@@ -3,6 +3,11 @@ description: ''
 runs:
   using: composite
   steps:
+    - run: |
+        echo "$PWD"
+        realpath "$PWD"
+      shell: bash
+
     # - if: ${{ github. }}
       # uses: actions/checkout@v4
 

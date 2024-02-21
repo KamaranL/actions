@@ -1,6 +1,15 @@
-name: 'setup'
+name: 'ci'
 description: ''
 runs:
   using: composite
   steps:
     - uses: KamaranL/actions/setup@HEAD
+
+    - uses: gittools/actions/gitversion/setup@v0.11
+      with:
+        versionSpec: '5.x'
+
+    - uses: gittools/actions/gitversion/execute@v0.11
+      with:
+        useConfigFile: true
+        configFilePath: '${{ github.action_path }}/GitVersion.yml'

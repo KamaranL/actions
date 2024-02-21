@@ -1,6 +1,0 @@
-name: 'release'
-description: ''
-runs:
-  using: composite
-  steps:
-    - uses: ./setup

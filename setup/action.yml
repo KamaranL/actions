@@ -1,18 +1,17 @@
-name: 'ci'
+name: 'setup'
 description: ''
 runs:
   using: composite
   steps:
     - run: |
+        TIMEZONE="America/New_York"
+        [ "$(</etc/timezone)" != "$TIMEZONE" ] &&
+            sudo timedatectl set-timezone "$TIMEZONE"
         ! git status >/dev/null 2>&1 &&
-            echo "checkout-repo=true" >>"$GITHUB_OUTPUT" ||
-            echo "checkout-repo=false" >>"$GITHUB_OUTPUT"
+            echo "checkout-repo=true" >>"$GITHUB_OUTPUT"
+        :
       shell: bash
-      id: check-workspace
+      id: checks
 
-    - if: steps.check-workspace.outputs.checkout-repo == 'true'
+    - if: steps.checks.outputs.checkout-repo == 'true'
       uses: actions/checkout@v4
-
-    - run: |
-        ls -lA
-      shell: bash

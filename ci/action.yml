@@ -3,4 +3,5 @@ description: ''
 runs:
   using: composite
   steps:
-    - uses: ${{ github.action_repository }}/setup
+    - uses: setup
+      working-directory: ${{ github.action_repository }}

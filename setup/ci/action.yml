@@ -3,7 +3,7 @@ description: ''
 runs:
   using: composite
   steps:
-    - uses: KamaranL/actions/setup@HEAD
+    - uses: KamaranL/actions/setup@v0
       with:
         fetch-depth: 0
 

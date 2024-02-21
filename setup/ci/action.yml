@@ -1,5 +1,10 @@
 name: 'setup-ci'
 description: ''
+inputs:
+  nuget:
+    description: '{true,false}'
+    default: 'false'
+
 runs:
   using: composite
   steps:
@@ -19,13 +24,14 @@ runs:
     - if: github.base_ref == 'main' && startsWith(github.head_ref, 'dev')
       run: |
         {
-            # check for previous tags/releases
+            # check for previous tags/releases prior to setting version
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
                 ! gh release view >/dev/null 2>&1; then
                 echo "CI_VERSION=1.0.0" >>"$GITHUB_ENV"
             else
                 echo "CI_VERSION=$GitVersion_MajorMinorPatch" >>"$GITHUB_ENV"
             fi
+
             echo "CI_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
         }; :
       shell: bash
@@ -33,7 +39,11 @@ runs:
     - if: github.base_ref != 'main'
       run: |
         {
-            echo "CI_VERSION=$GitVersion_FullSemVer" >>"$GITHUB_ENV"
+            # make version nuget-compatible, if specified
+            [ "$INPUT_NUGET" == true ] &&
+                CI_VERSION="${GitVersion_FullSemVer%.*}${GitVersion_FullSemVer##*.}" ||
+                CI_VERSION="$GitVersion_FullSemVer"
+            echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
             echo "CI_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
         }; :
       shell: bash

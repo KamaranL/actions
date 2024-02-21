@@ -13,9 +13,11 @@ runs:
             # verify github token is loaded
             [ -z "$GH_TOKEN" ] &&
                 echo "load-gh-token=true" >>"$GITHUB_OUTPUT"
+
             # verify timezone is set
             [ "$(</etc/timezone)" != "America/New_York" ] &&
                 echo "set-timezone=true" >>"$GITHUB_OUTPUT"
+
             # verify git repository is present
             ! git status >/dev/null 2>&1 &&
                 echo "checkout-repo=true" >>"$GITHUB_OUTPUT"

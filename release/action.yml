@@ -5,7 +5,8 @@ runs:
   steps:
     - run: |
         ! git status >/dev/null 2>&1 &&
-            echo "checkout-repo=true" >>"$GITHUB_OUTPUT"
+            echo "checkout-repo=true" >>"$GITHUB_OUTPUT" ||
+            echo "checkout-repo=false" >>"$GITHUB_OUTPUT"
       shell: bash
       id: check-workspace
 

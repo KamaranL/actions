@@ -1,0 +1,18 @@
+name: 'ci'
+description: ''
+runs:
+  using: composite
+  steps:
+    - run: |
+        ! git status >/dev/null 2>&1 &&
+            echo "checkout-repo=true" >>"$GITHUB_OUTPUT" ||
+            echo "checkout-repo=false" >>"$GITHUB_OUTPUT"
+      shell: bash
+      id: check-workspace
+
+    - if: steps.check-workspace.outputs.checkout-repo == 'true'
+      uses: actions/checkout@v4
+
+    - run: |
+        ls -lA
+      shell: bash

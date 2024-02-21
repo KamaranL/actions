@@ -10,7 +10,7 @@ runs:
       shell: bash
       id: check-workspace
 
-    - if: ${{ steps.check-workspace.outputs.checkout-repo }}
+    - if: steps.check-workspace.outputs.checkout-repo == true
       uses: actions/checkout@v4
 
     - run: |

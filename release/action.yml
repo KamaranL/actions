@@ -1,0 +1,14 @@
+name: 'release'
+description: ''
+runs:
+  using: composite
+  steps:
+    # - if: ${{ github. }}
+      # uses: actions/checkout@v4
+
+    - uses: actions/checkout@v4
+
+    - run: |
+        echo "$PWD"
+        realpath "$PWD"
+      shell: bash

@@ -4,8 +4,7 @@ runs:
   using: composite
   steps:
     - run: |
-        echo "$PWD"
-        realpath "$PWD"
+        ls -lA
       shell: bash
 
     # - if: ${{ github. }}
@@ -14,6 +13,5 @@ runs:
     - uses: actions/checkout@v4
 
     - run: |
-        echo "$PWD"
-        realpath "$PWD"
+        ls -lA
       shell: bash

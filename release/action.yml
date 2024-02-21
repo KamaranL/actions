@@ -4,13 +4,13 @@ runs:
   using: composite
   steps:
     - run: |
-        ls -lA
+        ! git status >/dev/null 2>&1 &&
+            echo "checkout-repo=true" >>"$GITHUB_OUTPUT"
       shell: bash
+      id: check-workspace
 
-    # - if: ${{ github. }}
-      # uses: actions/checkout@v4
-
-    - uses: actions/checkout@v4
+    - if: ${{ steps.check-workspace.outputs.checkout-repo }}
+      uses: actions/checkout@v4
 
     - run: |
         ls -lA

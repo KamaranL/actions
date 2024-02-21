@@ -4,6 +4,8 @@ runs:
   using: composite
   steps:
     - uses: KamaranL/actions/setup@HEAD
+      with:
+        fetch-depth: 0
 
     - uses: gittools/actions/gitversion/setup@v0.11
       with:

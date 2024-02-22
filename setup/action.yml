@@ -16,8 +16,17 @@ runs:
         check: timezone,gh_token,repository
       id: check
 
+    - run: |
+        echo -e "$RAW"
+
+        exit 1
+      shell: bash
+      env:
+        RAW: ${{ steps.check.outputs.raw }}
+        JSON: ${{ fromJson(steps.check.outputs.raw) }}
+
     # - if: steps.check.outputs.gh_token == 'fail'
-    - if: steps.check.outputs.raw.gh_token == 'fail'
+    - if: fromJson(steps.check.outputs.raw.gh_token)
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential

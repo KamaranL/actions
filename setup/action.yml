@@ -21,11 +21,11 @@ runs:
         echo ---
         echo -e "$OUTPUT"
 
-        exit 1
+        exit 128
       shell: bash
       env:
         RAW: ${{ steps.check.outputs.raw }}
-        # JSON: ${{ Json(steps.check.outputs.raw.gh_token) }}
+        JSON: ${{ toJson(steps.check.outputs.raw.gh_token) }}
         OUTPUT: ${{ toJson(steps.check.outputs) }}
 
     # - if: steps.check.outputs.gh_token == 'fail'

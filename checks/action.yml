@@ -68,7 +68,7 @@ runs:
 
     - run: |
         echo "value={ \
-            \"name\": \"Kam\"
+            \"name\": \"Kam\", \
             \"timezone\": \"${{ steps.timezone.outputs.check }}\", \
             \"gh_token\": \"${{ steps.gh_token.outputs.check }}\", \
             \"repository\": \"${{ steps.repository.outputs.check }}\", \

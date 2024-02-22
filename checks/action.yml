@@ -11,6 +11,15 @@ inputs:
 runs:
   using: composite
   steps:
+
+    - if: contains(inputs.checks, 'timezone') || inputs.checks == 'all'
+      run: |
+        {
+            [ "$(</etc/timezone)" != "America/New_York" ] &&
+                echo "check-timezone=fail" >>"$GITHUB_OUTPUT"
+        }; :
+      shell: bash
+
     - if: contains(inputs.checks, 'timezone')
       run: |
         {

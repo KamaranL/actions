@@ -33,7 +33,7 @@ runs:
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
-    - if: steps.checks.outputs.set-timezone == 'true'
+    - if: steps.checks.outputs.checks == 'true'
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 

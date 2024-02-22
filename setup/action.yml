@@ -17,28 +17,28 @@ runs:
       id: check
 
     - run: |
-        echo "${{ fromJson(steps.check.outputs.raw ).name }}"
+        echo "${{ toJson(steps.check.outputs.raw ).name }}"
         exit 128
       shell: bash
 
     # - if: steps.check.outputs.gh_token == 'fail'
-    - if: fromJson(steps.check.outputs.raw.gh_token)
-      uses: 1password/load-secrets-action@v1
-      env:
-        GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
+    # - if: fromJson(steps.check.outputs.raw.gh_token)
+    #   uses: 1password/load-secrets-action@v1
+    #   env:
+    #     GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
-    - if: steps.check.outputs.timezone == 'fail'
-      run: sudo timedatectl set-timezone "America/New_York"
-      shell: bash
+    # - if: steps.check.outputs.timezone == 'fail'
+    #   run: sudo timedatectl set-timezone "America/New_York"
+    #   shell: bash
 
-    - if: steps.check.outputs.repository == 'fail'
-      uses: actions/checkout@v4
-      with:
-        token: ${{ env.GH_TOKEN }}
-        fetch-depth: ${{ inputs.fetch-depth }}
+    # - if: steps.check.outputs.repository == 'fail'
+    #   uses: actions/checkout@v4
+    #   with:
+    #     token: ${{ env.GH_TOKEN }}
+    #     fetch-depth: ${{ inputs.fetch-depth }}
 
-    - run: |
-        echo -e "$RAW"
-      shell: bash
-      env:
-        RAW: ${{ steps.check.outputs.raw }}
+    # - run: |
+    #     echo -e "$RAW"
+    #   shell: bash
+    #   env:
+    #     RAW: ${{ steps.check.outputs.raw }}

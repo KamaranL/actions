@@ -17,8 +17,8 @@ runs:
       id: check
 
     - run: |
-        echo "${{ toJson(steps.check.outputs.raw ).name }}"
-        exit 128
+        echo "hello"
+        exit 1
       shell: bash
 
     # - if: steps.check.outputs.gh_token == 'fail'

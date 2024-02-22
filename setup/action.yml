@@ -18,11 +18,12 @@ runs:
 
     - run: |
         echo -e "$RAW"
-        echo --- JSON:
-        echo -e "$JSON"
+        echo --- name:
+        echo -e "$VALUE"
         exit 128
       shell: bash
       env:
+        VAL: ${{ steps.check.outputs.raw.name}}
         RAW: ${{ steps.check.outputs.raw }}
         JSON: ${{ toJson(steps.check.outputs.raw) }}
         # OUTPUT: ${{ steps.check.outputs }}

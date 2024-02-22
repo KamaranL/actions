@@ -11,13 +11,7 @@ inputs:
 outputs:
   raw:
     description: ''
-    value: |
-      {
-          \"timezone\": \"${{ steps.timezone.outputs.check }}\",
-          \"gh_token\": \"${{ steps.gh_token.outputs.check }}\",
-          \"repository\": \"${{ steps.repository.outputs.check }}\",
-          \"tags_releases\": \"${{ steps.tags_releases.outputs.check }}\"
-      }
+    value: ${{ steps.raw.outputs.check }}
   timezone:
     value: ${{ steps.timezone.outputs.check }}
     description: ''
@@ -70,3 +64,13 @@ runs:
         }; :
       shell: bash
       id: tags_releases
+
+    - run: |
+        echo "value={
+            \"timezone\": \"${{ steps.timezone.outputs.check }}\",
+            \"gh_token\": \"${{ steps.gh_token.outputs.check }}\",
+            \"repository\": \"${{ steps.repository.outputs.check }}\",
+            \"tags_releases\": \"${{ steps.tags_releases.outputs.check }}\"
+        }" >>"$GITHUB_OUTPUT"
+      shell: bash
+      id: raw

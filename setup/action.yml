@@ -30,3 +30,9 @@ runs:
       with:
         token: ${{ env.GH_TOKEN }}
         fetch-depth: ${{ inputs.fetch-depth }}
+
+    - run: |
+        echo -e "$RAW"
+      shell: bash
+      env:
+        RAW: ${{ steps.check.outputs.raw }}

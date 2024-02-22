@@ -2,42 +2,25 @@ name: 'setup'
 description: ''
 inputs:
   fetch-depth:
-    description: '{0,1}'
+    description: ''
     default: '1'
 
 runs:
   using: composite
   steps:
-    # - run: |
-    #     {
-    #         # verify github token is loaded
-    #         [ -z "$GH_TOKEN" ] &&
-    #             echo "load-gh-token=true" >>"$GITHUB_OUTPUT"
-
-    #         # verify timezone is set
-    #         [ "$(</etc/timezone)" != "America/New_York" ] &&
-    #             echo "set-timezone=true" >>"$GITHUB_OUTPUT"
-
-            # # verify git repository is present
-            # ! git status >/dev/null 2>&1 &&
-            #     echo "checkout-repo=true" >>"$GITHUB_OUTPUT"
-    #     }; :
-    #   shell: bash
-    #   id: checks
-
     - uses: KamaranL/actions/checks@v0
       id: checks
 
-    - if: ${{ !env.GH_TOKEN }}
+    - if: steps.checks.outputs.check-gh_token == 'fail'
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
-    - if: steps.checks.outputs.checks == 'true'
+    - if: steps.checks.outputs.check-timezone == 'fail'
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 
-    - if: steps.checks.outputs.checkout-repo == 'true'
+    - if: steps.checks.outputs.check-repository == 'fail'
       uses: actions/checkout@v4
       with:
         token: ${{ env.GH_TOKEN }}

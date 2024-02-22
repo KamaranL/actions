@@ -11,7 +11,6 @@ inputs:
 runs:
   using: composite
   steps:
-
     - if: contains(inputs.checks, 'timezone') || inputs.checks == 'all'
       run: |
         {
@@ -20,23 +19,15 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.checks, 'timezone')
+    - if: contains(inputs.checks, 'gh_token') || inputs.checks == 'all'
       run: |
         {
-            [ "$(</etc/timezone)" != "America/New_York" ] &&
-                echo "check-timezone=fail" >>"$GITHUB_OUTPUT"
+            [ -z "$GH_TOKEN" ] &&
+                echo "check-gh_token=fail" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
 
-    # - if: contains(inputs.checks, 'gh_token')
-    #   run: |
-    #     {
-    #         [ -z "$GH_TOKEN" ] &&
-    #             echo "check-gh_token=fail" >>"$GITHUB_OUTPUT"
-    #     }; :
-    #   shell: bash
-
-    - if: contains(inputs.checks, 'repository')
+    - if: contains(inputs.checks, 'repository') || inputs.checks == 'all'
       run: |
         {
             ! git status >/dev/null 2>&1 &&

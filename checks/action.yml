@@ -11,7 +11,8 @@ inputs:
 outputs:
   raw:
     description: ''
-    value: ${{ steps.raw.outputs.check }}
+    value: ${{ steps.raw.outputs.value }}
+#
   timezone:
     value: ${{ steps.timezone.outputs.check }}
     description: ''

@@ -17,7 +17,7 @@ runs:
       id: check
 
     # - if: steps.check.outputs.gh_token == 'fail'
-    - if: steps.check.outputs.raw == 'fail'
+    - if: steps.check.outputs.raw.gh_token == 'fail'
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential

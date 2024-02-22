@@ -8,6 +8,17 @@ inputs:
       Default: 'all'
     default: 'all'
 
+outputs:
+  timezone:
+    value: steps.timezone.outputs.check
+    description: ''
+  gh_token:
+    value: steps.gh_token.outputs.check
+    description: ''
+  repository:
+    value: steps.repository.outputs.check
+    description: ''
+
 runs:
   using: composite
   steps:
@@ -15,22 +26,25 @@ runs:
       run: |
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
-                echo "check-timezone=fail" >>"$GITHUB_OUTPUT"
+                echo "check=fail" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
+      id: timezone
 
     - if: contains(inputs.checks, 'gh_token') || inputs.checks == 'all'
       run: |
         {
             [ -z "$GH_TOKEN" ] &&
-                echo "check-gh_token=fail" >>"$GITHUB_OUTPUT"
+                echo "check=fail" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
+      id: gh_token
 
     - if: contains(inputs.checks, 'repository') || inputs.checks == 'all'
       run: |
         {
             ! git status >/dev/null 2>&1 &&
-                echo "check-repository=fail" >>"$GITHUB_OUTPUT"
+                echo "check=fail" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
+      id: repository

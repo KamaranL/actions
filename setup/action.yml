@@ -9,18 +9,18 @@ runs:
   using: composite
   steps:
     - uses: KamaranL/actions/checks@v0
-      id: checks
+      id: check
 
-    - if: steps.checks.outputs.check-gh_token == 'fail'
+    - if: steps.check.outputs.gh_token == 'fail'
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
-    - if: steps.checks.outputs.check-timezone == 'fail'
+    - if: steps.check.outputs.timezone == 'fail'
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 
-    - if: steps.checks.outputs.check-repository == 'fail'
+    - if: steps.check.outputs.repository == 'fail'
       uses: actions/checkout@v4
       with:
         token: ${{ env.GH_TOKEN }}

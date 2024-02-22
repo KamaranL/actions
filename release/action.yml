@@ -1,0 +1,112 @@
+name: 'release'
+description: ''
+inputs:
+  assets:
+    description: ''
+
+runs:
+  using: composite
+  steps:
+    - run: |
+        {
+            # check for existing ssh keys
+            SSH_TEMP="$RUNNER_TEMP/.ssh"
+            ! [ -f "$SSH_TEMP/id_ed25519" -a -f "$SSH_TEMP/id_ed25519.pub" ] &&
+                echo "ssh-temp=$SSH_TEMP" >> "$GITHUB_OUTPUT"
+        }; :
+      shell: bash
+      id: checks
+
+    - if: steps.checks.outputs.ssh-temp
+      uses: 1password/load-secrets-action@v1
+      with:
+        export-env: false
+      env:
+        id: 'op://Private/bot@kamaranl.vip/private key'
+        id_pub: 'op://Private/bot@kamaranl.vip/public key'
+      id: load-ssh
+
+    - if: steps.load-ssh.outputs.id && steps.load-ssh.outputs.id_pub
+      run: |
+        :
+        # write ssh keys
+        echo "::debug::Writing ssh key pair..."
+        [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
+        echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
+        echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
+        echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
+        echo "setup-git=true" >>"$GITHUB_OUTPUT"
+        chmod 0600 "$SSH_TEMP/id_ed25519"
+      shell: bash
+      env:
+        SSH_TEMP: ${{ steps.checks.outputs.ssh-temp }}
+        SSH_ID: ${{ steps.load-ssh.outputs.id }}
+        SSH_ID_PUB: ${{ steps.load-ssh.outputs.id_pub }}
+      id: write-ssh
+
+    - if: steps.write-ssh.outputs.setup-git == 'true'
+      run: |
+        :
+        # set up git
+        echo "::debug::Configuring Git..."
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "bot@kamaranl.vip"
+        git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
+        git config --global gpg.ssh.allowedsignersfile "$SSH_TEMP/allowed_signers"
+        git config --global gpg.format "ssh"
+        git config --global commit.gpgsign true
+        git config --global tag.gpgsign true
+        git config --global push.followtags true
+        git config --global push.default "upstream"
+        while IFS= read -ra line; do echo "::debug::>>$line"; done <<<"$(git config --list --global)"
+      shell: bash
+      env:
+        SSH_TEMP: ${{ steps.checks.outputs.ssh-temp }}
+
+    - run: |
+        :
+        # amend commit
+        git commit -a --amend --no-edit --date=now && {
+            CI_SHA="$(git rev-parse HEAD)"
+            echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
+            echo "origin=$CI_SHA:$CI_SOURCE_BRANCH" >>"$GITHUB_OUTPUT"
+            echo "tag="v$CI_VERSION" >>"$GITHUB_OUTPUT"
+        }
+      shell: bash
+      id: commit
+
+    - run: |
+        :
+        # create tag
+        git tag -a "$CI_TAG -m "$CI_TAG "$CI_SHA"
+      shell: bash
+      env:
+        CI_SHA: ${{ steps.commit.outputs.sha }}
+        CI_TAG: ${{ steps.commit.outputs.tag }}
+
+    - run: |
+        :
+        # push back to source
+        git push origin "$CI_ORIGIN" --force-with-lease
+      shell: bash
+      env:
+        CI_ORIGIN: ${{ steps.commit.outputs.origin }}
+
+    - if: ${{ !inputs.assets }}
+      run: |
+        :
+        # create release
+        gh release create "$CI_TAG" --latest --generate-notes --verify-tag
+      shell: bash
+      env:
+        CI_TAG: ${{ steps.commit.outputs.tag }}
+
+    - if: ${{ inputs.assets }}
+      run: |
+        :
+        # create release with assets
+        gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
+      shell: bash
+      env:
+        CI_TAG: ${{ steps.commit.outputs.tag }}
+        INPUT_ASSETS: ${{ inputs.assets }}

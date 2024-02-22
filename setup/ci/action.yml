@@ -32,7 +32,7 @@ runs:
                 echo "CI_VERSION=$GitVersion_MajorMinorPatch" >>"$GITHUB_ENV"
             fi
 
-            echo "CI_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
+            echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
         }; :
       shell: bash
 
@@ -43,7 +43,10 @@ runs:
             [ "$INPUT_NUGET" == true ] &&
                 CI_VERSION="${GitVersion_FullSemVer%.*}${GitVersion_FullSemVer##*.}" ||
                 CI_VERSION="$GitVersion_FullSemVer"
+
             echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
-            echo "CI_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
+            echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
         }; :
       shell: bash
+      env:
+        INPUT_NUGET: ${{ inputs.nuget }}

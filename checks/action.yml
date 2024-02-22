@@ -1,0 +1,36 @@
+name: 'checks'
+description: ''
+inputs:
+  checks:
+    description: |
+      {timezone,gh_token,repository}
+
+      Default: 'all'
+    default: 'all'
+
+runs:
+  using: composite
+  steps:
+    - if: contains(inputs.checks, 'timezone')
+      run: |
+        {
+            [ "$(</etc/timezone)" != "America/New_York" ] &&
+                echo "check-timezone=fail" >>"$GITHUB_OUTPUT"
+        }; :
+      shell: bash
+
+    # - if: contains(inputs.checks, 'gh_token')
+    #   run: |
+    #     {
+    #         [ -z "$GH_TOKEN" ] &&
+    #             echo "check-gh_token=fail" >>"$GITHUB_OUTPUT"
+    #     }; :
+    #   shell: bash
+
+    - if: contains(inputs.checks, 'repository')
+      run: |
+        {
+            ! git status >/dev/null 2>&1 &&
+                echo "check-repository=fail" >>"$GITHUB_OUTPUT"
+        }; :
+      shell: bash

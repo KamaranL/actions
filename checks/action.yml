@@ -9,6 +9,17 @@ inputs:
     default: 'all'
 
 outputs:
+  json:
+    description: ''
+    value: |
+      ${{
+        toJson({
+            "timezone": "${{ steps.timezone.outputs.check }}",
+            "gh_token": "${{ steps.gh_token.outputs.check }}",
+            "repository": "${{ steps.repository.outputs.check }}",
+            "tags_releases": "${{ steps.tags_releases.outputs.check }}"
+        })
+      }}
   raw:
     description: ''
     value: |

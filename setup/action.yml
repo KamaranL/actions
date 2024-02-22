@@ -26,7 +26,7 @@ runs:
       env:
         RAW: ${{ steps.check.outputs.raw }}
         # JSON: ${{ Json(steps.check.outputs.raw.gh_token) }}
-        OUTPUT: ${{ toJson(outputs) }}
+        OUTPUT: ${{ toJson(steps.check.outputs) }}
 
     # - if: steps.check.outputs.gh_token == 'fail'
     - if: fromJson(steps.check.outputs.raw.gh_token)

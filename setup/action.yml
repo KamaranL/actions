@@ -23,7 +23,7 @@ runs:
         exit 128
       shell: bash
       env:
-        VALUE: ${{ steps.check.outputs.raw.name }}
+        VALUE: ${{ steps.check.outputs.raw }}.name
         RAW: ${{ steps.check.outputs.raw }}
         JSON: ${{ toJson(steps.check.outputs.raw) }}
         # OUTPUT: ${{ steps.check.outputs }}

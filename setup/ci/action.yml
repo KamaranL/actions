@@ -2,7 +2,7 @@ name: 'setup-ci'
 description: ''
 inputs:
   nuget:
-    description: '{true,false}'
+    description: '[bool]'
     default: 'false'
 
 runs:
@@ -14,12 +14,12 @@ runs:
 
     - uses: gittools/actions/gitversion/setup@v0.11
       with:
-        versionSpec: '5.x'
+        versionSpec: 5.x
 
     - uses: gittools/actions/gitversion/execute@v0.11
       with:
         useConfigFile: true
-        configFilePath: '${{ github.action_path }}/GitVersion.yml'
+        configFilePath: ${{ github.action_path }}/GitVersion.yml
 
     - if: github.base_ref == 'main' && startsWith(github.head_ref, 'dev')
       run: |

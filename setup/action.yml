@@ -2,13 +2,18 @@ name: 'setup'
 description: ''
 inputs:
   fetch-depth:
-    description: ''
+    description: |
+      [int]
+
+      Default: '1'
     default: '1'
 
 runs:
   using: composite
   steps:
     - uses: KamaranL/actions/checks@v0
+      with:
+        check: timezone,gh_token,repository
       id: check
 
     - if: steps.check.outputs.gh_token == 'fail'

@@ -19,13 +19,14 @@ runs:
     - run: |
         echo -e "$RAW"
         echo ---
-        echo -e "$JSON"
+        echo -e "$OUTPUT"
 
         exit 1
       shell: bash
       env:
         RAW: ${{ steps.check.outputs.raw }}
-        JSON: ${{ fromJson(steps.check.outputs.raw.gh_token) }}
+        # JSON: ${{ Json(steps.check.outputs.raw.gh_token) }}
+        OUTPUT: ${{ fromJson(outputs) }}
 
     # - if: steps.check.outputs.gh_token == 'fail'
     - if: fromJson(steps.check.outputs.raw.gh_token)

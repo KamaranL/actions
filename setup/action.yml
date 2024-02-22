@@ -18,9 +18,10 @@ runs:
 
     - run: |
         echo -e "$RAW"
-        echo ---
+        echo --- JSON:
+        echo -e "$JSON"
+        echo --- OUTPUT:
         echo -e "$OUTPUT"
-
         exit 128
       shell: bash
       env:

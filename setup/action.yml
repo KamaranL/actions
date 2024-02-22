@@ -18,6 +18,8 @@ runs:
 
     - run: |
         echo -e "$RAW"
+        echo ---
+        echo -e "$JSON"
 
         exit 1
       shell: bash

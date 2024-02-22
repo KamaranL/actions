@@ -10,13 +10,13 @@ inputs:
 
 outputs:
   timezone:
-    value: steps.timezone.outputs.check
+    value: ${{ steps.timezone.outputs.check }}
     description: ''
   gh_token:
-    value: steps.gh_token.outputs.check
+    value: ${{ steps.gh_token.outputs.check }}
     description: ''
   repository:
-    value: steps.repository.outputs.check
+    value: ${{ steps.repository.outputs.check }}
     description: ''
 
 runs:

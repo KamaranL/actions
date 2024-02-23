@@ -9,68 +9,56 @@ inputs:
     default: 'all'
 
 outputs:
-  raw:
-    description: ''
+  github:
     value: |
       {
-        "user": {
-          "name": "Kam"
-        },
-        "name": "Kam",
-        "timezone": "${{ steps.timezone.outputs.check }}",
-        "gh_token": "${{ steps.gh_token.outputs.check }}",
-        "repository": "${{ steps.repository.outputs.check }}",
-        "tags_releases": "${{ steps.tags_releases.outputs.check }}"
+        "timezone-set": ${{ steps.github.timezone-set.outputs.value }},
+        "has-token": "",
+        "has-repository": "",
+        "first-release": ""
       }
-  timezone:
-    value: ${{ steps.timezone.outputs.check }}
-    description: ''
-  gh_token:
-    value: ${{ steps.gh_token.outputs.check }}
-    description: ''
-  repository:
-    value: ${{ steps.repository.outputs.check }}
-    description: ''
-  tags_releases:
-    value: ${{ steps.tags_releases.outputs.check }}
     description: ''
 
 runs:
   using: composite
   steps:
-    - if: contains(inputs.check, 'timezone') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github.timezone-set') || inputs.check == 'all'
       run: |
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
-                echo "check=fail" >>"$GITHUB_OUTPUT"
+                echo "value=false" >>"$GITHUB_OUTPUT" ||
+                echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: timezone
+      id: github.timezone-set
 
-    - if: contains(inputs.check, 'gh_token') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github.has-token') || inputs.check == 'all'
       run: |
         {
             [ -z "$GH_TOKEN" ] &&
-                echo "check=fail" >>"$GITHUB_OUTPUT"
+                echo "value=fail" >>"$GITHUB_OUTPUT" ||
+                echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: gh_token
+      id: github.has-token
 
-    - if: contains(inputs.check, 'repository') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github.has-repository') || inputs.check == 'all'
       run: |
         {
             ! git status >/dev/null 2>&1 &&
-                echo "check=fail" >>"$GITHUB_OUTPUT"
+                echo "value=fail" >>"$GITHUB_OUTPUT" ||
+                echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: repository
+      id: github.has-repository
 
-    - if: contains(inputs.check, 'tags_releases') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github.first-release') || inputs.check == 'all'
       run: |
         {
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
-                echo "tags_releases=fail" >>"$GITHUB_OUTPUT"
+                echo "value=fail" >>"$GITHUB_OUTPUT" ||
+                echo "value=true" >>"$GITHUB_OUTPUT"
             fi
         }; :
       shell: bash
-      id: tags_releases
+      id: github.first-release

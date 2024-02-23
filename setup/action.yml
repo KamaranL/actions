@@ -13,12 +13,15 @@ runs:
   steps:
     - uses: KamaranL/actions/checks@v0
       with:
-        check: timezone,gh_token,repository
+        check: |
+          github.timezone-set
+          github.has-token
+          github.has-repository
       id: check
 
     - run: |
-        echo "${{ toJson(fromJson(steps.check.outputs.raw).user) }}"
-        echo "${{ fromJson(steps.check.outputs.raw ).user.name }}"
+        echo "${{ steps.check.outputs.github }}"
+        echo "${{ fromJson(steps.check.outputs.github).timezone-set }}"
         exit 128
       shell: bash
 

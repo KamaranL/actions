@@ -11,14 +11,14 @@ inputs:
 runs:
   using: composite
   steps:
-    # - uses: KamaranL/actions/checks@v0
-    #   with:
-    #     check: timezone,gh_token,repository
-    #   id: check
+    - uses: KamaranL/actions/checks@v0
+      with:
+        check: timezone,gh_token,repository
+      id: check
 
     - run: |
-        echo "hello"
-        exit 0
+        echo "${{ toJson(steps.check.outputs.raw ).name }}"
+        exit 1
       shell: bash
 
     # - if: steps.check.outputs.gh_token == 'fail'

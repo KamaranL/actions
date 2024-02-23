@@ -44,7 +44,7 @@ runs:
         echo "{" | tee \
             "$JSON_TEMP/github.json" \
             "$JSON_TEMP/git.json"
-        echo "json_temp="$JSON_TEMP" >>"$GITHUB_OUTPUT"
+        echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
         echo "github=$JSON_TEMP/github.json" >>"$GITHUB_OUTPUT"
         echo "git=$JSON_TEMP/git.json" >>"$GITHUB_OUTPUT"
       shell: bash
@@ -104,16 +104,16 @@ runs:
     #   shell: bash
     #   id: git_has-keypair
 
-    # - run: |
-    #     :
-    #     JSON_TEMP='${{ steps.file.outputs.json_temp }}'
-    #     FILES=(
-    #         github
-    #         git
-    #     )
+    - run: |
+        :
+        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
+        FILES=(
+            github
+            git
+        )
 
-    #     for file in "${FILES[@]}"; do
-    #         echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
-    #     done
-    #   shell: bash
-    #   id: json
+        for file in "${FILES[@]}"; do
+            echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
+        done
+      shell: bash
+      id: json

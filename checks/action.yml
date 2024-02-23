@@ -33,7 +33,7 @@ runs:
   using: composite
   steps:
     - run: |
-        :
+        : # open file
         FILES=(
             github
             git
@@ -53,7 +53,7 @@ runs:
 
     - if: contains(inputs.github, 'timezone-set') || ${{ inputs.all }} == true
       run: |
-        {
+        {   # github.timezone
             [ "$(</etc/timezone)" != "America/New_York" ] && val='false'
             echo "$(<'${{ steps.file.outputs.github }}') \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
@@ -61,7 +61,7 @@ runs:
 
     - if: contains(inputs.github, 'has-token') || ${{ inputs.all }} == true
       run: |
-        {
+        {   # github.has-token
             [ -z "$GH_TOKEN" ] && val='false'
             echo "$(<'${{ steps.file.outputs.github }}') \"has-token\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
@@ -69,7 +69,7 @@ runs:
 
     - if: contains(inputs.github, 'has-repository') || ${{ inputs.all }} == true
       run: |
-        {
+        {   # github.has-repository
             ! git status >/dev/null 2>&1 && val='false'
             echo "$(<'${{ steps.file.outputs.github }}') \"has-repository\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
@@ -77,7 +77,7 @@ runs:
 
     - if: contains(inputs.github, 'first-release') || ${{ inputs.all }} == true
       run: |
-        {
+        {   # github.first-release
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
                 val='true'
             fi
@@ -87,7 +87,7 @@ runs:
 
     - if: contains(inputs.git, 'has-keypair') || ${{ inputs.all }} == true
       run: |
-        {
+        {   # git.has-keypair, path.ssh
             SSH_TEMP="$RUNNER_TEMP/.ssh"
             ! [ -f "$SSH_TEMP/id_ed25519" -a -f "$SSH_TEMP/id_ed25519.pub" ] && val='false'
             echo "$(<'${{ steps.file.outputs.git }}') \"has-keypair\": ${val:-true}," >'${{ steps.file.outputs.git }}'
@@ -96,7 +96,7 @@ runs:
       shell: bash
 
     - run: |
-        :
+        : # close file, read file to output
         FILES=(${{ steps.file.outputs.files }})
         JSON_TEMP='${{ steps.file.outputs.json_temp }}'
         for file in "${FILES[@]}"; do

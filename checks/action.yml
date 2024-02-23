@@ -33,7 +33,7 @@ runs:
   using: composite
   steps:
     - run: |
-        : # open file
+        : # open files
         FILES=(
             github
             git
@@ -51,9 +51,9 @@ runs:
       shell: bash
       id: file
 
-    - if: contains(inputs.github, 'timezone-set') || ${{ inputs.all }} == true
+    - if: contains(inputs.github, timezone-set) || ${{ inputs.all }} == true
       run: |
-        {   # github.timezone
+        { # github.timezone
             [ "$(</etc/timezone)" != "America/New_York" ] && val='false'
             echo "$(<'${{ steps.file.outputs.github }}') \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :

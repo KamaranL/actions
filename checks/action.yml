@@ -47,61 +47,62 @@ runs:
         echo "github=$JSON_TEMP/github.json" >>"$GITHUB_OUTPUT"
         echo "git=$JSON_TEMP/git.json" >>"$GITHUB_OUTPUT"
       shell: bash
-      id: files
+      id: json
 
     - if: contains(inputs.github, 'timezone-set') || inputs.all == true
       run: |
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
-                echo "value=false" >>"$GITHUB_OUTPUT" ||
-                echo "value=true" >>"$GITHUB_OUTPUT"
+                val='false'
+            echo "\"timezone-set\":${val:-false},"
+            echo "$(<${{ steps.json.outputs.github }})\"timezone-set\":${val:-false}," >"${{ steps.json.outputs.github }}"
         }; :
       shell: bash
       id: github_timezone-set
 
-    - if: contains(inputs.github, 'has-token') || inputs.all == true
-      run: |
-        {
-            [ -z "$GH_TOKEN" ] &&
-                echo "value=false" >>"$GITHUB_OUTPUT" ||
-                echo "value=true" >>"$GITHUB_OUTPUT"
-        }; :
-      shell: bash
-      id: github_has-token
+    # - if: contains(inputs.github, 'has-token') || inputs.all == true
+    #   run: |
+    #     {
+    #         [ -z "$GH_TOKEN" ] &&
+    #             echo "value=false" >>"$GITHUB_OUTPUT" ||
+    #             echo "value=true" >>"$GITHUB_OUTPUT"
+    #     }; :
+    #   shell: bash
+    #   id: github_has-token
 
-    - if: contains(inputs.github, 'has-repository') || inputs.all == true
-      run: |
-        {
-            ! git status >/dev/null 2>&1 &&
-                echo "value=false" >>"$GITHUB_OUTPUT" ||
-                echo "value=true" >>"$GITHUB_OUTPUT"
-        }; :
-      shell: bash
-      id: github_has-repository
+    # - if: contains(inputs.github, 'has-repository') || inputs.all == true
+    #   run: |
+    #     {
+    #         ! git status >/dev/null 2>&1 &&
+    #             echo "value=false" >>"$GITHUB_OUTPUT" ||
+    #             echo "value=true" >>"$GITHUB_OUTPUT"
+    #     }; :
+    #   shell: bash
+    #   id: github_has-repository
 
-    - if: contains(inputs.github, 'first-release') || inputs.all == true
-      run: |
-        {
-            if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
-                echo "value=true" >>"$GITHUB_OUTPUT"
-            else
-                echo "value=false" >>"$GITHUB_OUTPUT"
-            fi
-        }; :
-      shell: bash
-      id: github_first-release
+    # - if: contains(inputs.github, 'first-release') || inputs.all == true
+    #   run: |
+    #     {
+    #         if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
+    #             echo "value=true" >>"$GITHUB_OUTPUT"
+    #         else
+    #             echo "value=false" >>"$GITHUB_OUTPUT"
+    #         fi
+    #     }; :
+    #   shell: bash
+    #   id: github_first-release
 
-    - if: contains(inputs.git, 'has-keypair') || inputs.all == true
-      run: |
-        {
-            GIT_SSH="$RUNNER_TEMP/.ssh"
-            ! [ -f "$GIT_SSH/id_ed25519" -a -f "$GIT_SSH/id_ed25519.pub" ] &&
-                echo "value=fail" >>"$GITHUB_OUTPUT" ||
-                echo "value=true" >>"$GITHUB_OUTPUT"
-            echo "GIT_SSH=$GIT_SSH" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
-      id: git_has-keypair
+    # - if: contains(inputs.git, 'has-keypair') || inputs.all == true
+    #   run: |
+    #     {
+    #         GIT_SSH="$RUNNER_TEMP/.ssh"
+    #         ! [ -f "$GIT_SSH/id_ed25519" -a -f "$GIT_SSH/id_ed25519.pub" ] &&
+    #             echo "value=fail" >>"$GITHUB_OUTPUT" ||
+    #             echo "value=true" >>"$GITHUB_OUTPUT"
+    #         echo "GIT_SSH=$GIT_SSH" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
+    #   id: git_has-keypair
 
     # - run: |
     #     CHECKS=(

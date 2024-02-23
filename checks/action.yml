@@ -114,7 +114,8 @@ runs:
 
         for file in "${FILES[@]}"; do
             JSON="$file.json"
-            echo "$(<$JSON_TEMP/$JSON) }" >"$JSON_TEMP/$JSON"
+            CONTENT="$(<$JSON_TEMP/$JSON)"
+            echo "${CONTENT%,*} }" >"$JSON_TEMP/$JSON"
         done
       shell: bash
       id: json

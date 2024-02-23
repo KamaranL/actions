@@ -71,9 +71,9 @@ runs:
       run: |
         {
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
-                echo "value=fail" >>"$GITHUB_OUTPUT"
-            else
                 echo "value=true" >>"$GITHUB_OUTPUT"
+            else
+                echo "value=fail" >>"$GITHUB_OUTPUT"
             fi
         }; :
       shell: bash

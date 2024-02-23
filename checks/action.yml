@@ -24,6 +24,7 @@ outputs:
         "timezone-set": ${{ steps.github_timezone-set.outputs.value }},
         "has-token": ${{ steps.github_has-token.outputs.value }},
         "has-repository": ${{ steps.github_has-repository.outputs.value }},
+        "first-release": ${{ steps.github_first-release.outputs.value }}
       }
     description: ''
   git:
@@ -36,6 +37,18 @@ outputs:
 runs:
   using: composite
   steps:
+    - run: |
+        :
+        JSON_TEMP="$RUNNER_TEMP/.json"
+        [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
+        echo "{" | tee \
+            "$JSON_TEMP/github.json" \
+            "$JSON_TEMP/git.json"
+        echo "github=$JSON_TEMP/github.json" >>"$GITHUB_OUTPUT"
+        echo "git=$JSON_TEMP/git.json" >>"$GITHUB_OUTPUT"
+      shell: bash
+      id: files
+
     - if: contains(inputs.github, 'timezone-set') || inputs.all == true
       run: |
         {
@@ -50,7 +63,7 @@ runs:
       run: |
         {
             [ -z "$GH_TOKEN" ] &&
-                echo "value=fail" >>"$GITHUB_OUTPUT" ||
+                echo "value=false" >>"$GITHUB_OUTPUT" ||
                 echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
@@ -60,7 +73,7 @@ runs:
       run: |
         {
             ! git status >/dev/null 2>&1 &&
-                echo "value=fail" >>"$GITHUB_OUTPUT" ||
+                echo "value=false" >>"$GITHUB_OUTPUT" ||
                 echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
@@ -72,7 +85,7 @@ runs:
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
                 echo "value=true" >>"$GITHUB_OUTPUT"
             else
-                echo "value=fail" >>"$GITHUB_OUTPUT"
+                echo "value=false" >>"$GITHUB_OUTPUT"
             fi
         }; :
       shell: bash

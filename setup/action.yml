@@ -2,8 +2,8 @@ name: 'setup'
 description: ''
 inputs:
   fetch-depth:
-    description: '[number]'
-    default: ${{ 1 }}
+    description: ''
+    default: '1'
 
 runs:
   using: composite
@@ -25,7 +25,9 @@ runs:
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
-    - if: fromJson(steps.checks.outputs.github).has-repository == false
+    - if: |
+        fromJson(steps.checks.outputs.github).has-repository == false &&
+            env.GH_TOKEN
       uses: actions/checkout@v4
       with:
         token: ${{ env.GH_TOKEN }}

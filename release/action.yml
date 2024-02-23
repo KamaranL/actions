@@ -2,53 +2,54 @@ name: 'release'
 description: ''
 inputs:
   assets:
-    description: '[string]'
+    description: ''
 
 runs:
   using: composite
   steps:
-    - run: |
-        {
-            # check for existing ssh keys
-            SSH_TEMP="$RUNNER_TEMP/.ssh"
-            ! [ -f "$SSH_TEMP/id_ed25519" -a -f "$SSH_TEMP/id_ed25519.pub" ] &&
-                echo "ssh-temp=$SSH_TEMP" >> "$GITHUB_OUTPUT"
-        }; :
+    - if: github.event != 'pull_request'
+      run: |
+        echo '::notice::${{ github.workflow }} will only complete successfully on "pull_request"'
       shell: bash
+
+    - uses: KamaranL/actions/checks@v0
+      with:
+        git: |
+          has-keypair
+          is-configured
       id: checks
 
-    - if: steps.checks.outputs.ssh-temp
+    - if: fromJson(steps.checks.outputs.git).has-keypair == false
       uses: 1password/load-secrets-action@v1
       with:
         export-env: false
       env:
         id: 'op://Private/bot@kamaranl.vip/private key'
         id_pub: 'op://Private/bot@kamaranl.vip/public key'
-      id: load-ssh
+      id: op-ssh
 
-    - if: steps.load-ssh.outputs.id && steps.load-ssh.outputs.id_pub
+    - if: |
+        fromJson(steps.checks.outputs.git).has-keypair == false &&
+            steps.op-ssh.outputs.id &&
+            steps.op-ssh.outputs.id_pub
       run: |
-        :
-        # write ssh keys
+        : # write ssh keypair
         echo "::debug::Writing ssh key pair..."
+        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
+        SSH_ID='${{ steps.op-ssh.outputs.id }}'
+        SSH_ID_PUB='${{ steps.op-ssh.outputs.id_pub }}'
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
         echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
-        echo "setup-git=true" >>"$GITHUB_OUTPUT"
         chmod 0600 "$SSH_TEMP/id_ed25519"
       shell: bash
-      env:
-        SSH_TEMP: ${{ steps.checks.outputs.ssh-temp }}
-        SSH_ID: ${{ steps.load-ssh.outputs.id }}
-        SSH_ID_PUB: ${{ steps.load-ssh.outputs.id_pub }}
-      id: write-ssh
 
-    - if: steps.write-ssh.outputs.setup-git == 'true'
+    - if: fromJson(steps.checks.outputs.git).is-configured == false
       run: |
-        :
-        # set up git
+        : # configure git
         echo "::debug::Configuring Git..."
+        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
         git config --global user.name "GitHub Actions"
         git config --global user.email "bot@kamaranl.vip"
         git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
@@ -58,14 +59,13 @@ runs:
         git config --global tag.gpgsign true
         git config --global push.followtags true
         git config --global push.default "upstream"
-        while IFS= read -ra line; do echo "::debug::>>$line"; done <<<"$(git config --list --global)"
+        while IFS= read -ra line; do
+            echo "::debug::>> $line"
+        done <<<"$(git config --list --global)"
       shell: bash
-      env:
-        SSH_TEMP: ${{ steps.checks.outputs.ssh-temp }}
 
     - run: |
-        :
-        # amend commit
+        : # amend commit
         git commit -a --amend --no-edit --date=now && {
             CI_SHA="$(git rev-parse HEAD)"
             echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
@@ -75,9 +75,14 @@ runs:
       shell: bash
       id: commit
 
-    - run: |
-        :
-        # create tag
+    - if: steps.commit.outputs == null
+      run: |
+        exit 128
+      shell: bash
+
+    - if: steps.commit.outputs
+      run: |
+        : # create tag
         git tag -a "$CI_TAG -m "$CI_TAG "$CI_SHA"
       shell: bash
       env:
@@ -85,28 +90,27 @@ runs:
         CI_TAG: ${{ steps.commit.outputs.tag }}
 
     - run: |
-        :
-        # push back to source
+        : # push back to source
         git push origin "$CI_ORIGIN" --force-with-lease
       shell: bash
       env:
         CI_ORIGIN: ${{ steps.commit.outputs.origin }}
 
-    - if: ${{ !inputs.assets }}
-      run: |
-        :
-        # create release
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag
-      shell: bash
-      env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
+    # - if: ${{ !inputs.assets }}
+    #   run: |
+    #     :
+    #     # create release
+    #     gh release create "$CI_TAG" --latest --generate-notes --verify-tag
+    #   shell: bash
+    #   env:
+    #     CI_TAG: ${{ steps.commit.outputs.tag }}
 
-    - if: ${{ inputs.assets }}
-      run: |
-        :
-        # create release with assets
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
-      shell: bash
-      env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
-        INPUT_ASSETS: ${{ inputs.assets }}
+    # - if: ${{ inputs.assets }}
+    #   run: |
+    #     :
+    #     # create release with assets
+    #     gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
+    #   shell: bash
+    #   env:
+    #     CI_TAG: ${{ steps.commit.outputs.tag }}
+    #     INPUT_ASSETS: ${{ inputs.assets }}

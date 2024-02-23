@@ -12,7 +12,7 @@ outputs:
   github:
     value: |
       {
-        "timezone-set": ${{ steps.github.timezone-set.outputs.value }},
+        "timezone-set": ${{ steps.github_timezone-set.outputs.value }},
         "has-token": "",
         "has-repository": "",
         "first-release": ""
@@ -22,7 +22,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - if: contains(inputs.check, 'github.timezone-set') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github_timezone-set') || inputs.check == 'all'
       run: |
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
@@ -30,9 +30,9 @@ runs:
                 echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: github.timezone-set
+      id: github_timezone-set
 
-    - if: contains(inputs.check, 'github.has-token') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github_has-token') || inputs.check == 'all'
       run: |
         {
             [ -z "$GH_TOKEN" ] &&
@@ -40,9 +40,9 @@ runs:
                 echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: github.has-token
+      id: github_has-token
 
-    - if: contains(inputs.check, 'github.has-repository') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github_has-repository') || inputs.check == 'all'
       run: |
         {
             ! git status >/dev/null 2>&1 &&
@@ -50,9 +50,9 @@ runs:
                 echo "value=true" >>"$GITHUB_OUTPUT"
         }; :
       shell: bash
-      id: github.has-repository
+      id: github_has-repository
 
-    - if: contains(inputs.check, 'github.first-release') || inputs.check == 'all'
+    - if: contains(inputs.check, 'github_first-release') || inputs.check == 'all'
       run: |
         {
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
@@ -61,4 +61,4 @@ runs:
             fi
         }; :
       shell: bash
-      id: github.first-release
+      id: github_first-release

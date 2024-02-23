@@ -111,16 +111,13 @@ runs:
 
     - run: |
         :
-        FILES=(
-            github
-            git
-        )
+        FILES=('${{ steps.file.outputs.files }}')
         JSON_TEMP='${{ steps.file.outputs.json_temp }}'
-
         for file in "${FILES[@]}"; do
-            JSON="$file.json"
-            CONTENT="$(<$JSON_TEMP/$JSON)"
-            echo "${CONTENT%,*} }" >"$JSON_TEMP/$JSON"
+            JSON="$JSON_TEMP/$file.json"
+            CONTENT="$(<$JSON)"
+            echo "$file=${CONTENT%,*} }" >>"$GITHUB_OUTPUT"
         done
+      # rm -rf "$JSON_TEMP"
       shell: bash
       id: json

@@ -104,16 +104,16 @@ runs:
     #   shell: bash
     #   id: git_has-keypair
 
-    - run: |
-        :
-        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
-        FILES=(
-            github
-            git
-        )
+    # - run: |
+    #     :
+    #     JSON_TEMP='${{ steps.file.outputs.json_temp }}'
+    #     FILES=(
+    #         github
+    #         git
+    #     )
 
-        for file in "${FILES[@]}"; do
-            echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
-        done
-      shell: bash
-      id: json
+    #     for file in "${FILES[@]}"; do
+    #         echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
+    #     done
+    #   shell: bash
+    #   id: json

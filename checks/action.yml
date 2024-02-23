@@ -24,7 +24,6 @@ outputs:
         "timezone-set": ${{ steps.github_timezone-set.outputs.value }},
         "has-token": ${{ steps.github_has-token.outputs.value }},
         "has-repository": ${{ steps.github_has-repository.outputs.value }},
-        "first-release": ${{ steps.github_first-release.outputs.value || null }}
       }
     description: ''
   git:
@@ -90,3 +89,18 @@ runs:
         }; :
       shell: bash
       id: git_has-keypair
+
+    - run: |
+        CHECKS=(
+            github_timezone-set
+            github_has-token
+            github_has-repository
+            github_first-release
+            git_has-keypair
+        )
+
+        for check in "${CHECKS[@]}"; do
+            [ ! -z ${{ steps.$check.outputs.value }} ] &&
+            echo "$check has value"
+        done
+      shell: bash

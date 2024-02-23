@@ -17,8 +17,10 @@ inputs:
     description: |
       has-keypair
 
-# outputs:
-#   github:
+outputs:
+  github:
+    value: ${{ steps.json.outputs.github }}
+    description: ''
 #     value: |
 #       {
 #         "timezone-set": ${{ steps.github_timezone-set.outputs.value }},

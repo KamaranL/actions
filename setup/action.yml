@@ -21,7 +21,8 @@ runs:
       id: checks
 
     - run: |
-        cat "$RUNNER_TEMP/.json/github.json"
+        # cat "$RUNNER_TEMP/.json/github.json"
+        echo "${{ steps.checks.outputs }}"
         exit 128
       shell: bash
 

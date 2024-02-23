@@ -44,18 +44,18 @@ runs:
         echo "{" | tee \
             "$JSON_TEMP/github.json" \
             "$JSON_TEMP/git.json"
+        echo "json_temp="$JSON_TEMP" >>"$GITHUB_OUTPUT"
         echo "github=$JSON_TEMP/github.json" >>"$GITHUB_OUTPUT"
         echo "git=$JSON_TEMP/git.json" >>"$GITHUB_OUTPUT"
       shell: bash
-      id: json
+      id: file
 
     - if: contains(inputs.github, 'timezone-set') || inputs.all == true
       run: |
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
                 val='false'
-            echo "\"timezone-set\":${val:-false},"
-            echo "$(<${{ steps.json.outputs.github }})\"timezone-set\": ${val:-true}," >"${{ steps.json.outputs.github }}"
+            echo "$(<${{ steps.file.outputs.github }}) \"timezone-set\": ${val:-true}," >"${{ steps.file.outputs.github }}"
         }; :
       shell: bash
       id: github_timezone-set
@@ -104,17 +104,16 @@ runs:
     #   shell: bash
     #   id: git_has-keypair
 
-    # - run: |
-    #     CHECKS=(
-    #         github_timezone-set
-    #         github_has-token
-    #         github_has-repository
-    #         github_first-release
-    #         git_has-keypair
-    #     )
+    - run: |
+        :
+        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
+        FILES=(
+            github
+            git
+        )
 
-    #     for check in "${CHECKS[@]}"; do
-    #         [ ! -z ${{ steps.$check.outputs.value }} ] &&
-    #         echo "$check has value"
-    #     done
-    #   shell: bash
+        for file in "${FILES[@]}"; do
+            echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
+        done
+      shell: bash
+      id: json

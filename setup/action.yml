@@ -14,9 +14,9 @@ runs:
     - uses: KamaranL/actions/checks@v0
       with:
         check: |
-          github.timezone-set
-          github.has-token
-          github.has-repository
+          github_timezone-set
+          github_has-token
+          github_has-repository
       id: check
 
     - run: |

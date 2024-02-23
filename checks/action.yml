@@ -113,7 +113,8 @@ runs:
         )
 
         for file in "${FILES[@]}"; do
-            echo "$(<$JSON_TEMP/$file) }" >"$JSON_TEMP/$file"
+            JSON="$file.json"
+            echo "$(<$JSON_TEMP/$JSON) }" >"$JSON_TEMP/$JSON"
         done
       shell: bash
       id: json

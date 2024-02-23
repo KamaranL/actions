@@ -21,7 +21,6 @@ runs:
       id: checks
 
     - run: |
-        # cat "$RUNNER_TEMP/.json/github.json"
         echo "${{ toJson(steps.checks.outputs) }}"
         exit 128
       shell: bash

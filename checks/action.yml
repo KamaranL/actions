@@ -113,7 +113,7 @@ runs:
 
     - run: |
         :
-        FILES=('${{ steps.file.outputs.files }}')
+        FILES=(${{ steps.file.outputs.files }})
         JSON_TEMP='${{ steps.file.outputs.json_temp }}'
         for file in "${FILES[@]}"; do
             JSON="$JSON_TEMP/$file.json"

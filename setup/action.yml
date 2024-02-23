@@ -22,7 +22,7 @@ runs:
 
     - run: |
         # cat "$RUNNER_TEMP/.json/github.json"
-        echo "${{ steps.checks.outputs }}"
+        echo "${{ toJson(steps.checks.outputs) }}"
         exit 128
       shell: bash
 

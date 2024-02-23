@@ -2,7 +2,7 @@ name: 'release'
 description: ''
 inputs:
   assets:
-    description: ''
+    description: '[string]'
 
 runs:
   using: composite

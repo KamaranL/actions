@@ -2,26 +2,26 @@ name: 'setup'
 description: ''
 inputs:
   fetch-depth:
-    description: |
-      [int]
-
-      Default: '1'
-    default: '1'
+    description: '[number]'
+    default: ${{ 1 }}
 
 runs:
   using: composite
   steps:
     - uses: KamaranL/actions/checks@v0
       with:
-        check: |
-          github_timezone-set
-          github_has-token
-          github_has-repository
-      id: check
+        all: true
+        # github: |
+        #   timezone-set
+        #   has-token
+        #   has-repository
+        # git: |
+        #   has-keypair
+      id: checks
 
     - run: |
-        echo "${{ steps.check.outputs.github }}"
-        echo "${{ fromJson(steps.check.outputs.github).timezone-set }}"
+        echo "${{ steps.checks.outputs }}"
+        echo "${{ fromJson(steps.checks.outputs.github).timezone-set }}"
         exit 128
       shell: bash
 

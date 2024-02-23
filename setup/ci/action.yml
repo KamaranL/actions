@@ -2,8 +2,8 @@ name: 'setup-ci'
 description: ''
 inputs:
   nuget:
-    description: '[bool]'
-    default: 'false'
+    description: '[boolean]'
+    default: ${{ false }}
 
 runs:
   using: composite

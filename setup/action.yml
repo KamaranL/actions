@@ -22,10 +22,11 @@ runs:
 
     - run: |
         cat "$RUNNER_TEMP/.json/github.json"
-        # echo "${{ steps.checks.outputs }}"
-        # echo "${{ fromJson(steps.checks.outputs.github).timezone-set }}"
         exit 128
       shell: bash
+
+    # echo "${{ steps.checks.outputs }}"
+    # echo "${{ fromJson(steps.checks.outputs.github).timezone-set }}"
 
     # - if: steps.check.outputs.gh_token == 'fail'
     # - if: fromJson(steps.check.outputs.raw.gh_token)

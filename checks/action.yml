@@ -55,7 +55,7 @@ runs:
             [ "$(</etc/timezone)" != "America/New_York" ] &&
                 val='false'
             echo "\"timezone-set\":${val:-false},"
-            echo "$(<${{ steps.json.outputs.github }})\"timezone-set\":${val:-false}," >"${{ steps.json.outputs.github }}"
+            echo "$(<${{ steps.json.outputs.github }})\"timezone-set\": ${val:-true}," >"${{ steps.json.outputs.github }}"
         }; :
       shell: bash
       id: github_timezone-set

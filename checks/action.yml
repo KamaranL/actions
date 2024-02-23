@@ -13,6 +13,9 @@ outputs:
     description: ''
     value: |
       {
+        "user": {
+          "name": "Kam"
+        },
         "name": "Kam",
         "timezone": "${{ steps.timezone.outputs.check }}",
         "gh_token": "${{ steps.gh_token.outputs.check }}",

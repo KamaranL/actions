@@ -17,7 +17,7 @@ runs:
       id: check
 
     - run: |
-        echo "${{ fromJson (steps.check.outputs.raw ) }}"
+        echo "${{ fromJson (steps.check.outputs.raw ).user }}"
         exit 1
       shell: bash
 

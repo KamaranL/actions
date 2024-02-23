@@ -39,14 +39,19 @@ runs:
   steps:
     - run: |
         :
+        FILES=(
+            github
+            git
+        )
         JSON_TEMP="$RUNNER_TEMP/.json"
         [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
-        echo "{" | tee \
-            "$JSON_TEMP/github.json" \
-            "$JSON_TEMP/git.json"
+        for file in "${FILES[@]}"; do
+            JSON="$JSON_TEMP/$file.json"
+            echo "{" >"$JSON"
+            echo "$file=$JSON" >>"$GITHUB_OUTPUT"
+        done
+        echo "files=${FILES[@]}" >>"$GITHUB_OUTPUT"
         echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
-        echo "github=$JSON_TEMP/github.json" >>"$GITHUB_OUTPUT"
-        echo "git=$JSON_TEMP/git.json" >>"$GITHUB_OUTPUT"
       shell: bash
       id: file
 
@@ -55,7 +60,7 @@ runs:
         {
             [ "$(</etc/timezone)" != "America/New_York" ] &&
                 val='false'
-            echo "$(<${{ steps.file.outputs.github }}) \"timezone-set\": ${val:-true}," >"${{ steps.file.outputs.github }}"
+            echo "$(<'${{ steps.file.outputs.github }}') \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
       shell: bash
       id: github_timezone-set
@@ -106,11 +111,11 @@ runs:
 
     - run: |
         :
-        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
         FILES=(
             github
             git
         )
+        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
 
         for file in "${FILES[@]}"; do
             JSON="$file.json"

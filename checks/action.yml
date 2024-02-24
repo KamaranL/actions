@@ -54,7 +54,7 @@ runs:
       shell: bash
       id: file
 
-    - if: contains(inputs.github, timezone-set) || ${{ inputs.all }} == true
+    - if: contains(inputs.github, 'timezone-set') || ${{ inputs.all }} == true
       run: |
         { # github.timezone-set
             echo "::debug::>check(github.timezone-set)"
@@ -63,7 +63,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.github, has-token) || ${{ inputs.all }} == true
+    - if: contains(inputs.github, 'has-token') || ${{ inputs.all }} == true
       run: |
         { # github.has-token
             echo "::debug::>check(github.has-token)"
@@ -72,7 +72,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.github, has-repository) || ${{ inputs.all }} == true
+    - if: contains(inputs.github, 'has-repository') || ${{ inputs.all }} == true
       run: |
         { # github.has-repository
             echo "::debug::>check(github.has-repository)"
@@ -81,7 +81,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.github, release) || ${{ inputs.all }} == true
+    - if: contains(inputs.github, 'release') || ${{ inputs.all }} == true
       run: |
         { # github.first-release
             echo "::debug::>check(github.first-release)"
@@ -92,7 +92,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.github, release) || ${{ inputs.all }} == true
+    - if: contains(inputs.github, 'release') || ${{ inputs.all }} == true
       run: |
         { # github.is-release, github.is-prerelease
             echo "::debug::>check(github.is-release, github.is-prerelease)"
@@ -107,7 +107,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.git, has-keypair) || ${{ inputs.all }} == true
+    - if: contains(inputs.git, 'has-keypair') || ${{ inputs.all }} == true
       run: |
         { # git.has-keypair, path.ssh
             echo "::debug::>check(git.has-keypair)"
@@ -118,7 +118,7 @@ runs:
         }; :
       shell: bash
 
-    - if: contains(inputs.git, is-configured) || ${{ inputs.all }} == true
+    - if: contains(inputs.git, 'is-configured') || ${{ inputs.all }} == true
       run: |
         { # git.is-configured
             echo "::debug::>check(git.is-configured)"

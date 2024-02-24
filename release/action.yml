@@ -24,8 +24,8 @@ runs:
       with:
         export-env: false
       env:
-        ID: 'op://Private/bot@kamaranl.vip/private key'
-        ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
+        SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
+        SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
       id: op-ssh
 
     - if: |
@@ -44,8 +44,8 @@ runs:
         chmod 0600 "$SSH_TEMP/id_ed25519"
       shell: bash
       env:
-        SSH_ID: ${{ steps.op-ssh.outputs.ID }}
-        SSH_ID_PUB: ${{ steps.op-ssh.outputs.ID_PUB }}
+        SSH_ID: ${{ steps.op-ssh.outputs.SSH_ID }}
+        SSH_ID_PUB: ${{ steps.op-ssh.outputs.SSH_ID_PUB }}
 
     - run: |
         ls -la "$RUNNER_TEMP/.ssh"

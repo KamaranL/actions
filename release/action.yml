@@ -30,8 +30,8 @@ runs:
 
     - if: |
         fromJson(steps.checks.outputs.git).has-keypair == false &&
-            steps.op-ssh.outputs.id &&
-            steps.op-ssh.outputs.id_pub
+            contains(steps.op-ssh.outputs, 'id') &&
+            contains(steps.op-ssh.outputs, 'id_pub')
       run: |
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"

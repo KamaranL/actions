@@ -21,8 +21,6 @@ runs:
 
     - if: fromJson(steps.checks.outputs.git).has-keypair == false
       uses: 1password/load-secrets-action@v1
-      with:
-        export-env: false
       env:
         SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
         SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
@@ -35,17 +33,12 @@ runs:
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"
         SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
-        # SSH_ID="${{ steps.op-ssh.outputs.ID }}"
-        # SSH_ID_PUB="${{ steps.op-ssh.outputs.ID_PUB }}"
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
         echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
         chmod 0600 "$SSH_TEMP/id_ed25519"
       shell: bash
-      env:
-        SSH_ID: ${{ steps.op-ssh.outputs.SSH_ID }}
-        SSH_ID_PUB: ${{ steps.op-ssh.outputs.SSH_ID_PUB }}
 
     - run: |
         ls -la "$RUNNER_TEMP/.ssh"

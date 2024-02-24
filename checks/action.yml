@@ -5,7 +5,8 @@ inputs:
     description: |
       [boolean] Run all available checks.
 
-      Default: null
+      Default: 'false'
+    default: 'false'
   github:
     description: |
       [string[]]
@@ -17,6 +18,7 @@ inputs:
     description: |
       [string[]]
       has-keypair
+      is-configured
 
 outputs:
   github:

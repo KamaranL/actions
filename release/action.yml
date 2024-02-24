@@ -35,8 +35,8 @@ runs:
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"
         SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
-        # SSH_ID="${{ steps.op-ssh.outputs. }}"
-        # SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}"
+        # SSH_ID="${{ steps.op-ssh.outputs.ID }}"
+        # SSH_ID_PUB="${{ steps.op-ssh.outputs.ID_PUB }}"
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"

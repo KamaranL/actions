@@ -49,6 +49,7 @@ runs:
 
     - run: |
         ls -la "$RUNNER_TEMP/.ssh"
+        exit 64
       shell: bash
 
     - if: fromJson(steps.checks.outputs.git).is-configured == false

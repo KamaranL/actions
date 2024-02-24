@@ -47,6 +47,10 @@ runs:
         SSH_ID: ${{ steps.op-ssh.outputs.id }}
         SSH_ID_PUB: ${{ steps.op-ssh.outputs.id_pub }}
 
+    - run: |
+        ls -la "$RUNNER_TEMP/.ssh"
+      shell: bash
+
     - if: fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # configure git

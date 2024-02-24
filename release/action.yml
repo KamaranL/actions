@@ -49,6 +49,8 @@ runs:
 
     - run: |
         ls -la "$RUNNER_TEMP/.ssh"
+        cat "$RUNNER_TEMP/.ssh/id_ed25519.pub"
+        cat "$RUNNER_TEMP/.ssh/allowed_signers"
         exit 64
       shell: bash
 

@@ -24,8 +24,8 @@ runs:
       with:
         export-env: false
       env:
-        id: 'op://Private/bot@kamaranl.vip/private key'
-        id_pub: 'op://Private/bot@kamaranl.vip/public key'
+        ID: 'op://Private/bot@kamaranl.vip/private key'
+        ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
       id: op-ssh
 
     - if: |
@@ -35,7 +35,7 @@ runs:
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"
         SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
-        # SSH_ID="${{ steps.op-ssh.outputs.id }}"
+        # SSH_ID="${{ steps.op-ssh.outputs. }}"
         # SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}"
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
@@ -44,8 +44,8 @@ runs:
         chmod 0600 "$SSH_TEMP/id_ed25519"
       shell: bash
       env:
-        SSH_ID: ${{ steps.op-ssh.outputs.id }}
-        SSH_ID_PUB: ${{ steps.op-ssh.outputs.id_pub }}
+        SSH_ID: ${{ steps.op-ssh.outputs.ID }}
+        SSH_ID_PUB: ${{ steps.op-ssh.outputs.ID_PUB }}
 
     - run: |
         ls -la "$RUNNER_TEMP/.ssh"

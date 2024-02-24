@@ -23,7 +23,7 @@ runs:
       uses: 1password/load-secrets-action@v1
       env:
         SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
-        SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
+        # SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
       id: op-ssh
 
     - if: |

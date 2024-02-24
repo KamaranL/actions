@@ -54,7 +54,7 @@ runs:
 
     - if: contains(inputs.github, timezone-set) || ${{ inputs.all }} == true
       run: |
-        { # github.timezone
+        { # github.timezone-set
             echo "::debug::>check(github.timezone-set)"
             [ "$(</etc/timezone)" != "America/New_York" ] && val="false"
             echo "$(<"${{ steps.file.outputs.github }}") \"timezone-set\": ${val:-true}," >"${{ steps.file.outputs.github }}"
@@ -92,7 +92,7 @@ runs:
 
     - if: contains(inputs.github, release) || ${{ inputs.all }} == true
       run: |
-        { # github.is-release || github.is-prerelease
+        { # github.is-release, github.is-prerelease
             echo "::debug::>check(github.is-release, github.is-prerelease)"
             if [ "${{ github.base_ref }}" == main ] &&
                 [[ $name =~ ^dev(elop)?(ment)?$ ]]; then

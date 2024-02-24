@@ -22,9 +22,13 @@ runs:
       id: checks
 
     - if: fromJson(steps.checks.outputs.git).has-keypair == false
+      uses: 1password/load-secrets-action/configure@v1
+      with:
+        service-account-token: ${{ inputs.op-service-account-token }}
+
+    - if: fromJson(steps.checks.outputs.git).has-keypair == false
       uses: 1password/load-secrets-action@v1
       env:
-        OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op-service-account-token }}
         SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
         # SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
       id: op-ssh

@@ -23,9 +23,13 @@ runs:
       shell: bash
 
     - if: fromJson(steps.checks.outputs.github).has-token == false
+      uses: 1password/load-secrets-action/configure@v1
+      with:
+        service-account-token: ${{ inputs.op-service-account-token }}
+
+    - if: fromJson(steps.checks.outputs.github).has-token == false
       uses: 1password/load-secrets-action@v1
       env:
-        OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op-service-account-token }}
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 
     - if: |

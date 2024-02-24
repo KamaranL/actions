@@ -7,9 +7,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - if: github.event != 'pull_request'
+    - if: github.event != pull_request
       run: |
-        echo '::notice::${{ github.workflow }} will only complete successfully on "pull_request"'
+        echo "::notice::${{ github.workflow }} will only complete successfully on \"pull_request\""
       shell: bash
 
     - uses: KamaranL/actions/checks@v0
@@ -34,10 +34,10 @@ runs:
             steps.op-ssh.outputs.id_pub
       run: |
         : # write ssh keypair
-        echo "::debug::Writing ssh key pair..."
-        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
-        SSH_ID='${{ steps.op-ssh.outputs.id }}'
-        SSH_ID_PUB='${{ steps.op-ssh.outputs.id_pub }}'
+        echo "::debug::write(id, id_pub)"
+        SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
+        SSH_ID="${{ steps.op-ssh.outputs.id }}"
+        SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}"
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
@@ -48,8 +48,8 @@ runs:
     - if: fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # configure git
-        echo "::debug::Configuring Git..."
-        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
+        echo "::debug::configure(git)"
+        SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
         git config --global user.name "GitHub Actions"
         git config --global user.email "bot@kamaranl.vip"
         git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
@@ -66,6 +66,7 @@ runs:
 
     - run: |
         : # amend commit
+        echo "::debug::commit()"
         git commit -a --amend --no-edit --date=now && {
             CI_SHA="$(git rev-parse HEAD)"
             echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
@@ -83,7 +84,8 @@ runs:
     - if: steps.commit.outputs
       run: |
         : # create tag
-        git tag -a "$CI_TAG -m "$CI_TAG "$CI_SHA"
+        echo "::debug::tag($CI_TAG)"
+        git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA"
       shell: bash
       env:
         CI_SHA: ${{ steps.commit.outputs.sha }}
@@ -91,6 +93,7 @@ runs:
 
     - run: |
         : # push back to source
+        echo "::debug::push($CI_ORIGIN)"
         git push origin "$CI_ORIGIN" --force-with-lease
       shell: bash
       env:

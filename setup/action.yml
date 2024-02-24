@@ -4,6 +4,8 @@ inputs:
   fetch-depth:
     description: ''
     default: '1'
+  op-service-account-token:
+    description: ''
 
 runs:
   using: composite
@@ -22,6 +24,8 @@ runs:
 
     - if: fromJson(steps.checks.outputs.github).has-token == false
       uses: 1password/load-secrets-action@v1
+      with:
+        service-account-token: ${{ inputs.op-service-account-token }}
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
 

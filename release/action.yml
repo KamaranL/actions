@@ -3,6 +3,8 @@ description: ''
 inputs:
   assets:
     description: ''
+  op-service-account-token:
+    description: ''
 
 runs:
   using: composite
@@ -22,7 +24,7 @@ runs:
     - if: fromJson(steps.checks.outputs.git).has-keypair == false
       uses: 1password/load-secrets-action@v1
       with:
-        service-account-token: ${{ env.OP_SERVICE_ACCOUNT_TOKEN }}
+        service-account-token: ${{ inputs.op-service-account-token }}
       env:
         SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
         # SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'

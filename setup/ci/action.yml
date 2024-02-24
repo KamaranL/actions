@@ -4,6 +4,8 @@ inputs:
   nuget:
     description: ''
     default: 'false'
+  op-service-account-token:
+    description: ''
 
 runs:
   using: composite
@@ -16,6 +18,7 @@ runs:
     - uses: KamaranL/actions/setup@v0
       with:
         fetch-depth: 0
+        op-service-account-token: ${{ inputs.op-service-account-token }}
 
     - uses: gittools/actions/gitversion/setup@v0.11
       with:

@@ -31,6 +31,8 @@ runs:
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Tokens/GitHub.kamaranl.CICD/credential
+        SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
+        SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
 
     - if: |
         fromJson(steps.checks.outputs.github).has-repository == false

@@ -42,7 +42,7 @@ runs:
         JSON_TEMP="$RUNNER_TEMP/.json"
         [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
         for file in "${FILES[@]}"; do
-            JSON="$JSON_TEMP/$file.json"
+            JSON="$JSON_TEMP/$file"
             echo "{" >"$JSON"
             echo "$file=$JSON" >>"$GITHUB_OUTPUT"
             echo "::debug::>open($file)"
@@ -130,7 +130,7 @@ runs:
         FILES=(${{ steps.file.outputs.files }})
         JSON_TEMP="${{ steps.file.outputs.json_temp }}"
         for file in "${FILES[@]}"; do
-            JSON="$JSON_TEMP/$file.json"
+            JSON="$JSON_TEMP/$file"
             CONTENT="$(<$JSON)"
             echo "$file=${CONTENT%,*} }" >>"$GITHUB_OUTPUT"
             echo "::debug::>close($file)"

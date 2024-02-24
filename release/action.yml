@@ -68,16 +68,17 @@ runs:
         : # amend commit
         echo "::debug::commit()"
         git commit -a --amend --no-edit --date=now && {
-            CI_SHA="$(git rev-parse HEAD)"
-            echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
-            echo "origin=$CI_SHA:$CI_SOURCE_BRANCH" >>"$GITHUB_OUTPUT"
-            echo "tag="v$CI_VERSION" >>"$GITHUB_OUTPUT"
+            # CI_SHA="$(git rev-parse HEAD)"
+            # echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
+            # echo "origin=$CI_SHA:$CI_SOURCE_BRANCH" >>"$GITHUB_OUTPUT"
+            # echo "tag="v$CI_VERSION" >>"$GITHUB_OUTPUT"
         }
       shell: bash
       id: commit
 
     - if: steps.commit.outputs == null
       run: |
+        echo "::notice::git did not commit successfully, exiting now"
         exit 128
       shell: bash
 

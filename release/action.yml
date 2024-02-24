@@ -21,17 +21,14 @@ runs:
           is-configured
       id: checks
 
-    # - if: fromJson(steps.checks.outputs.git).has-keypair == false
-    #   uses: 1password/load-secrets-action/configure@v1
-    #   with:
-    #     service-account-token: ${{ inputs.op-service-account-token }}
-
-    # - if: fromJson(steps.checks.outputs.git).has-keypair == false
-    #   uses: 1password/load-secrets-action@v1
-    #   env:
-    #     SSH_ID: 'op://Private/bot@kamaranl.vip/private key'
-    #     SSH_ID_PUB: 'op://Private/bot@kamaranl.vip/public key'
-    #   id: op-ssh
+    - if: fromJson(steps.checks.outputs.git).has-keypair == false
+      uses: 1password/load-secrets-action@v1
+      with:
+        export-env: false
+      env:
+        id: 'op://Integrations/bot@kamaranl.vip/private key'
+        id_pub: 'op://Integrations/bot@kamaranl.vip/public key'
+      id: op-ssh
 
     - if: |
         fromJson(steps.checks.outputs.git).has-keypair == false &&
@@ -40,6 +37,8 @@ runs:
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"
         SSH_TEMP="${{ fromJson(steps.checks.outputs.path).ssh }}"
+        SSH_ID="${{ steps.op-ssh.outputs.id }}"
+        SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}"
         [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
         echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"

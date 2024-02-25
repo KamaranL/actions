@@ -57,7 +57,7 @@ runs:
         }; :
       shell: bash
 
-    - if: fromJson(steps.checks.outputs.github).is-prerelease == true && ${{ inputs.nuget }}
+    - if: fromJson(steps.checks.outputs.github).is-prerelease == true && ${{ inputs.nuget }} == true
       run: |
         { # set CI_VERSION (nuget-compatible prerelease)
             echo "CI_VERSION=${GitVersion_FullSemVer%.*}${GitVersion_FullSemVer##*.}" >>"$GITHUB_ENV"

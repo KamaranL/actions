@@ -26,13 +26,16 @@ runs:
       with:
         export-env: false
       env:
-        id: op://Integrations/bot/private-key
-        id_pub: op://Integrations/bot/public-key
+        id: op://Integrations/bot.kamaranl.vip/private-key
+        id_pub: op://Integrations/bot.kamaranl.vip/public-key
       id: op-ssh
 
     - if: |
         fromJson(steps.checks.outputs.git).has-keypair == false &&
-            fromJson(steps.checks.outputs.git).is-configured == false
+            steps.op-ssh.outputs.id &&
+            steps.op-ssh.outputs.id_pub
+
+      # fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"

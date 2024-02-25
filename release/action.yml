@@ -34,8 +34,6 @@ runs:
         fromJson(steps.checks.outputs.git).has-keypair == false &&
             steps.op-ssh.outputs.id &&
             steps.op-ssh.outputs.id_pub
-
-      # fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # write ssh keypair
         echo "::debug::write(id, id_pub)"
@@ -47,13 +45,6 @@ runs:
         echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
         echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
         chmod 0600 "$SSH_TEMP/id_ed25519"
-      shell: bash
-
-    - run: |
-        ls -la "$RUNNER_TEMP/.ssh"
-        cat "$RUNNER_TEMP/.ssh/id_ed25519.pub"
-        cat "$RUNNER_TEMP/.ssh/allowed_signers"
-        exit 64
       shell: bash
 
     - if: fromJson(steps.checks.outputs.git).is-configured == false

@@ -12,7 +12,11 @@ runs:
       shell: bash
 
     - if: ${{ inputs.assets != null }}
-      run: echo "::notice::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
+      run: echo "::notice::There are assets"
+      shell: bash
+
+    - if: inputs.assets == null
+      run: echo "::notice::There are NO assets"
       shell: bash
 
     - uses: KamaranL/actions/checks@v0

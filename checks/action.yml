@@ -2,23 +2,18 @@ name: 'checks'
 description: ''
 inputs:
   all:
-    description: |
-      [boolean] Run all available checks.
-
-      Default: 'false'
+    description: "Default: 'false'"
     default: 'false'
   github:
     description: |
-      [string[]]
-      timezone-set
-      has-token
-      has-repository
-      first-release
+      ["timezone-set",
+      "has-token",
+      "has-repository",
+      "first-release"]
   git:
     description: |
-      [string[]]
-      has-keypair
-      is-configured
+      ["has-keypair",
+      "is-configured"]
 
 outputs:
   github:

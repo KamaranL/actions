@@ -19,6 +19,11 @@ runs:
       with:
         fetch-depth: 0
 
+    - uses: KamaranL/actions/checks@v0
+      with:
+        github: release
+      id: checks
+
     - uses: gittools/actions/gitversion/setup@v0.11
       with:
         versionSpec: 5.x
@@ -27,11 +32,6 @@ runs:
       with:
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml
-
-    - uses: KamaranL/actions/checks@v0
-      with:
-        github: release
-      id: checks
 
     - run: |
         { # set CI_VERSION (default)

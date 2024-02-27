@@ -19,7 +19,7 @@ runs:
         exit 500
       shell: bash
       env:
-        VAR1: ${{  }}
+        VAR1: ${{ steps.checks.outputs.github }}
 
     - if: fromJson(steps.checks.outputs.github).timezone-set == false
       run: sudo timedatectl set-timezone "America/New_York"

@@ -21,8 +21,8 @@ runs:
       with:
         export-env: false
       env:
-        id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
-        id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
+        id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-ke
+        id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-ke
       id: op-ssh
 
     - if: |

@@ -13,9 +13,7 @@ runs:
 
     - uses: KamaranL/actions/checks@v0
       with:
-        git: |
-          has-keypair
-          is-configured
+        git: has-keypair, is-configured
       id: checks
 
     - if: fromJson(steps.checks.outputs.git).has-keypair == false
@@ -26,6 +24,13 @@ runs:
         id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
         id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
       id: op-ssh
+
+    - if: |
+        fromJson(steps.checks.outputs.git).has-keypair == false &&
+            ( steps.op-ssh.outputs.id == null ||
+              steps.op-ssh.outputs.id_pub == null )
+      run: echo "::notice::Failed to load ssh id from previous action"; exit 128
+      shell: bash
 
     - if: |
         fromJson(steps.checks.outputs.git).has-keypair == false &&

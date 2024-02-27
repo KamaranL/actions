@@ -30,8 +30,7 @@ runs:
 
     - uses: KamaranL/actions/checks@v0
       with:
-        github: |
-          release
+        github: release
       id: checks
 
     - run: |

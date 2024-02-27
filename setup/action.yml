@@ -10,16 +10,8 @@ runs:
   steps:
     - uses: KamaranL/actions/checks@v0
       with:
-        # all: true
-        github: timezone-set, has-token
+        github: timezone-set, has-token, has-repository
       id: checks
-
-    - run: |
-        echo "$VAR1"
-        exit 64
-      shell: bash
-      env:
-        VAR1: ${{ steps.checks.outputs.github }}
 
     - if: fromJson(steps.checks.outputs.github).timezone-set == false
       run: sudo timedatectl set-timezone "America/New_York"

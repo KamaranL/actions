@@ -57,7 +57,7 @@ runs:
         { # github.timezone-set
             echo "::debug::>check(github.timezone-set)"
             [ "$(</etc/timezone)" != "America/New_York" ] && val="false"
-            echo "$(<"${{ steps.file.outputs.github }}") \"timezone-set\": ${val:-true}," >"${{ steps.file.outputs.github }}"
+            echo "$(<'${{ steps.file.outputs.github }}') \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
       shell: bash
 
@@ -66,7 +66,7 @@ runs:
         { # github.has-token
             echo "::debug::>check(github.has-token)"
             [ -z "$GH_TOKEN" ] && val="false"
-            echo "$(<"${{ steps.file.outputs.github }}") \"has-token\": ${val:-true}," >"${{ steps.file.outputs.github }}"
+            echo "$(<'${{ steps.file.outputs.github }}') \"has-token\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
       shell: bash
 
@@ -75,7 +75,7 @@ runs:
         { # github.has-repository
             echo "::debug::>check(github.has-repository)"
             ! git status >/dev/null 2>&1 && val="false"
-            echo "$(<"${{ steps.file.outputs.github }}") \"has-repository\": ${val:-true}," >"${{ steps.file.outputs.github }}"
+            echo "$(<'${{ steps.file.outputs.github }}') \"has-repository\": ${val:-true}," >'${{ steps.file.outputs.github }}'
         }; :
       shell: bash
 
@@ -86,7 +86,7 @@ runs:
             if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
                 val="true"
             fi
-            echo "$(<"${{ steps.file.outputs.github }}") \"first-release\": ${val:-false}," >"${{ steps.file.outputs.github }}"
+            echo "$(<'${{ steps.file.outputs.github }}') \"first-release\": ${val:-false}," >'${{ steps.file.outputs.github }}'
         }; :
       shell: bash
 
@@ -96,11 +96,11 @@ runs:
             echo "::debug::>check(github.is-release, github.is-prerelease)"
             if [ "${GITHUB_BASE_REF:-github.base_ref}" == main ] &&
                 [[ ${GITHUB_HEAD_REF:-github.head_ref} =~ ^dev(elop)?(ment)?$ ]]; then
-                echo "$(<"${{ steps.file.outputs.github }}") \"is-release\": true," >"${{ steps.file.outputs.github }}"
-                echo "$(<"${{ steps.file.outputs.github }}") \"is-prerelease\": false," >"${{ steps.file.outputs.github }}"
+                echo "$(<'${{ steps.file.outputs.github }}') \"is-release\": true," >'${{ steps.file.outputs.github }}'
+                echo "$(<'${{ steps.file.outputs.github }}') \"is-prerelease\": false," >'${{ steps.file.outputs.github }}'
             else
-                echo "$(<"${{ steps.file.outputs.github }}") \"is-prerelease\": true," >"${{ steps.file.outputs.github }}"
-                echo "$(<"${{ steps.file.outputs.github }}") \"is-release\": false," >"${{ steps.file.outputs.github }}"
+                echo "$(<'${{ steps.file.outputs.github }}') \"is-prerelease\": true," >'${{ steps.file.outputs.github }}'
+                echo "$(<'${{ steps.file.outputs.github }}') \"is-release\": false," >'${{ steps.file.outputs.github }}'
             fi
         }; :
       shell: bash
@@ -111,8 +111,8 @@ runs:
             echo "::debug::>check(git.has-keypair)"
             SSH_TEMP="$RUNNER_TEMP/.ssh"
             ! [ -f "$SSH_TEMP/id_ed25519" -a -f "$SSH_TEMP/id_ed25519.pub" ] && val="false"
-            echo "$(<"${{ steps.file.outputs.git }}") \"has-keypair\": ${val:-true}," >"${{ steps.file.outputs.git }}"
-            echo "$(<"${{ steps.file.outputs.path }}") \"ssh\": \"$SSH_TEMP\"," >"${{ steps.file.outputs.path }}"
+            echo "$(<'${{ steps.file.outputs.git }}') \"has-keypair\": ${val:-true}," >'${{ steps.file.outputs.git }}'
+            echo "$(<'${{ steps.file.outputs.path }}') \"ssh\": \"$SSH_TEMP\"," >'${{ steps.file.outputs.path }}'
         }; :
       shell: bash
 
@@ -121,14 +121,14 @@ runs:
         { # git.is-configured
             echo "::debug::>check(git.is-configured)"
             [ "$(git config --global user.email)" != "bot@kamaranl.vip" ] && val=false
-            echo "$(<"${{ steps.file.outputs.git }}") \"is-configured\": ${val:-true}," >"${{ steps.file.outputs.git }}"
+            echo "$(<'${{ steps.file.outputs.git }}') \"is-configured\": ${val:-true}," >'${{ steps.file.outputs.git }}'
         }; :
       shell: bash
 
     - run: |
         : # close files, redirect files to output
         FILES=(${{ steps.file.outputs.files }})
-        JSON_TEMP="${{ steps.file.outputs.json_temp }}"
+        JSON_TEMP='${{ steps.file.outputs.json_temp }}'
         for file in "${FILES[@]}"; do
             JSON="$JSON_TEMP/$file"
             CONTENT="$(<$JSON)"

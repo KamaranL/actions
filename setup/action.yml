@@ -12,6 +12,7 @@ runs:
       with:
         all: true
         # github: [""]
+      id: checks
 
     - if: fromJson(steps.checks.outputs.github).timezone-set == false
       run: sudo timedatectl set-timezone "America/New_York"

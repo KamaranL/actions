@@ -1,14 +1,15 @@
-name: 'release'
+name: 'exec-ci'
 description: ''
-inputs:
-  assets:
-    description: 'asset directory path'
+outputs:
+  ci-tag:
+    value: ${{ steps.commit.outputs.tag }}
+    description: ''
 
 runs:
   using: composite
   steps:
     - if: github.event_name != 'pull_request'
-      run: echo "::warn::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
+      run: echo "::error::${{ github.action_repository }} can only run on \"pull_request\""; exit 128
       shell: bash
 
     - uses: KamaranL/actions/checks@v0
@@ -87,40 +88,18 @@ runs:
     - if: steps.commit.outputs.tag
       run: |
         : # create tag
-        echo "::debug::tag($CI_TAG)"
-        git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA"
+        echo "::debug::tag(${{ steps.commit.outputs.tag }})"
+        git tag -a '${{ steps.commit.outputs.tag }}' -m '${{ steps.commit.outputs.tag }}' '${{ steps.commit.outputs.sha }}'
       shell: bash
-      env:
-        CI_SHA: ${{ steps.commit.outputs.sha }}
-        CI_TAG: ${{ steps.commit.outputs.tag }}
 
     - run: |
         : # push back to source
-        echo "::debug::push($CI_ORIGIN)"
-        git push origin "$CI_ORIGIN" --force-with-lease
+        echo "::debug::push(${{ steps.commit.outputs.origin }})"
+        git push origin "${{ steps.commit.outputs.origin }}" --force-with-lease
       shell: bash
-      env:
-        CI_ORIGIN: ${{ steps.commit.outputs.origin }}
-
-    - if: inputs.assets == null
-      run: |
-        : # create release
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag
-      shell: bash
-      env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
-
-    - if: inputs.assets != null
-      run: |
-        : # create release with assets
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
-      shell: bash
-      env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
-        INPUT_ASSETS: ${{ inputs.assets }}
 
     - run: |
-        # test gh pr
-        gh pr comment ${{ github.event.number }} --body 'Successful run by bot'
+        : # close pull_request
+        echo "::debug::close-pull_request(${{ github.event.number }})"
+        gh pr merge '${{ github.event.number }}' --auto
       shell: bash
-

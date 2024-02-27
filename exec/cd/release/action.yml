@@ -1,0 +1,33 @@
+name: 'exec-cd-release'
+description: ''
+inputs:
+  tag:
+    description: 'git tag'
+    required: true
+  assets:
+    description: 'asset directory path'
+
+runs:
+  using: composite
+  steps:
+    - if: inputs.assets == null
+      run: |
+        : # create release
+        gh release create "$CI_TAG" --latest --generate-notes --verify-tag
+      shell: bash
+      env:
+        CI_TAG: ${{ steps.commit.outputs.tag }}
+
+    - if: inputs.assets != null
+      run: |
+        : # create release with assets
+        gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
+      shell: bash
+      env:
+        CI_TAG: ${{ steps.commit.outputs.tag }}
+        INPUT_ASSETS: ${{ inputs.assets }}
+
+    - run: |
+        : # comment release link
+        gh pr comment '${{ github.event.number }}' --body "Published release can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest"
+      shell: bash

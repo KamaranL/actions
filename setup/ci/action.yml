@@ -12,7 +12,7 @@ runs:
   using: composite
   steps:
     - if: github.event_name != 'pull_request'
-      run: echo "::warn::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
+      run: echo "::error::${{ github.action_repository }} can only run on \"pull_request\""; exit 128
       shell: bash
 
     - uses: KamaranL/actions/setup@v0

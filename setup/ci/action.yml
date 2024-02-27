@@ -11,8 +11,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - if: github.event != 'pull_request'
-      run: echo "::notice::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
+    - if: github.event_name != 'pull_request'
+      run: echo "::warn::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
       shell: bash
 
     - uses: KamaranL/actions/setup@v0

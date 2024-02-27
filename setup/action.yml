@@ -2,7 +2,7 @@ name: 'setup'
 description: ''
 inputs:
   fetch-depth:
-    description: ''
+    description: 'actions/checkout fetch-depth'
     default: '1'
 
 runs:

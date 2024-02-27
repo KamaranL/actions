@@ -16,7 +16,7 @@ runs:
 
     - run: |
         echo "$VAR1"
-        exit 500
+        exit 64
       shell: bash
       env:
         VAR1: ${{ steps.checks.outputs.github }}

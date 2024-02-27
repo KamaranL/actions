@@ -20,11 +20,8 @@ inputs:
 
 outputs:
   github:
-    value: fromJson(steps.json.outputs.github)
+    value: ${{ fromJson(steps.json.outputs.github) }}
     description: ''
-  # github:
-  #   value: ${{ fromJson(steps.json.outputs.github) }}
-  #   description: ''
   # github:
   #   value: ${{ steps.json.outputs.github }}
   #   description: ''

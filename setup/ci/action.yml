@@ -45,7 +45,10 @@ runs:
         }; :
       shell: bash
 
-    - if: ${{ fromJson(inputs.nuget) == true && fromJson(steps.checks.outputs.github).is-prerelease == true }}
+    - if: |
+        fromJson(steps.checks.outputs.github).is-prerelease == true &&
+            fromJson(inputs.nuget) == true
+# ${{ fromJson(inputs.nuget) == true && fromJson(steps.checks.outputs.github).is-prerelease == true }}
       run: |
         { # format prerelease tag as nuget-compatible
             echo "CI_VERSION=${CI_VERSION%.*}${CI_VERSION##*.}" >>"$GITHUB_ENV"

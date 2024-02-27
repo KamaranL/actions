@@ -10,8 +10,8 @@ runs:
   steps:
     - uses: KamaranL/actions/checks@v0
       with:
-        all: true
-        # github: [""]
+        # all: true
+        github: ["timezone-set", "has-token"]
       id: checks
 
     - run: |

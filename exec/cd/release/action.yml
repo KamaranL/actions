@@ -13,18 +13,18 @@ runs:
     - if: inputs.assets == null
       run: |
         : # create release
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag
+        gh release create "$INPUT_TAG" --latest --generate-notes --verify-tag
       shell: bash
       env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
+        INPUT_TAG: ${{ inputs.tag }}
 
     - if: inputs.assets != null
       run: |
         : # create release with assets
-        gh release create "$CI_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
+        gh release create "$INPUT_TAG" --latest --generate-notes --verify-tag "$INPUT_ASSETS"/*
       shell: bash
       env:
-        CI_TAG: ${{ steps.commit.outputs.tag }}
+        INPUT_TAG: ${{ inputs.tag }}
         INPUT_ASSETS: ${{ inputs.assets }}
 
     # - run: |

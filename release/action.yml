@@ -118,3 +118,9 @@ runs:
       env:
         CI_TAG: ${{ steps.commit.outputs.tag }}
         INPUT_ASSETS: ${{ inputs.assets }}
+
+    - run: |
+        # test gh pr
+        gh pr comment --body 'Successful run by bot'
+      shell: bash
+

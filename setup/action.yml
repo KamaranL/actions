@@ -1,8 +1,8 @@
-name: 'setup'
+name: setup
 description: ''
 inputs:
   fetch-depth:
-    description: 'actions/checkout fetch-depth'
+    description: 'fetch-depth for actions/checkout'
     default: '1'
 
 runs:

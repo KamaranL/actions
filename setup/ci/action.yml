@@ -1,4 +1,4 @@
-name: 'setup-ci'
+name: setup-ci
 description: ''
 inputs:
   nuget:

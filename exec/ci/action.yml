@@ -1,4 +1,4 @@
-name: 'exec-ci'
+name: exec-ci
 description: ''
 outputs:
   ci-tag:

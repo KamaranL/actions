@@ -1,4 +1,4 @@
-name: 'exec-cd-release'
+name: exec-cd-release
 description: ''
 inputs:
   tag:
@@ -27,7 +27,7 @@ runs:
         CI_TAG: ${{ steps.commit.outputs.tag }}
         INPUT_ASSETS: ${{ inputs.assets }}
 
-    - run: |
-        : # comment release link
-        gh pr comment '${{ github.event.number }}' --body "Published release can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest"
-      shell: bash
+    # - run: |
+    #     : # comment release link
+    #     gh pr comment '${{ github.event.number }}' --body "Published release can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest"
+    #   shell: bash

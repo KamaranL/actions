@@ -14,6 +14,13 @@ runs:
         # github: [""]
       id: checks
 
+    - run: |
+        echo "$VAR1"
+        exit 500
+      shell: bash
+      env:
+        VAR1: ${{  }}
+
     - if: fromJson(steps.checks.outputs.github).timezone-set == false
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash

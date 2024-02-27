@@ -2,7 +2,10 @@ name: 'setup-ci'
 description: ''
 inputs:
   nuget:
-    description: ''
+    description: |
+        [true, false]
+
+        Default: false
     default: 'false'
 
 runs:

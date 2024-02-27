@@ -3,9 +3,9 @@ description: ''
 inputs:
   all:
     description: |
-        ["true", "false"]
+        [true, false]
 
-        Default: "false"
+        Default: false
     default: 'false'
   github:
     description: |
@@ -20,8 +20,11 @@ inputs:
 
 outputs:
   github:
-    value: ${{ steps.json.outputs.github }}
+    value: fromJson(steps.json.outputs.github)
     description: ''
+  # github:
+  #   value: ${{ steps.json.outputs.github }}
+  #   description: ''
   git:
     value: ${{ steps.json.outputs.git }}
     description: ''

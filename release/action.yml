@@ -3,8 +3,6 @@ description: ''
 inputs:
   assets:
     description: ''
-  op-service-account-token:
-    description: ''
 
 runs:
   using: composite

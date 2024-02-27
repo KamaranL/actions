@@ -97,7 +97,7 @@ runs:
         { # github.is-release, github.is-prerelease
             echo "::debug::>check(github.is-release, github.is-prerelease)"
             if [ "${{ github.base_ref }}" == main ] &&
-                [[ $name =~ ^dev(elop)?(ment)?$ ]]; then
+                [[ ${{ github.head_ref }} =~ ^dev(elop)?(ment)?$ ]]; then
                 echo "$(<"${{ steps.file.outputs.github }}") \"is-release\": true," >"${{ steps.file.outputs.github }}"
                 echo "$(<"${{ steps.file.outputs.github }}") \"is-prerelease\": false," >"${{ steps.file.outputs.github }}"
             else

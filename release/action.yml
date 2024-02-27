@@ -10,8 +10,7 @@ runs:
   using: composite
   steps:
     - if: github.event != 'pull_request'
-      run: |
-        echo "::notice::${{ github.workflow }} will only complete successfully on \"pull_request\""
+      run: echo "::notice::$GITHUB_WORKFLOW will only complete successfully on \"pull_request\""
       shell: bash
 
     - uses: KamaranL/actions/checks@v0

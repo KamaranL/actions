@@ -79,9 +79,7 @@ runs:
       id: commit
 
     - if: steps.commit.outputs == null
-      run: |
-        echo "::notice::git did not commit successfully, exiting now"
-        exit 128
+      run: echo "::notice::git did not commit successfully, exiting now"; exit 128
       shell: bash
 
     - if: steps.commit.outputs

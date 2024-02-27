@@ -10,7 +10,7 @@ runs:
   steps:
     - uses: KamaranL/actions/checks@v0
       with:
-        all: true
+        all: 'true'
         github: |
           timezone-set
           has-token

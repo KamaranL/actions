@@ -2,7 +2,10 @@ name: 'checks'
 description: ''
 inputs:
   all:
-    description: "Default: 'false'"
+    description: |
+        ["true", "false"]
+
+        Default: "false"
     default: 'false'
   github:
     description: |

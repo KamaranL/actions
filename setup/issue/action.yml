@@ -4,15 +4,14 @@ description: ''
 runs:
   using: composite
   steps:
+    - uses: KamaranL/actions/setup@v0
+      with:
+        no-repo: true
+
     - uses: KamaranL/actions/checks@v0
       with:
-        github: ci-label, has-token, timezone-set
+        github: ci-label
       id: checks
-
-    - if: fromJson(steps.checks.outputs.github).has-token == false
-      uses: 1password/load-secrets-action@v1
-      env:
-        GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
 
     - if: fromJson(steps.checks.outputs.github).ci-label == false
       run: |

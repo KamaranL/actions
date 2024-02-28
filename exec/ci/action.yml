@@ -103,3 +103,8 @@ runs:
         echo "::debug::close-pull_request(${{ github.event.number }})"
         gh pr merge '${{ github.event.number }}' --auto
       shell: bash
+
+    - run: |
+        : # cleanup
+        rm -rf '${{ fromJson(steps.checks.outputs.path).ssh }}'
+      shell: bash

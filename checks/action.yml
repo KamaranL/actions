@@ -12,7 +12,8 @@ inputs:
       ["timezone-set",
       "has-token",
       "has-repository",
-      "release"]
+      "release",
+      "ci-label"]
   git:
     description: |
       ["has-keypair",
@@ -51,6 +52,10 @@ runs:
         echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
       shell: bash
       id: file
+
+####################
+# GitHub
+####################
 
     - if: ${{ contains(inputs.github, 'timezone-set') || fromJson(inputs.all) == true }}
       run: |
@@ -104,6 +109,24 @@ runs:
             fi
         }; :
       shell: bash
+
+    - if: ${{ contains(inputs.github, 'ci-label') || fromJson(inputs.all) == true }}
+      run: |
+        { # github.ci-label
+            for label in $(gh label list --json name --jq .[].name); do
+                [ "$label" == ci ] && {
+                    val=true
+                    break
+                }
+            done
+            echo "$(<${{ steps.file.outputs.github }}) \"ci-label\": ${val:-false}," >'${{ steps.file.outputs.github }}'
+            echo "$(<${{ steps.file.outputs.path }}) \"log\": \"$RUNNER_TEMP/.log\"," >'${{ steps.file.outputs.path }}'
+        }; :
+      shell: bash
+
+####################
+# Git
+####################
 
     - if: ${{ contains(inputs.git, 'has-keypair') || fromJson(inputs.all) == true }}
       run: |

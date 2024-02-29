@@ -75,9 +75,9 @@ runs:
         | Workflow    |                                     |
         | ----------- | ----------------------------------- |
         | Name        | [$WORKFLOW_RUN]($WORKFLOW_RUN_FILE) |
+        | Number      | $WORKFLOW_RUN_NUMBER                |
         | ID          | $WORKFLOW_RUN_ID                    |
         | Attempt     | $WORKFLOW_RUN_ATTEMPT               |
-        | Number      | $WORKFLOW_RUN_NUMBER                |
         | Event       | $WORKFLOW_RUN_EVENT                 |
         $(
                     [ "$WORKFLOW_RUN_EVENT" == pull_request ] && {

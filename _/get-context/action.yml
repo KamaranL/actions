@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: echo -e "$GITHUB_CONTEXT"
+    - run: echo -e "$GITHUB_CONTEXT" | sed 's/^/(github)..../'
       shell: bash
       env:
-        GITHUB_CONTEXT: ${{ toJson(inputs.context) }}
+        GITHUB_CONTEXT: ${{ toJson(github) }}

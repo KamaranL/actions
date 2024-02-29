@@ -33,10 +33,14 @@ runs:
         : # write job output to log
         LOG_TEMP='${{ fromJson(steps.checks.outputs.path).log }}'
         [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
-        gh run view $GITHUB_RUN_ID -v --log-failed \
-            --attempt $GITHUB_RUN_ATTEMPT \
-            --repo "$GITHUB_REPOSITORY" >"$LOG_TEMP/$GITHUB_WORKFLOW-$GITHUB_RUN_ID.GITHUB_RUN_ATTEMPT.log"
+        gh run view $WORKFLOW_RUN_ID -v --log-failed \
+            --attempt $WORKFLOW_RUN_ATTEMPT \
+            --repo "$GITHUB_REPOSITORY" >"$LOG_TEMP/$WORKFLOW_RUN-$WORKFLOW_RUN_ID.$WORKFLOW_RUN_ATTEMPT.log"
       shell: bash
+      env:
+        WORKFLOW_RUN: ${{ fromJson(inputs.workflow-run).name }}
+        WORKFLOW_RUN_ATTEMPT: ${{ fromJson(inputs.workflow-run).run_attempt }}
+        WORKFLOW_RUN_ID: ${{ fromJson(inputs.workflow-run).id }}
 
     - uses: actions/upload-artifact@v4
       with:
@@ -51,10 +55,12 @@ runs:
         gh issue create \
             --assignee $GITHUB_TRIGGERING_ACTOR \
             --label ci \
-            --title "$GITHUB_WORKFLOW on ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME} ($GITHUB_RUN_ID)" \
+            --title "🔴 ${WORKFLOW_RUN^} #${WORKFLOW_RUN_NUMBER}: $WORKFLOW_RUN_EVENT" \
             --body "$(
                 cat <<DOC
-        Attempt # $GITHUB_RUN_ATTEMPT
+        Attempt: $WORKFLOW_RUN_ATTEMPT
+
+        Branch: TBD
 
         - [ ] Review [logs](${{ steps.logs.outputs.artifact-url }})
         - [ ] Mention findings
@@ -62,6 +68,13 @@ runs:
             )" \
             --repo "$GITHUB_REPOSITORY"
       shell: bash
+      env:
+        WORKFLOW_RUN: ${{ fromJson(inputs.workflow-run).name }}
+        WORKFLOW_RUN_ATTEMPT: ${{ fromJson(inputs.workflow-run).run_attempt }}
+        WORKFLOW_RUN_CONCLUSION: ${{ fromJson(inputs.workflow-run).conclusion }}
+        WORKFLOW_RUN_EVENT: ${{ fromJson(inputs.workflow-run).event }}
+        WORKFLOW_RUN_ID: ${{ fromJson(inputs.workflow-run).id }}
+        WORKFLOW_RUN_NUMBER: ${{ fromJson(inputs.workflow-run).run_number }}
 
     - run: |
         : # cleanup

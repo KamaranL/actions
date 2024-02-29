@@ -8,9 +8,5 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: |
-        : # print contexts
-        for context in "${CONTEXTS[@]}"; do
-            echo "${{ $context }}"
-        done
+    - run: echo -e "${{ toJson(inputs.context) }}"
       shell: bash

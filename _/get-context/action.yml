@@ -1,0 +1,16 @@
+name: get-context
+description: ''
+inputs:
+  context:
+    description: ''
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - run: |
+        : # print contexts
+        for context in "${CONTEXTS[@]}"; do
+            echo "${{ $context }}"
+        done
+      shell: bash

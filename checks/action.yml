@@ -88,7 +88,7 @@ runs:
       run: |
         { # github.first-release
             echo "::debug::>check(github.first-release)"
-            if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view >/dev/null 2>&1; then
+            if ! git describe --tags --abbrev=0 >/dev/null 2>&1 && ! gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
                 val="true"
             fi
             echo "$(<${{ steps.file.outputs.github }}) \"first-release\": ${val:-false}," >'${{ steps.file.outputs.github }}'
@@ -113,7 +113,7 @@ runs:
     - if: ${{ contains(inputs.github, 'ci-label') || fromJson(inputs.all) == true }}
       run: |
         { # github.ci-label
-            for label in $(gh label list --json name --jq .[].name); do
+            for label in $(gh label list --json name --jq .[].name --repo "$GITHUB_REPOSITORY"); do
                 [ "$label" == ci ] && {
                     val=true
                     break

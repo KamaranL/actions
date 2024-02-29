@@ -8,12 +8,6 @@ inputs:
 runs:
   using: composite
   steps:
-
-    - run: |
-        echo "${{ fromJson(inputs.workflow-run).id }}"
-        exit 2
-      shell: bash
-
     - uses: KamaranL/actions/setup@v0
       with:
         no-repo: true

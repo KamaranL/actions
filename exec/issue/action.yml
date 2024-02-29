@@ -20,21 +20,23 @@ runs:
     - if: fromJson(steps.checks.outputs.github).ci-label == false
       run: |
         : # create ci label
+        echo "create-label(ci)"
         gh label create ci --description "Workflow-related" --color 5319E7 --repo "$GITHUB_REPOSITORY"
       shell: bash
 
     - run: |
         : # write job output to log
+        echo "get-logs(${{ fromJson(inputs.workflow-run).id }})"
         LOG_TEMP='${{ fromJson(steps.checks.outputs.path).log }}'
+        WORKFLOW_RUN='${{ fromJson(inputs.workflow-run).name }}'
+        WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
+        WORKFLOW_RUN_ID='${{ fromJson(inputs.workflow-run).id }}'
         [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
+
         gh run view $WORKFLOW_RUN_ID -v --log \
             --attempt $WORKFLOW_RUN_ATTEMPT \
             --repo "$GITHUB_REPOSITORY" >"$LOG_TEMP/$WORKFLOW_RUN-$WORKFLOW_RUN_ID.$WORKFLOW_RUN_ATTEMPT.log"
       shell: bash
-      env:
-        WORKFLOW_RUN: ${{ fromJson(inputs.workflow-run).name }}
-        WORKFLOW_RUN_ATTEMPT: ${{ fromJson(inputs.workflow-run).run_attempt }}
-        WORKFLOW_RUN_ID: ${{ fromJson(inputs.workflow-run).id }}
 
     - uses: actions/upload-artifact@v4
       with:
@@ -46,31 +48,55 @@ runs:
 
     - run: |
         : # create issue
+        echo "create-issue()"
+        WORKFLOW_RUN='${{ fromJson(inputs.workflow-run).name }}'
+        WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
+        WORKFLOW_RUN_BASE_REF='${{ fromJson(inputs.workflow-run).pull_requests.base.ref }}'
+        WORKFLOW_RUN_BASE_SHA='${{ fromJson(inputs.workflow-run).pull_requests.base.sha }}'
+        WORKFLOW_RUN_BRANCH='${{ fromJson(inputs.workflow-run).head_branch }}'
+        WORKFLOW_RUN_COMMITTER='${{ fromJson(inputs.workflow-run).head_commit.committer.name }} <${{ fromJson(inputs.workflow-run).head_commit.committer.email }}>'
+        WORKFLOW_RUN_CONCLUSION='${{ fromJson(inputs.workflow-run).conclusion }}'
+        WORKFLOW_RUN_EVENT='${{ fromJson(inputs.workflow-run).event }}'
+        WORKFLOW_RUN_HEAD_REF='${{ fromJson(inputs.workflow-run).pull_requests.head.ref }}'
+        WORKFLOW_RUN_HEAD_SHA='${{ fromJson(inputs.workflow-run).pull_requests.head.sha }}'
+        WORKFLOW_RUN_ID='${{ fromJson(inputs.workflow-run).id }}'
+        WORKFLOW_RUN_NUMBER='${{ fromJson(inputs.workflow-run).run_number }}'
+        WORKFLOW_RUN_PATH='${{ fromJson(inputs.workflow-run).path }}'
+        WORKFLOW_RUN_SHA='${{ fromJson(inputs.workflow-run).head_sha }}'
+
         gh issue create \
             --assignee $GITHUB_TRIGGERING_ACTOR \
             --label ci \
             --title "${WORKFLOW_RUN_PATH##*\/} #${WORKFLOW_RUN_NUMBER}: $WORKFLOW_RUN_EVENT $WORKFLOW_RUN_CONCLUSION" \
             --body "$(
                 cat <<DOC
-
-        Attempt: $WORKFLOW_RUN_ATTEMPT
-
-        Branch: TBD
+        | $WORKFLOW_RUN |                        |
+        | ------------- | ---------------------- |
+        | ID            | $WORKFLOW_RUN_ID       |
+        | Attempt       | $WORKFLOW_RUN_ATTEMPT  |
+        | Number        | $WORKFLOW_RUN_NUMBER   |
+        | Event         | $WORKFLOW_RUN_EVENT    |
+        $(
+            [ "$WORKFLOW_RUN_EVENT" == pull_request ] && {
+                cat <<DOC_1
+        | Base Branch   | $WORKFLOW_RUN_BASE_REF |
+        | Base Commit   | $WORKFLOW_RUN_BASE_SHA |
+        | Head Branch   | $WORKFLOW_RUN_HEAD_REF |
+        | Head Commit   | $WORKFLOW_RUN_HEAD_SHA |
+        DOC_1
+            } || cat <<DOC_2
+        | Branch        | $WORKFLOW_RUN_BRANCH   |
+        | Commit        | $WORKFLOW_RUN_SHA      |
+        DOC_2
+        )
+        | Committer     | $WORKFLOW_RUN_COMMITTER |
+        DOC
 
         - [ ] Review [logs](${{ steps.logs.outputs.artifact-url }})
-        - [ ] Mention findings
-        DOC
+        - [ ] List findings
             )" \
             --repo "$GITHUB_REPOSITORY"
       shell: bash
-      env:
-        WORKFLOW_RUN: ${{ fromJson(inputs.workflow-run).name }}
-        WORKFLOW_RUN_ATTEMPT: ${{ fromJson(inputs.workflow-run).run_attempt }}
-        WORKFLOW_RUN_CONCLUSION: ${{ fromJson(inputs.workflow-run).conclusion }}
-        WORKFLOW_RUN_EVENT: ${{ fromJson(inputs.workflow-run).event }}
-        WORKFLOW_RUN_ID: ${{ fromJson(inputs.workflow-run).id }}
-        WORKFLOW_RUN_NUMBER: ${{ fromJson(inputs.workflow-run).run_number }}
-        WORKFLOW_RUN_PATH: ${{ fromJson(inputs.workflow-run).run_number }}
 
     - run: |
         : # cleanup

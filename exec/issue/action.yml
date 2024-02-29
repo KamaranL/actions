@@ -94,6 +94,8 @@ runs:
                 )
         | Committer     | $WORKFLOW_RUN_COMMITTER             |
 
+        ### Next steps:
+
         - Review [logs]($LOG_URL)
         - Discuss findings
         DOC

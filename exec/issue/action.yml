@@ -10,7 +10,7 @@ runs:
   steps:
 
     - run: |
-        echo "${{ fromJson(inputs.workflow-run)id }}"
+        echo "${{ fromJson(inputs.workflow-run).id }}"
         exit 2
       shell: bash
 

@@ -49,6 +49,7 @@ runs:
     - run: |
         : # create issue
         echo "create-issue()"
+        LOG_URL='${{ steps.logs.outputs.artifact-url }}'
         WORKFLOW_RUN='${{ fromJson(inputs.workflow-run).name }}'
         WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
         WORKFLOW_RUN_BASE_REF='${{ fromJson(inputs.workflow-run).pull_requests.base.ref }}'
@@ -77,23 +78,22 @@ runs:
         | Number        | $WORKFLOW_RUN_NUMBER   |
         | Event         | $WORKFLOW_RUN_EVENT    |
         $(
-            [ "$WORKFLOW_RUN_EVENT" == pull_request ] && {
-                cat <<DOC_1
+                    [ "$WORKFLOW_RUN_EVENT" == pull_request ] && {
+                        cat <<DOC_1
         | Base Branch   | $WORKFLOW_RUN_BASE_REF |
         | Base Commit   | $WORKFLOW_RUN_BASE_SHA |
         | Head Branch   | $WORKFLOW_RUN_HEAD_REF |
         | Head Commit   | $WORKFLOW_RUN_HEAD_SHA |
         DOC_1
-            } || cat <<DOC_2
+                    } || cat <<DOC_2
         | Branch        | $WORKFLOW_RUN_BRANCH   |
         | Commit        | $WORKFLOW_RUN_SHA      |
         DOC_2
-        )
+                )
         | Committer     | $WORKFLOW_RUN_COMMITTER |
-        DOC
-
-        - [ ] Review [logs](${{ steps.logs.outputs.artifact-url }})
+        - [ ] Review [logs]($LOG_URL)
         - [ ] List findings
+        DOC
             )" \
             --repo "$GITHUB_REPOSITORY"
       shell: bash

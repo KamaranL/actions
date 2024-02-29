@@ -72,8 +72,9 @@ runs:
             --title "${WORKFLOW_RUN_PATH##*\/} #${WORKFLOW_RUN_NUMBER}: $WORKFLOW_RUN_EVENT $WORKFLOW_RUN_CONCLUSION" \
             --body "$(
                 cat <<DOC
-        | Workflow    | [$WORKFLOW_RUN]($WORKFLOW_RUN_FILE) |
+        | Workflow    |                                     |
         | ----------- | ----------------------------------- |
+        | Name        | [$WORKFLOW_RUN]($WORKFLOW_RUN_FILE) |
         | ID          | $WORKFLOW_RUN_ID                    |
         | Attempt     | $WORKFLOW_RUN_ATTEMPT               |
         | Number      | $WORKFLOW_RUN_NUMBER                |

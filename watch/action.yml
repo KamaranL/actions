@@ -12,18 +12,30 @@ runs:
             issue
         )
         for item in "${WATCHED[@]}"; do
-            [ -f ".github/.open_$item" ] && val=true || val=false
+            file=".github/.open_$item"
+            val=false
+            [ -f "$file" ] && {
+                val=true
+                rm -rf "$file"
+                ran=true
+            }
             echo "open-$item=$val" >>"$GITHUB_OUTPUT"
         done
+        echo "ran=${ran:-false}" >>"$GITHUB_OUTPUT"
       shell: bash
       id: watched
 
-    - if: steps.watched.outputs.open-pull_request == true
+    - if: fromJson(steps.watched.outputs.open-pull_request) == true
       run: |
         echo we are opening a pull_request
       shell: bash
 
-    - if: steps.watched.outputs.open-issue == true
+    - if: fromJson(steps.watched.outputs.open-issue) == true
       run: |
         echo we are opening an issue
+      shell: bash
+
+    - if: fromJson(steps.watched.outputs.ran) == true
+      run: |
+        echo it ran
       shell: bash

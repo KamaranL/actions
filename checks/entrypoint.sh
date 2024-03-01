@@ -2,15 +2,13 @@
 
 : ${INPUT_ALL:=false} ${INPUT_GIT:=false} ${INPUT_GITHUB:=false}
 
+declare -A out
+
+out[name]=kam
+
 OUTPUT_GITHUB="{"
 OUTPUT_GIT="{"
 OUTPUT_PATH="{"
-
-echo "INPUT_GITHUB is $INPUT_GITHUB"
-echo "INPUT_GIT is $INPUT_GIT"
-echo "INPUT_ALL is $INPUT_ALL"
-
-echo "this repo is $GITHUB_REPOSITORY"
 
 [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
     # echo "->check(github.timezone-set)"
@@ -20,5 +18,7 @@ echo "this repo is $GITHUB_REPOSITORY"
 } && unset val
 
 echo "github=${OUTPUT_GITHUB%,*} }" >>"$GITHUB_OUTPUT"
+
+echo "${out[name]}"
 
 exit 0

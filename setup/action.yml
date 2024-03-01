@@ -32,34 +32,6 @@ runs:
       uses: actions/checkout@v4
       with:
         token: ${{ env.GH_TOKEN }}
-
-    - if: |
-        fromJson(steps.checks.outputs.github).has-repository == false &&
-            fromJson(inputs.no-repo) == false &&
-            inputs.ref != null
-      uses: actions/checkout@v4
-      with:
-        token: ${{ env.GH_TOKEN }}
-        ref: ${{ inputs.ref }}
-        fetch-tags: true
-
-    - if: |
-        fromJson(steps.checks.outputs.github).has-repository == false &&
-            fromJson(inputs.no-repo) == false &&
-            inputs.fetch-depth != null
-      uses: actions/checkout@v4
-      with:
-        token: ${{ env.GH_TOKEN }}
-        fetch-depth: ${{ inputs.fetch-depth }}
-
-    - if: |
-        fromJson(steps.checks.outputs.github).has-repository == false &&
-            fromJson(inputs.no-repo) == false &&
-            inputs.ref != null &&
-            inputs.fetch-depth != null
-      uses: actions/checkout@v4
-      with:
-        token: ${{ env.GH_TOKEN }}
         ref: ${{ inputs.ref }}
         fetch-depth: ${{ inputs.fetch-depth }}
         fetch-tags: true

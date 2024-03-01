@@ -30,7 +30,10 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: echo '${{ toJson(inputs) }}'
+    - run: |
+        echo '${{ toJson(inputs) }}'
+        echo '${{ fromJson(inputs.git).has-token }}'
+        echo '${{ fromJson(inputs.git).release }}'
       shell: bash
 
     - run: entrypoint.sh

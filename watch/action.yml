@@ -12,8 +12,8 @@ runs:
             issue
         )
         for item in "${WATCHED[@]}"; do
-            [ -f ".github/.open_$item" ] && val=true
-            echo "open-$item=${val:-false}" >>"$GITHUB_OUTPUT"
+            [ -f ".github/.open_$item" ] && val=true || val=false
+            echo "open-$item=$val" >>"$GITHUB_OUTPUT"
         done
       shell: bash
       id: watched

@@ -32,3 +32,6 @@ runs:
   steps:
     - run: echo '${{ toJson(inputs) }}'
       shell: bash
+
+    - run: entrypoint.sh
+      shell: bash

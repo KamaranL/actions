@@ -1,4 +1,4 @@
-name: exec-issue
+name: issue
 description: ''
 inputs:
   workflow-run:
@@ -20,19 +20,18 @@ runs:
     - if: fromJson(steps.checks.outputs.github).ci-label == false
       run: |
         : # create ci label
-        echo "create-label(ci)"
+        echo "->create(ci-label)"
         gh label create ci --description "Workflow-related" --color 5319E7 --repo "$GITHUB_REPOSITORY"
       shell: bash
 
     - run: |
         : # write job output to log
-        echo "get-logs(${{ fromJson(inputs.workflow-run).id }})"
+        echo "->log(${{ fromJson(inputs.workflow-run).id }})"
         LOG_TEMP='${{ fromJson(steps.checks.outputs.path).log }}'
         WORKFLOW_RUN='${{ fromJson(inputs.workflow-run).name }}'
         WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
         WORKFLOW_RUN_ID='${{ fromJson(inputs.workflow-run).id }}'
         [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
-
         gh run view $WORKFLOW_RUN_ID -v --log \
             --attempt $WORKFLOW_RUN_ATTEMPT \
             --repo "$GITHUB_REPOSITORY" >"$LOG_TEMP/$WORKFLOW_RUN-$WORKFLOW_RUN_ID.$WORKFLOW_RUN_ATTEMPT.log"
@@ -48,7 +47,7 @@ runs:
 
     - run: |
         : # create issue
-        echo "create-issue()"
+        echo "->issue()"
         LOG_URL='${{ steps.logs.outputs.artifact-url }}'
         WORKFLOW_RUN='${{ fromJson(inputs.workflow-run).name }}'
         WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
@@ -65,7 +64,6 @@ runs:
         WORKFLOW_RUN_NUMBER='${{ fromJson(inputs.workflow-run).run_number }}'
         WORKFLOW_RUN_PATH='${{ fromJson(inputs.workflow-run).path }}'
         WORKFLOW_RUN_SHA='${{ fromJson(inputs.workflow-run).head_sha }}'
-
         gh issue create \
             --assignee $GITHUB_TRIGGERING_ACTOR \
             --label ci \

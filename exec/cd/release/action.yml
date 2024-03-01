@@ -1,4 +1,4 @@
-name: exec-cd-release
+name: cd-release
 description: ''
 inputs:
   tag:

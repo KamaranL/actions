@@ -69,3 +69,10 @@ runs:
             echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
         }; :
       shell: bash
+
+    - run: |
+        { # announce CI vars
+            echo -e "branch:\t\t$CI_SOURCE_BRANCH"
+            echo -e "version:\t\t$CI_VERSION"
+        }; :
+      shell: bash

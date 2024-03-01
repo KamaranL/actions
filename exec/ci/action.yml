@@ -1,4 +1,4 @@
-name: exec-ci
+name: ci
 description: ''
 outputs:
   ci-tag:
@@ -39,7 +39,7 @@ runs:
             steps.op-ssh.outputs.id_pub
       run: |
         : # write ssh keypair
-        echo "::debug::write(id, id_pub)"
+        echo "->write(id, id_pub)"
         SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
         SSH_ID='${{ steps.op-ssh.outputs.id }}'
         SSH_ID_PUB='${{ steps.op-ssh.outputs.id_pub }}'
@@ -53,7 +53,7 @@ runs:
     - if: fromJson(steps.checks.outputs.git).is-configured == false
       run: |
         : # configure git
-        echo "::debug::configure(git)"
+        echo "->configure(git)"
         SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
         git config --global user.name "GitHub Actions"
         git config --global user.email "bot@kamaranl.vip"
@@ -65,13 +65,13 @@ runs:
         git config --global push.followtags true
         git config --global push.default "upstream"
         while IFS= read -ra line; do
-            echo "::debug::>> $line"
+            echo -e "\t$line"
         done <<<"$(git config --list --global)"
       shell: bash
 
     - run: |
         : # amend commit
-        echo "::debug::commit()"
+        echo "->commit()"
         git commit -a --amend --no-edit --date=now && {
             CI_SHA="$(git rev-parse HEAD)"
             echo "sha=$CI_SHA" >>"$GITHUB_OUTPUT"
@@ -88,19 +88,19 @@ runs:
     - if: steps.commit.outputs.tag
       run: |
         : # create tag
-        echo "::debug::tag(${{ steps.commit.outputs.tag }})"
+        echo "->tag(${{ steps.commit.outputs.tag }})"
         git tag -a '${{ steps.commit.outputs.tag }}' -m '${{ steps.commit.outputs.tag }}' '${{ steps.commit.outputs.sha }}'
       shell: bash
 
     - run: |
         : # push back to source
-        echo "::debug::push(${{ steps.commit.outputs.origin }})"
+        echo "->push(${{ steps.commit.outputs.origin }})"
         git push origin "${{ steps.commit.outputs.origin }}" --force-with-lease
       shell: bash
 
     - run: |
         : # close pull_request
-        echo "::debug::close-pull_request(${{ github.event.number }})"
+        echo "->close-pull_request(${{ github.event.number }})"
         gh pr merge '${{ github.event.number }}' --auto
       shell: bash
 

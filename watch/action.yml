@@ -1,0 +1,29 @@
+name: watch
+description: ''
+runs:
+  using: composite
+  steps:
+    - uses: KamaranL/actions/setup@v0
+
+    - run: |
+        : # check watched files
+        WATCHED=(
+            pull_request
+            issue
+        )
+        for item in "${WATCHED[@]}"; do
+            [ -f ".open_$item" ] && val=true
+            echo "open-$item=${val:-false}" >>"$GITHUB_OUTPUT"
+        done
+      shell: bash
+      id: watched
+
+    - if: steps.watched.open-pull_request == true
+      run: |
+        echo we are opening a pull_request
+      shell: bash
+
+    - if: steps.watched.open-issue == true
+      run: |
+        echo we are opening an issue
+      shell: bash

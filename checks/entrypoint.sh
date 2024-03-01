@@ -10,6 +10,8 @@ echo "INPUT_GITHUB is $INPUT_GITHUB"
 echo "INPUT_GIT is $INPUT_GIT"
 echo "INPUT_ALL is $INPUT_ALL"
 
+echo "this repo is $GITHUB_REPOSITORY"
+
 [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
     # echo "->check(github.timezone-set)"
     [ "$(</etc/timezone)" != "America/New_York" ] && val="false"

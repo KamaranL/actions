@@ -32,8 +32,8 @@ runs:
   steps:
     - run: |
         echo '${{ toJson(inputs) }}'
-        echo '${{ fromJson(inputs.git).has-token }}'
-        echo '${{ fromJson(inputs.git).release }}'
+        echo '${{ fromJson(inputs.github).has-token }}'
+        echo '${{ fromJson(inputs.github).release }}'
       shell: bash
 
     - run: entrypoint.sh

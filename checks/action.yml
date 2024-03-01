@@ -31,8 +31,8 @@ runs:
   using: composite
   steps:
     - run: |
-        INPUT_ALL='${{ fromJson(inputs.all) }}' \
-            INPUT_GIT='${{ inputs.github }}' \
+        INPUT_ALL='${{ inputs.all }}' \
+            INPUT_GIT='${{ inputs.git }}' \
             INPUT_GITHUB='${{ inputs.github }}' \
             $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash

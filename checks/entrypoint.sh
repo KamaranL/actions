@@ -9,6 +9,8 @@ OUTPUT_GITHUB="{"
 OUTPUT_GIT="{"
 OUTPUT_PATH="{"
 
+echo "INPUT_GITHUB is $INPUT_GITHUB"
+echo "INPUT_GIT is $INPUT_GIT"
 echo "INPUT_ALL is $INPUT_ALL"
 
 [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {

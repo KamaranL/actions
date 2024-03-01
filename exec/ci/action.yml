@@ -44,7 +44,6 @@ runs:
       shell: bash
 
     - run: |
-        : # close pull_request
-        echo "->close-pull_request(${{ github.event.number }})"
-        gh pr merge '${{ github.event.number }}' --auto --merge --delete-branch
+        : # comment release link
+        gh pr comment '${{ github.event.number }}' --body "Published release can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest"
       shell: bash

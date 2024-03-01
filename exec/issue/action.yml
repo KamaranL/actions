@@ -100,8 +100,3 @@ runs:
             )" \
             --repo "$GITHUB_REPOSITORY"
       shell: bash
-
-    - run: |
-        : # cleanup
-        rm -rf '${{ fromJson(steps.checks.outputs.path).log }}'
-      shell: bash

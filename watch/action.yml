@@ -36,6 +36,9 @@ runs:
       shell: bash
 
     - if: fromJson(steps.watched.outputs.ran) == true
+      uses: KamaranL/actions/setup/identity@v0
+
+    - if: fromJson(steps.watched.outputs.ran) == true
       run: |
         : # commit and push with watched files removed
         git commit -a --amend --no-edit --date=now

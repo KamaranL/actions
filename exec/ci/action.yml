@@ -12,62 +12,64 @@ runs:
       run: echo "::error::${{ github.action_repository }} can only run on \"pull_request\""; exit 128
       shell: bash
 
-    - uses: KamaranL/actions/checks@v0
-      with:
-        git: has-keypair, is-configured
-      id: checks
+    - uses: KamaranL/actions/setup/identity@v0
 
-    - if: fromJson(steps.checks.outputs.git).has-keypair == false
-      uses: 1password/load-secrets-action@v1
-      with:
-        export-env: false
-      env:
-        id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
-        id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
-      id: op-ssh
+    # - uses: KamaranL/actions/checks@v0
+    #   with:
+    #     git: has-keypair, is-configured
+    #   id: checks
 
-    - if: |
-        fromJson(steps.checks.outputs.git).has-keypair == false &&
-            ( steps.op-ssh.outputs.id == null ||
-              steps.op-ssh.outputs.id_pub == null )
-      run: echo "::error::Failed to load ssh keypair from previous action"; exit 128
-      shell: bash
+    # - if: fromJson(steps.checks.outputs.git).has-keypair == false
+    #   uses: 1password/load-secrets-action@v1
+    #   with:
+    #     export-env: false
+    #   env:
+    #     id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
+    #     id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
+    #   id: op-ssh
 
-    - if: |
-        fromJson(steps.checks.outputs.git).has-keypair == false &&
-            steps.op-ssh.outputs.id &&
-            steps.op-ssh.outputs.id_pub
-      run: |
-        : # write ssh keypair
-        echo "->write(id, id_pub)"
-        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
-        SSH_ID='${{ steps.op-ssh.outputs.id }}'
-        SSH_ID_PUB='${{ steps.op-ssh.outputs.id_pub }}'
-        [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
-        echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
-        echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
-        echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
-        chmod 0600 "$SSH_TEMP/id_ed25519"
-      shell: bash
+    # - if: |
+    #     fromJson(steps.checks.outputs.git).has-keypair == false &&
+    #         ( steps.op-ssh.outputs.id == null ||
+    #           steps.op-ssh.outputs.id_pub == null )
+    #   run: echo "::error::Failed to load ssh keypair from previous action"; exit 128
+    #   shell: bash
 
-    - if: fromJson(steps.checks.outputs.git).is-configured == false
-      run: |
-        : # configure git
-        echo "->configure(git)"
-        SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "bot@kamaranl.vip"
-        git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
-        git config --global gpg.ssh.allowedsignersfile "$SSH_TEMP/allowed_signers"
-        git config --global gpg.format "ssh"
-        git config --global commit.gpgsign true
-        git config --global tag.gpgsign true
-        git config --global push.followtags true
-        git config --global push.default "upstream"
-        while IFS= read -ra line; do
-            echo -e "\t$line"
-        done <<<"$(git config --list --global)"
-      shell: bash
+    # - if: |
+    #     fromJson(steps.checks.outputs.git).has-keypair == false &&
+    #         steps.op-ssh.outputs.id &&
+    #         steps.op-ssh.outputs.id_pub
+    #   run: |
+    #     : # write ssh keypair
+    #     echo "->write(id, id_pub)"
+    #     SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
+    #     SSH_ID='${{ steps.op-ssh.outputs.id }}'
+    #     SSH_ID_PUB='${{ steps.op-ssh.outputs.id_pub }}'
+    #     [ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
+    #     echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
+    #     echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
+    #     echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
+    #     chmod 0600 "$SSH_TEMP/id_ed25519"
+    #   shell: bash
+
+    # - if: fromJson(steps.checks.outputs.git).is-configured == false
+    #   run: |
+    #     : # configure git
+    #     echo "->configure(git)"
+    #     SSH_TEMP='${{ fromJson(steps.checks.outputs.path).ssh }}'
+    #     git config --global user.name "GitHub Actions"
+    #     git config --global user.email "bot@kamaranl.vip"
+    #     git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
+    #     git config --global gpg.ssh.allowedsignersfile "$SSH_TEMP/allowed_signers"
+    #     git config --global gpg.format "ssh"
+    #     git config --global commit.gpgsign true
+    #     git config --global tag.gpgsign true
+    #     git config --global push.followtags true
+    #     git config --global push.default "upstream"
+    #     while IFS= read -ra line; do
+    #         echo -e "\t$line"
+    #     done <<<"$(git config --list --global)"
+    #   shell: bash
 
     - run: |
         : # amend commit
@@ -102,9 +104,4 @@ runs:
         : # close pull_request
         echo "->close-pull_request(${{ github.event.number }})"
         gh pr merge '${{ github.event.number }}' --auto
-      shell: bash
-
-    - run: |
-        : # cleanup
-        rm -rf '${{ fromJson(steps.checks.outputs.path).ssh }}'
       shell: bash

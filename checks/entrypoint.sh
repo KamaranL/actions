@@ -14,7 +14,7 @@ outputs=(
     path
 )
 
-for name in "${outputs[@]}"; do out[name]="{"; done
+for name in "${outputs[@]}"; do out[$name]="{"; done
 
 [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
     echo "->check(github.timezone-set)"
@@ -23,7 +23,7 @@ for name in "${outputs[@]}"; do out[name]="{"; done
 } && unset val
 
 for name in "${outputs[@]}"; do
-    echo "$name=${out[name]%,*}" >>"$GITHUB_OUTPUT"
+    echo "$name=${out[$name]%,*}" >>"$GITHUB_OUTPUT"
 done
 
 exit 0

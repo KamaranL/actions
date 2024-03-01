@@ -3,6 +3,7 @@
 INPUT_GITHUB='${{ inputs.github }}'
 INPUT_GIT='${{ inputs.github }}'
 INPUT_ALL='${{ fromJson(inputs.all) }}'
+: ${INPUT_ALL:=false}
 
 OUTPUT_GITHUB="{"
 OUTPUT_GIT="{"

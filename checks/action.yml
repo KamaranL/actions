@@ -30,12 +30,5 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: |
-        echo '${{ toJson(inputs) }}'
-        echo '${{ inputs.github }}'
-        ${{ inputs.all }} && echo it was true || echo it was not true
-
-      shell: bash
-
     - run: $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash

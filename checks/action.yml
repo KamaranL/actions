@@ -30,5 +30,5 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: echo '${{ inputs }}'
+    - run: echo '${{ fromJson(inputs) }}'
       shell: bash

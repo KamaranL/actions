@@ -32,7 +32,7 @@ runs:
         WORKFLOW_RUN_ATTEMPT='${{ fromJson(inputs.workflow-run).run_attempt }}'
         WORKFLOW_RUN_ID='${{ fromJson(inputs.workflow-run).id }}'
         [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
-        gh run view $WORKFLOW_RUN_ID -v --log \
+        gh run view $WORKFLOW_RUN_ID --verbose --log \
             --attempt $WORKFLOW_RUN_ATTEMPT \
             --repo "$GITHUB_REPOSITORY" >"$LOG_TEMP/$WORKFLOW_RUN-$WORKFLOW_RUN_ID.$WORKFLOW_RUN_ATTEMPT.log"
       shell: bash

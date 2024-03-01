@@ -40,11 +40,11 @@ runs:
     - run: |
         : # push back to source
         echo "->push(${{ steps.commit.outputs.origin }})"
-        git push origin "${{ steps.commit.outputs.origin }}" --force-with-lease
+        git push origin '${{ steps.commit.outputs.origin }}' --force-with-lease
       shell: bash
 
     - run: |
         : # close pull_request
         echo "->close-pull_request(${{ github.event.number }})"
-        gh pr merge '${{ github.event.number }}' --auto
+        gh pr merge '${{ github.event.number }}' --auto --merge --delete-branch
       shell: bash

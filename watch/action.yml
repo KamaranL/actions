@@ -37,5 +37,7 @@ runs:
 
     - if: fromJson(steps.watched.outputs.ran) == true
       run: |
-        echo it ran
+        : # commit and push with watched files removed
+        git commit -a --amend --no-edit --date=now
+        git push --force-with-lease
       shell: bash

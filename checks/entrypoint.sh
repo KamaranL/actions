@@ -1,19 +1,20 @@
 #!/bin/bash
 
-# FILES=(
-#     github
-#     git
-#     path
-# )
-# JSON_TEMP="$RUNNER_TEMP/.json"
-# [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
-# for file in "${FILES[@]}"; do
-#     JSON="$JSON_TEMP/$file"
-#     echo "{" >"$JSON"
-#     echo "$file=$JSON" >>"$GITHUB_OUTPUT"
-#     echo "::debug::>open($file)"
-# done
-# echo "files=${FILES[@]}" >>"$GITHUB_OUTPUT"
-# echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
+INPUT_GITHUB='${{ inputs.github }}'
+INPUT_GIT='${{ inputs.github }}'
+INPUT_ALL='${{ fromJson(inputs.all) }}'
 
-echo hello from entrypoint
+OUTPUT_GITHUB="{"
+OUTPUT_GIT="{"
+OUTPUT_PATH="{"
+
+[[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
+    # echo "->check(github.timezone-set)"
+    [ "$(</etc/timezone)" != "America/New_York" ] && val="false"
+    # echo "$(<'${{ steps.file.outputs.github }}') \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
+    OUTPUT_GITHUB+=" \"timezone-set\": ${val:-true},"
+} && unset val
+
+echo "github=${OUTPUT_GITHUB%,*} }" >>"$GITHUB_OUTPUT"
+
+exit 0

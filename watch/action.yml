@@ -12,18 +12,18 @@ runs:
             issue
         )
         for item in "${WATCHED[@]}"; do
-            [ -f ".open_$item" ] && val=true
+            [ -f ".github/.open_$item" ] && val=true
             echo "open-$item=${val:-false}" >>"$GITHUB_OUTPUT"
         done
       shell: bash
       id: watched
 
-    - if: steps.watched.open-pull_request == true
+    - if: steps.watched.outputs.open-pull_request == true
       run: |
         echo we are opening a pull_request
       shell: bash
 
-    - if: steps.watched.open-issue == true
+    - if: steps.watched.outputs.open-issue == true
       run: |
         echo we are opening an issue
       shell: bash

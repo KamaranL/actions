@@ -4,6 +4,10 @@ inputs:
   all:
     description: |
         [true, false]
+  git:
+    description: |
+      ["has-keypair",
+      "is-configured"]
   github:
     description: |
       ["timezone-set",
@@ -11,20 +15,16 @@ inputs:
       "has-repository",
       "release",
       "ci-label"]
-  git:
-    description: |
-      ["has-keypair",
-      "is-configured"]
 
 outputs:
-  github:
-    value: ${{ steps.json.outputs.github }}
-    description: ''
   git:
-    value: ${{ steps.json.outputs.git }}
+    value: ${{ steps.entrypoint.outputs.git }}
+    description: ''
+  github:
+    value: ${{ steps.entrypoint.outputs.github }}
     description: ''
   path:
-    value: ${{ steps.json.outputs.path }}
+    value: ${{ steps.entrypoint.outputs.path }}
     description: ''
 
 runs:
@@ -36,4 +36,5 @@ runs:
             INPUT_GITHUB='${{ inputs.github }}' \
             $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
+      id: entrypoint
 

@@ -33,7 +33,7 @@ runs:
     - run: |
         echo '${{ toJson(inputs) }}'
         echo '${{ inputs.github }}'
-        ${{ fromJson(inputs.all) }} && echo it was true || echo it was not true
+        ${{ inputs.all }} && echo it was true || echo it was not true
 
       shell: bash
 

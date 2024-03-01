@@ -1,6 +1,6 @@
 #!/bin/bash
 
-: ${INPUT_ALL:=false}
+: ${INPUT_ALL:=false} ${INPUT_GIT:=false} ${INPUT_GITHUB:=false}
 
 OUTPUT_GITHUB="{"
 OUTPUT_GIT="{"

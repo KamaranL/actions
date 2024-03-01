@@ -9,6 +9,8 @@ OUTPUT_GITHUB="{"
 OUTPUT_GIT="{"
 OUTPUT_PATH="{"
 
+echo "INPUT_ALL is $INPUT_ALL"
+
 [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
     # echo "->check(github.timezone-set)"
     [ "$(</etc/timezone)" != "America/New_York" ] && val="false"

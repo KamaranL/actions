@@ -32,7 +32,7 @@ runs:
   steps:
     - run: |
         echo '${{ toJson(inputs) }}'
-        echo '${{ fromJson(inputs).github }}'
+        echo '${{ inputs.github }}'
 
       shell: bash
 

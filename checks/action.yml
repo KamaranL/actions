@@ -30,5 +30,10 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: $GITHUB_ACTION_PATH/entrypoint.sh
+    - run: |
+        INPUT_ALL='${{ fromJson(inputs.all) }}' \
+            INPUT_GIT='${{ inputs.github }}' \
+            INPUT_GITHUB='${{ inputs.github }}' \
+            $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
+

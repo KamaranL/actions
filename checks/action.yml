@@ -30,6 +30,11 @@ outputs:
 runs:
   using: composite
   steps:
+
+    - run: |
+        echo ${{ inputs }}
+      shell: bash
+
     - run: |
         \
             INPUT_ALL='${{ inputs.all }}' \

@@ -3,15 +3,15 @@
 declare -A out
 
 : \
-    ${INPUT_ALL:=false} \
-    ${INPUT_GIT:=false} \
-    ${INPUT_GITHUB:=false}
+    ${INPUT_ALL:=false}
+# ${INPUT_GIT:=false} \
+# ${INPUT_GITHUB:=false}
 
-[ "$INPUT_GIT" ] && {
+[ "$INPUT_GIT" != false ] && {
     echo setting array for git
     INPUT_GIT=($INPUT_GIT)
 }
-[ "$INPUT_GITHUB" ] && {
+[ "$INPUT_GITHUB" != false ] && {
     echo setting array for github
     INPUT_GITHUB=($INPUT_GITHUB)
 }

@@ -35,11 +35,10 @@ runs:
     #   shell: bash
 
     - run: |
-        declare -a INPUT_GIT INPUT_GITHUB
         \
             INPUT_ALL=${{ inputs.all }} \
-            INPUT_GIT+=(${{ inputs.git }}) \
-            INPUT_GITHUB+=(${{ inputs.github }}) \
+            INPUT_GIT='${{ inputs.git }}' \
+            INPUT_GITHUB='${{ inputs.github }}' \
             $GITHUB_ACTION_PATH/${GITHUB_ACTION_PATH##*\/}
       shell: bash
       id: entrypoint

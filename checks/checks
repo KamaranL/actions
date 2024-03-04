@@ -5,6 +5,10 @@ declare -A out
     ${INPUT_ALL:=false} \
     ${INPUT_GIT:=false} \
     ${INPUT_GITHUB:=false}
+
+[ "$INPUT_GIT" ] && INPUT_GIT=($INPUT_GIT)
+[ "$INPUT_GITHUB" ] && INPUT_GITHUB=($INPUT_GITHUB)
+
 outputs=(
     git
     github

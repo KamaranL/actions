@@ -13,7 +13,7 @@ outputs=(
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
-INPUT_GITHUB="$INPUT_GITHUB"
+# INPUT_GITHUB="$INPUT_GITHUB"
 
 echo "${#INPUT_GITHUB[@]}"
 echo "${INPUT_GITHUB[0]}"

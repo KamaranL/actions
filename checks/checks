@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# set global defaults
+declare -A out
 : \
     ${INPUT_ALL:=false} \
     ${INPUT_GIT:=false} \
     ${INPUT_GITHUB:=false}
-
-declare -A out
-
 outputs=(
     git
     github
@@ -16,11 +13,39 @@ outputs=(
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
-[[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
-    echo "->check(github.timezone-set)"
-    [ "$(</etc/timezone)" != "America/New_York" ] && val=false
-    out[github]+=" \"timezone-set\": ${val:-true},"
-} && unset val
+echo "${#INPUT_GITHUB[@]}"
+echo "${INPUT_GITHUB[0]}"
+echo "${INPUT_GITHUB[1]}"
+
+# [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
+#     echo "->check(github.timezone-set)"
+#     [ "$(</etc/timezone)" != "America/New_York" ] && val=false
+#     out[github]+=" \"timezone-set\": ${val:-true},"
+# } && unset val
+
+# [[ $INPUT_GITHUB =~ has-token ]] || $INPUT_ALL && {
+#     echo "->check(github.has-token)"
+#     [ -z "$GH_TOKEN" ] && val="false"
+#     out[github]+=" \"has-token\": ${val:-true},"
+# } && unset val
+
+# [[ $INPUT_GITHUB =~ has-repository ]] || $INPUT_ALL && {
+#     echo "->check(github.has-repository)"
+#     ! git status >/dev/null 2>&1 && val="false"
+#     out[github]+=" \"has-repository\": ${val:-true},"
+# } && unset val
+
+# [[ $INPUT_GITHUB =~ release ]] || $INPUT_ALL && {
+#     echo "->check(github.has-repository)"
+#     ! git status >/dev/null 2>&1 && val="false"
+#     out[github]+=" \"has-repository\": ${val:-true},"
+# } && unset val
+
+# [[ $INPUT_GITHUB =~ has-repository ]] || $INPUT_ALL && {
+#     echo "->check(github.has-repository)"
+#
+#     out[github]+=" \"has-repository\": ${val:-true},"
+# } && unset val
 
 for name in "${outputs[@]}"; do
     echo "$name=${out[$name]%,*} }" >>"$GITHUB_OUTPUT"

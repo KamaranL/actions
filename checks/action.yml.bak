@@ -57,32 +57,32 @@ runs:
 # GitHub
 ####################
 
-    - if: ${{ contains(inputs.github, 'timezone-set') || fromJson(inputs.all) == true }}
-      run: |
-        { # github.timezone-set
-            echo "->check(github.timezone-set)"
-            [ "$(</etc/timezone)" != "America/New_York" ] && val="false"
-            echo "$(<${{ steps.file.outputs.github }}) \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
-        }; :
-      shell: bash
+    # - if: ${{ contains(inputs.github, 'timezone-set') || fromJson(inputs.all) == true }}
+    #   run: |
+    #     { # github.timezone-set
+    #         echo "->check(github.timezone-set)"
+    #         [ "$(</etc/timezone)" != "America/New_York" ] && val="false"
+    #         echo "$(<${{ steps.file.outputs.github }}) \"timezone-set\": ${val:-true}," >'${{ steps.file.outputs.github }}'
+    #     }; :
+    #   shell: bash
 
-    - if: ${{ contains(inputs.github, 'has-token') || fromJson(inputs.all) == true }}
-      run: |
-        { # github.has-token
-            echo "->check(github.has-token)"
-            [ -z "$GH_TOKEN" ] && val="false"
-            echo "$(<${{ steps.file.outputs.github }}) \"has-token\": ${val:-true}," >'${{ steps.file.outputs.github }}'
-        }; :
-      shell: bash
+    # - if: ${{ contains(inputs.github, 'has-token') || fromJson(inputs.all) == true }}
+    #   run: |
+    #     { # github.has-token
+    #         echo "->check(github.has-token)"
+    #         [ -z "$GH_TOKEN" ] && val="false"
+    #         echo "$(<${{ steps.file.outputs.github }}) \"has-token\": ${val:-true}," >'${{ steps.file.outputs.github }}'
+    #     }; :
+    #   shell: bash
 
-    - if: ${{ contains(inputs.github, 'has-repository') || fromJson(inputs.all) == true }}
-      run: |
-        { # github.has-repository
-            echo "->check(github.has-repository)"
-            ! git status >/dev/null 2>&1 && val="false"
-            echo "$(<${{ steps.file.outputs.github }}) \"has-repository\": ${val:-true}," >'${{ steps.file.outputs.github }}'
-        }; :
-      shell: bash
+    # - if: ${{ contains(inputs.github, 'has-repository') || fromJson(inputs.all) == true }}
+    #   run: |
+    #     { # github.has-repository
+    #         echo "->check(github.has-repository)"
+    #         ! git status >/dev/null 2>&1 && val="false"
+    #         echo "$(<${{ steps.file.outputs.github }}) \"has-repository\": ${val:-true}," >'${{ steps.file.outputs.github }}'
+    #     }; :
+    #   shell: bash
 
     - if: ${{ contains(inputs.github, 'release') || fromJson(inputs.all) == true }}
       run: |

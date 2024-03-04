@@ -9,6 +9,8 @@ declare -A out
 [ "$INPUT_GIT" ] && INPUT_GIT=($INPUT_GIT)
 [ "$INPUT_GITHUB" ] && INPUT_GITHUB=($INPUT_GITHUB)
 
+echo "$INPUT_GIT"
+
 outputs=(
     git
     github

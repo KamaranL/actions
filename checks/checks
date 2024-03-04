@@ -17,6 +17,11 @@ outputs=(
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
+echo "${#INPUT_GIT[@]}"
+echo "${INPUT_GIT[*]}"
+echo "${#INPUT_GITHUB[@]}"
+echo "${INPUT_GITHUB[*]}"
+
 # [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
 #     echo "->check(github.timezone-set)"
 #     [ "$(</etc/timezone)" != "America/New_York" ] && val=false

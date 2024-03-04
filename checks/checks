@@ -12,12 +12,6 @@ outputs=(
     path
 )
 
-echo "$INPUT_ALL"
-echo "${#INPUT_GIT[@]}"
-echo "${INPUT_GIT[@]}"
-echo "${#INPUT_GITHUB[@]}"
-echo "${INPUT_GITHUB[@]}"
-
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
 for check in "${INPUT_GIT[@]}"; do
@@ -26,43 +20,37 @@ for check in "${INPUT_GIT[@]}"; do
 done
 
 for check in "${INPUT_GITHUB[@]}"; do
+    echo "->check(github.$check)"
+
     [ "$check" == timezone-set ] || $INPUT_ALL && {
-        echo -n "->check(github.$check)"
         [ "$(</etc/timezone)" != "America/New_York" ] && val=false
-        out[github]+=" \"$check\": ${val:-true},"
-
     }
+
+    [ "$check" == has-token ] || $INPUT_ALL && {
+        [ -z "$GH_TOKEN" ] && val=false
+    }
+
+    [ "$check" == has-repository ] || $INPUT_ALL && {
+        ! git status >/dev/null 2>&1 && val=false
+    }
+
+    [ "$check" == first-release ] || $INPUT_ALL && {
+        if git describe --tags --abbrev=0 >/dev/null 2>&1 &&
+            gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            val=false
+        fi
+    }
+
+    [ "$check" == is-prerelease ] && {
+        if [ "${GITHUB_BASE_REF:-github.base_ref}" == main ] &&
+            [[ ${GITHUB_HEAD_REF:-github.head_ref} =~ ^dev(elop)?(ment)?$ ]]; then
+            val=false
+        fi
+    }
+
+    out[github]+=" \"$check\": ${val:-true},"
+    unset val
 done
-
-# [[ $INPUT_GITHUB =~ timezone-set ]] || $INPUT_ALL && {
-#     echo "->check(github.timezone-set)"
-#     [ "$(</etc/timezone)" != "America/New_York" ] && val=false
-#     out[github]+=" \"timezone-set\": ${val:-true},"
-# } && unset val
-
-# [[ $INPUT_GITHUB =~ has-token ]] || $INPUT_ALL && {
-#     echo "->check(github.has-token)"
-#     [ -z "$GH_TOKEN" ] && val="false"
-#     out[github]+=" \"has-token\": ${val:-true},"
-# } && unset val
-
-# [[ $INPUT_GITHUB =~ has-repository ]] || $INPUT_ALL && {
-#     echo "->check(github.has-repository)"
-#     ! git status >/dev/null 2>&1 && val="false"
-#     out[github]+=" \"has-repository\": ${val:-true},"
-# } && unset val
-
-# [[ $INPUT_GITHUB =~ release ]] || $INPUT_ALL && {
-#     echo "->check(github.has-repository)"
-#     ! git status >/dev/null 2>&1 && val="false"
-#     out[github]+=" \"has-repository\": ${val:-true},"
-# } && unset val
-
-# [[ $INPUT_GITHUB =~ has-repository ]] || $INPUT_ALL && {
-#     echo "->check(github.has-repository)"
-#
-#     out[github]+=" \"has-repository\": ${val:-true},"
-# } && unset val
 
 for name in "${outputs[@]}"; do
     echo "$name=${out[$name]%,*} }" >>"$GITHUB_OUTPUT"

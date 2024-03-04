@@ -36,9 +36,9 @@ runs:
 
     - run: |
         \
-            INPUT_ALL=${{ inputs.all }} \
-            INPUT_GIT='${{ inputs.git }}' \
-            INPUT_GITHUB='${{ inputs.github }}' \
+            INPUT_ALL="${{ inputs.all }}" \
+            INPUT_GIT="${{ inputs.git }}" \
+            INPUT_GITHUB="${{ inputs.github }}" \
             $GITHUB_ACTION_PATH/${GITHUB_ACTION_PATH##*\/}
       shell: bash
       id: entrypoint

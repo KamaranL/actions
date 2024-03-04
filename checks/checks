@@ -17,7 +17,9 @@ outputs=(
 
 echo "$INPUT_ALL"
 echo "${#INPUT_GIT[@]}"
+echo "${INPUT_GIT[@]}"
 echo "${#INPUT_GITHUB[@]}"
+echo "${INPUT_GITHUB[@]}"
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 

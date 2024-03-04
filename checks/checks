@@ -7,11 +7,11 @@ declare -A out
     ${INPUT_GIT:=false} \
     ${INPUT_GITHUB:=false}
 
-[ "$INPUT_GIT" != 'false' ] && {
+[ "$INPUT_GIT" == true ] && {
     echo setting array for git
     INPUT_GIT=($INPUT_GIT)
 }
-[ "$INPUT_GITHUB" != 'false' ] && {
+[ "$INPUT_GITHUB" == true ] && {
     echo setting array for github
     INPUT_GITHUB=($INPUT_GITHUB)
 }

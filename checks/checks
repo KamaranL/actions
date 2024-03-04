@@ -39,6 +39,7 @@ for name in "${outputs[@]}"; do out[$name]="{"; done
 
 for check in "${INPUT_GIT[@]}"; do
     :
+    echo checking "$check"
 done
 
 for check in "${INPUT_GITHUB[@]}"; do

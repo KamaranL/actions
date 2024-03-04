@@ -1,57 +1,57 @@
-name: checks
-description: ''
-inputs:
-  all:
-    description: |
-        [true, false]
+# name: checks
+# description: ''
+# inputs:
+#   all:
+#     description: |
+#         [true, false]
 
-        Default: false
-    default: 'false'
-  github:
-    description: |
-      ["timezone-set",
-      "has-token",
-      "has-repository",
-      "release",
-      "ci-label"]
-  git:
-    description: |
-      ["has-keypair",
-      "is-configured"]
+#         Default: false
+#     default: 'false'
+#   github:
+#     description: |
+#       ["timezone-set",
+#       "has-token",
+#       "has-repository",
+#       "release",
+#       "ci-label"]
+#   git:
+#     description: |
+#       ["has-keypair",
+#       "is-configured"]
 
-outputs:
-  github:
-    value: ${{ steps.json.outputs.github }}
-    description: ''
-  git:
-    value: ${{ steps.json.outputs.git }}
-    description: ''
-  path:
-    value: ${{ steps.json.outputs.path }}
-    description: ''
+# outputs:
+#   github:
+#     value: ${{ steps.json.outputs.github }}
+#     description: ''
+#   git:
+#     value: ${{ steps.json.outputs.git }}
+#     description: ''
+#   path:
+#     value: ${{ steps.json.outputs.path }}
+#     description: ''
 
-runs:
-  using: composite
-  steps:
-    - run: |
-        : # open files
-        FILES=(
-            github
-            git
-            path
-        )
-        JSON_TEMP="$RUNNER_TEMP/.json"
-        [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
-        for file in "${FILES[@]}"; do
-            JSON="$JSON_TEMP/$file"
-            echo "{" >"$JSON"
-            echo "$file=$JSON" >>"$GITHUB_OUTPUT"
-            echo "::debug::>open($file)"
-        done
-        echo "files=${FILES[@]}" >>"$GITHUB_OUTPUT"
-        echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
-      shell: bash
-      id: file
+# runs:
+#   using: composite
+#   steps:
+#     - run: |
+#         : # open files
+#         FILES=(
+#             github
+#             git
+#             path
+#         )
+#         JSON_TEMP="$RUNNER_TEMP/.json"
+#         [ ! -d "$JSON_TEMP" ] && mkdir -p "$JSON_TEMP"
+#         for file in "${FILES[@]}"; do
+#             JSON="$JSON_TEMP/$file"
+#             echo "{" >"$JSON"
+#             echo "$file=$JSON" >>"$GITHUB_OUTPUT"
+#             echo "::debug::>open($file)"
+#         done
+#         echo "files=${FILES[@]}" >>"$GITHUB_OUTPUT"
+#         echo "json_temp=$JSON_TEMP" >>"$GITHUB_OUTPUT"
+#       shell: bash
+#       id: file
 
 ####################
 # GitHub

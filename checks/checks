@@ -18,11 +18,11 @@ echo "${#INPUT_GITHUB}"
 # [ "$INPUT_GIT" ] && INPUT_GIT=($INPUT_GIT)
 # [ "$INPUT_GITHUB" ] && INPUT_GITHUB=($INPUT_GITHUB)
 
-((${#INPUT_GIT})) && {
+[ "$INPUT_GIT" ] && {
     echo setting array for git
     INPUT_GIT=($INPUT_GIT)
 }
-((${#INPUT_GITHUB})) && {
+[ "$INPUT_GITHUB" ] && {
     echo setting array for github
     INPUT_GITHUB=($INPUT_GITHUB)
 }

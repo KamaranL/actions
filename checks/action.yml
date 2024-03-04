@@ -1,9 +1,6 @@
 name: checks
 description: ''
 inputs:
-  all:
-    description: |
-        [true, false]
   git:
     description: |
       ["has-keypair",
@@ -13,7 +10,7 @@ inputs:
       ["timezone-set",
       "has-token",
       "has-repository",
-      "release",
+      "is-prerelease",
       "ci-label"]
 
 outputs:
@@ -30,13 +27,8 @@ outputs:
 runs:
   using: composite
   steps:
-    # - run: |
-    #     echo "${{ toJson(inputs) }}"
-    #   shell: bash
-
     - run: |
         \
-            INPUT_ALL="${{ inputs.all }}" \
             INPUT_GIT="${{ inputs.git }}" \
             INPUT_GITHUB="${{ inputs.github }}" \
             $GITHUB_ACTION_PATH/${GITHUB_ACTION_PATH##*\/}

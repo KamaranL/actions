@@ -12,7 +12,7 @@ outputs=(
     path
 )
 
-INPUT_ALL=true
+# INPUT_ALL=true
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
@@ -24,19 +24,19 @@ done
 for check in "${INPUT_GITHUB[@]}"; do
     echo "->check(github.$check)"
 
-    [ "$check" == timezone-set ] || $INPUT_ALL && {
+    [ "$check" == timezone-set ] && {
         [ "$(</etc/timezone)" != "America/New_York" ] && val=false
     }
 
-    [ "$check" == has-token ] || $INPUT_ALL && {
+    [ "$check" == has-token ] && {
         [ -z "$GH_TOKEN" ] && val=false
     }
 
-    [ "$check" == has-repository ] || $INPUT_ALL && {
+    [ "$check" == has-repository ] && {
         ! git status >/dev/null 2>&1 && val=false
     }
 
-    [ "$check" == first-release ] || $INPUT_ALL && {
+    [ "$check" == first-release ] && {
         if git describe --tags --abbrev=0 >/dev/null 2>&1 &&
             gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             val=false

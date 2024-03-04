@@ -11,6 +11,10 @@ echo "${#INPUT_GITHUB}"
     ${INPUT_GIT:=false} \
     ${INPUT_GITHUB:=false}
 
+echo "${#INPUT_ALL}"
+echo "${#INPUT_GIT}"
+echo "${#INPUT_GITHUB}"
+
 # [ "$INPUT_GIT" ] && INPUT_GIT=($INPUT_GIT)
 # [ "$INPUT_GITHUB" ] && INPUT_GITHUB=($INPUT_GITHUB)
 

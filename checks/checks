@@ -1,8 +1,6 @@
 #!/bin/bash
 
 declare -A out
-
-: ${INPUT_ALL:=false}
 INPUT_GIT=($INPUT_GIT)
 INPUT_GITHUB=($INPUT_GITHUB)
 
@@ -12,13 +10,25 @@ outputs=(
     path
 )
 
-# INPUT_ALL=true
-
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
 for check in "${INPUT_GIT[@]}"; do
-    :
-    echo checking "$check"
+    echo "->check(git.$check)"
+
+    [ "$check" == has-keypair ] && {
+        SSH_TEMP="$RUNNER_TEMP/.ssh"
+        ! [ -f "$SSH_TEMP/id_ed25519" -a -f "$SSH_TEMP/id_ed25519.pub" ] &&
+            val=false
+        out[path]+=" \"ssh\": \"$SSH_TEMP\","
+    }
+
+    [ "$check" == is-configured ] && {
+        [ "$(git config --global user.email)" != "bot@kamaranl.vip" ] &&
+            val=false
+    }
+
+    out[git]+=" \"$check\": ${val:-true},"
+    unset val
 done
 
 for check in "${INPUT_GITHUB[@]}"; do
@@ -48,6 +58,19 @@ for check in "${INPUT_GITHUB[@]}"; do
             [[ ${GITHUB_HEAD_REF:-github.head_ref} =~ ^dev(elop)?(ment)?$ ]]; then
             val=false
         fi
+    }
+
+    [ "$check" == ci-label ] && {
+        exist=false
+        for label in $(gh label list --json name --jq .[].name \
+            --repo "$GITHUB_REPOSITORY"); do
+            [ "$label" == ci ] && {
+                exist=true
+                break
+            }
+        done
+        ! $exist && val=$exist
+        out[path]+=" \"log\": \"$RUNNER_TEMP/.log\","
     }
 
     out[github]+=" \"$check\": ${val:-true},"

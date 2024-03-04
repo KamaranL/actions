@@ -95,35 +95,35 @@ runs:
     #     }; :
     #   shell: bash
 
-    - if: ${{ contains(inputs.github, 'release') || fromJson(inputs.all) == true }}
-      run: |
-        { # github.is-release, github.is-prerelease
-            echo "->check(github.is-release, github.is-prerelease)"
-            if [ "${GITHUB_BASE_REF:-github.base_ref}" == main ] &&
-                [[ ${GITHUB_HEAD_REF:-github.head_ref} =~ ^dev(elop)?(ment)?$ ]]; then
-                echo "$(<${{ steps.file.outputs.github }}) \"is-release\": true," >'${{ steps.file.outputs.github }}'
-                echo "$(<${{ steps.file.outputs.github }}) \"is-prerelease\": false," >'${{ steps.file.outputs.github }}'
-            else
-                echo "$(<${{ steps.file.outputs.github }}) \"is-prerelease\": true," >'${{ steps.file.outputs.github }}'
-                echo "$(<${{ steps.file.outputs.github }}) \"is-release\": false," >'${{ steps.file.outputs.github }}'
-            fi
-        }; :
-      shell: bash
+    # - if: ${{ contains(inputs.github, 'release') || fromJson(inputs.all) == true }}
+    #   run: |
+    #     { # github.is-release, github.is-prerelease
+    #         echo "->check(github.is-release, github.is-prerelease)"
+    #         if [ "${GITHUB_BASE_REF:-github.base_ref}" == main ] &&
+    #             [[ ${GITHUB_HEAD_REF:-github.head_ref} =~ ^dev(elop)?(ment)?$ ]]; then
+    #             echo "$(<${{ steps.file.outputs.github }}) \"is-release\": true," >'${{ steps.file.outputs.github }}'
+    #             echo "$(<${{ steps.file.outputs.github }}) \"is-prerelease\": false," >'${{ steps.file.outputs.github }}'
+    #         else
+    #             echo "$(<${{ steps.file.outputs.github }}) \"is-prerelease\": true," >'${{ steps.file.outputs.github }}'
+    #             echo "$(<${{ steps.file.outputs.github }}) \"is-release\": false," >'${{ steps.file.outputs.github }}'
+    #         fi
+    #     }; :
+    #   shell: bash
 
-    - if: ${{ contains(inputs.github, 'ci-label') || fromJson(inputs.all) == true }}
-      run: |
-        { # github.ci-label
-            echo "->check(github.ci-label)"
-            for label in $(gh label list --json name --jq .[].name --repo "$GITHUB_REPOSITORY"); do
-                [ "$label" == ci ] && {
-                    val=true
-                    break
-                }
-            done
-            echo "$(<${{ steps.file.outputs.github }}) \"ci-label\": ${val:-false}," >'${{ steps.file.outputs.github }}'
-            echo "$(<${{ steps.file.outputs.path }}) \"log\": \"$RUNNER_TEMP/.log\"," >'${{ steps.file.outputs.path }}'
-        }; :
-      shell: bash
+    # - if: ${{ contains(inputs.github, 'ci-label') || fromJson(inputs.all) == true }}
+    #   run: |
+    #     { # github.ci-label
+    #         echo "->check(github.ci-label)"
+    #         for label in $(gh label list --json name --jq .[].name --repo "$GITHUB_REPOSITORY"); do
+    #             [ "$label" == ci ] && {
+    #                 val=true
+    #                 break
+    #             }
+    #         done
+    #         echo "$(<${{ steps.file.outputs.github }}) \"ci-label\": ${val:-false}," >'${{ steps.file.outputs.github }}'
+    #         echo "$(<${{ steps.file.outputs.path }}) \"log\": \"$RUNNER_TEMP/.log\"," >'${{ steps.file.outputs.path }}'
+    #     }; :
+    #   shell: bash
 
 ####################
 # Git

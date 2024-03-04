@@ -3,7 +3,6 @@
 declare -A out
 INPUT_GIT=($INPUT_GIT)
 INPUT_GITHUB=($INPUT_GITHUB)
-
 outputs=(
     git
     github
@@ -12,6 +11,9 @@ outputs=(
 
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
+####################
+# Git
+####################
 for check in "${INPUT_GIT[@]}"; do
     echo "->check(git.$check)"
 
@@ -31,6 +33,9 @@ for check in "${INPUT_GIT[@]}"; do
     unset val
 done
 
+####################
+# GitHub
+####################
 for check in "${INPUT_GITHUB[@]}"; do
     echo "->check(github.$check)"
 

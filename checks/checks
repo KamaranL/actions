@@ -2,9 +2,9 @@
 
 declare -A out
 : \
-    ${INPUT_ALL:=false} \
-    ${INPUT_GIT:+(INPUT_GIT)} \
-    ${INPUT_GITHUB:+(INPUT_GITHUB)}
+    ${INPUT_ALL:=false}
+${INPUT_GIT:+(INPUT_GIT)}
+${INPUT_GITHUB:+(INPUT_GITHUB)}
 
 # [ ! -z "$INPUT_GIT" ] && INPUT_GIT=($INPUT_GIT)
 # [ ! -z "$INPUT_GITHUB" ] && INPUT_GITHUB=($INPUT_GITHUB)

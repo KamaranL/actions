@@ -15,6 +15,8 @@ outputs=(
     path
 )
 
+echo "$INPUT_ALL"
+
 for name in "${outputs[@]}"; do out[$name]="{"; done
 
 for check in "${INPUT_GIT[@]}"; do
@@ -23,9 +25,10 @@ done
 
 for check in "${INPUT_GITHUB[@]}"; do
     [ "$check" == timezone-set ] || $INPUT_ALL && {
-        echo "->check(github.$check)"
+        echo -n "->check(github.$check)"
         [ "$(</etc/timezone)" != "America/New_York" ] && val=false
         out[github]+=" \"$check\": ${val:-true},"
+
     }
 done
 

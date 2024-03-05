@@ -13,6 +13,7 @@ runs:
   steps:
     - run: |
         \
+            GITHUB_ACTION_REPOSITORY="${{ github.action_repository }}" \
             $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       id: checks

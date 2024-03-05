@@ -5,7 +5,7 @@ runs:
   steps:
     - run: |
         \
-            $GITHUB_ACTION_PATH/check.sh
+            $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       id: checks
 
@@ -26,5 +26,5 @@ runs:
         \
             SSH_ID="${{ steps.op-ssh.outputs.id }}" \
             SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}" \
-            $GITHUB_ACTION_PATH/entrypoint.sh
+            $GITHUB_ACTION_PATH/main.sh
       shell: bash

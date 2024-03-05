@@ -14,7 +14,7 @@ runs:
   steps:
     - run: |
         \
-            $GITHUB_ACTION_PATH/check.sh
+            $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       id: checks
 

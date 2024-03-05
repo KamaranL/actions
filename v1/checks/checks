@@ -39,17 +39,17 @@ done
 for check in "${INPUT_GITHUB[@]}"; do
     echo "->check(github.$check)"
 
-    [ "$check" == timezone-set ] && {
-        [ "$(</etc/timezone)" != "America/New_York" ] && val=false
-    }
+    # [ "$check" == timezone-set ] && {
+    #     [ "$(</etc/timezone)" != "America/New_York" ] && val=false
+    # }
 
-    [ "$check" == has-token ] && {
-        [ -z "$GH_TOKEN" ] && val=false
-    }
+    # [ "$check" == has-token ] && {
+    #     [ -z "$GH_TOKEN" ] && val=false
+    # }
 
-    [ "$check" == has-repository ] && {
-        ! git status >/dev/null 2>&1 && val=false
-    }
+    # [ "$check" == has-repository ] && {
+    #     ! git status >/dev/null 2>&1 && val=false
+    # }
 
     [ "$check" == first-release ] && {
         if git describe --tags --abbrev=0 >/dev/null 2>&1 &&

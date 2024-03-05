@@ -1,0 +1,30 @@
+name: setup-identity
+description: ''
+runs:
+  using: composite
+  steps:
+    - run: |
+        \
+            $GITHUB_ACTION_PATH/check.sh
+      shell: bash
+      id: checks
+
+    - if: fromJson(steps.checks.outputs.is-configured) == false
+      uses: 1password/load-secrets-action@v1
+      with:
+        export-env: false
+      env:
+        id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
+        id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
+      id: op-ssh
+
+    - if: |
+        fromJson(steps.checks.outputs.is-configured) == false &&
+            steps.op-ssh.outputs.id &&
+            steps.op-ssh.outputs.id_pub
+      run: |
+        \
+            SSH_ID="${{ steps.op-ssh.outputs.id }}" \
+            SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}" \
+            $GITHUB_ACTION_PATH/entrypoint.sh
+      shell: bash

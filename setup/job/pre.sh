@@ -16,7 +16,7 @@ for option in "${INPUT_CHECKOUT[@]}"; do
     if [ ! -z "${opt[0]}" ] && [ ! -z "${opt[1]}" ]; then
         echo "checkout_${opt[0]}=${opt[1]}" >>"$GITHUB_OUTPUT"
     else
-        echo "\"$option\" is missing a key or value"
+        echo "checkout option \"$option\" is invalid"
     fi
 done
 unset IFS

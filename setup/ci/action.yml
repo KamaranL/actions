@@ -3,23 +3,23 @@ description: ''
 runs:
   using: composite
   steps:
-    - run: |
-        \
-            $GITHUB_ACTION_PATH/pre.sh
+    - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
-      id: checks
+      id: pre
       env:
-        GITHUB_ACTION_REPOSITORY: ${{ github.action_repository }}
         ACTION_REPOSITORY: ${{ github.action_repository }}
 
-    # - uses: gittools/actions/gitversion/setup@v0.11
-    #   with:
-    #     versionSpec: 5.x
+    - uses: gittools/actions/gitversion/setup@v0.13
+      with:
+        versionSpec: 5.x
 
-    # - uses: gittools/actions/gitversion/execute@v0.11
-    #   with:
-    #     useConfigFile: true
-    #     configFilePath: ${{ github.action_path }}/GitVersion.yml
+    - uses: gittools/actions/gitversion/execute@v0.13
+      with:
+        disableCache: true
+        disableNormalization: true
+        useConfigFile: true
+        configFilePath: ${{ github.action_path }}/GitVersion.yml
+        overrideConfig: ${{ steps.pre.outputs.override-config }}
 
     # - run: |
     #     { # set CI_VERSION (default)

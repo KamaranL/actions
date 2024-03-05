@@ -3,13 +3,11 @@ description: ''
 runs:
   using: composite
   steps:
-    - run: |
-        \
-            $GITHUB_ACTION_PATH/pre.sh
+    - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
-      id: checks
+      id: pre
 
-    - if: fromJson(steps.checks.outputs.is-configured) == false
+    - if: fromJson(steps.pre.outputs.is-configured) == false
       uses: 1password/load-secrets-action@v1
       with:
         export-env: false
@@ -19,12 +17,11 @@ runs:
       id: op-ssh
 
     - if: |
-        fromJson(steps.checks.outputs.is-configured) == false &&
+        fromJson(steps.pre.outputs.is-configured) == false &&
             steps.op-ssh.outputs.id &&
             steps.op-ssh.outputs.id_pub
-      run: |
-        \
-            SSH_ID="${{ steps.op-ssh.outputs.id }}" \
-            SSH_ID_PUB="${{ steps.op-ssh.outputs.id_pub }}" \
-            $GITHUB_ACTION_PATH/main.sh
+      run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
+      env:
+        SSH_ID: ${{ steps.op-ssh.outputs.id }}
+        SSH_ID_PUB: ${{ steps.op-ssh.outputs.id_pub }}

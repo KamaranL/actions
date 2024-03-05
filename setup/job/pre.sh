@@ -15,8 +15,7 @@ INPUT_CHECKOUT=($INPUT_CHECKOUT)
 # echo "index 1: ${INPUT_CHECKOUT[1]}"
 # echo -e "all: ${INPUT_CHECKOUT[*]}"
 
-IFS='='
 for option in "${INPUT_CHECKOUT[@]}"; do
-    read -ra opt <<<"$option"
+    IFS='=' read -ra opt <<<"$option"
     echo "${opt[0]} -- ${opt[1]}"
 done

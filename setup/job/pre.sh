@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INPUT_CHECKOUT=($INPUT_CHECKOUT)
+# INPUT_CHECKOUT=($INPUT_CHECKOUT)
 
 [ "$(</etc/timezone)" != "America/New_York" ] &&
     echo "timezone-set=false" >>"$GITHUB_OUTPUT"

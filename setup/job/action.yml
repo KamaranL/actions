@@ -1,6 +1,8 @@
 name: setup-job
 description: ''
 inputs:
+  checkout:
+    description: ''
   ref:
     description: 'ref for actions/checkout'
   fetch-depth:
@@ -14,6 +16,8 @@ runs:
   steps:
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
+      env:
+        INPUT_CHECKOUT: ${{ inputs.checkout }}
       id: pre
 
     - if: fromJson(steps.pre.outputs.timezone-set) == false
@@ -24,6 +28,17 @@ runs:
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
+
+    # original
+    # - if: |
+    #     fromJson(steps.pre.outputs.checked-out) == false &&
+    #         fromJson(inputs.no-repo) == false
+    #   uses: actions/checkout@v4
+    #   with:
+    #     token: ${{ env.GH_TOKEN }}
+    #     ref: ${{ inputs.ref }}
+    #     fetch-depth: ${{ inputs.fetch-depth }}
+    #     fetch-tags: true
 
     - if: |
         fromJson(steps.pre.outputs.checked-out) == false &&

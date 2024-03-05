@@ -11,10 +11,9 @@ INPUT_CHECKOUT=($INPUT_CHECKOUT)
 ! git status >/dev/null 2>&1 &&
     echo "checked-out=false" >>"$GITHUB_OUTPUT"
 
-
-echo "${#INPUT_CHECKOUT[@]}"
-echo "${INPUT_CHECKOUT[1]}"
-
+echo "count: ${#INPUT_CHECKOUT[@]}"
+echo "index 1: ${INPUT_CHECKOUT[1]}"
+echo -e "all: ${INPUT_CHECKOUT[*]}"
 
 # for input in "${INPUT_CHECKOUT[@]}"; do
 #     echo "$input"

@@ -1,22 +1,16 @@
 name: setup-ci
 description: ''
-inputs:
-  nuget:
-    description: |
-        [true, false]
-
-        Default: false
-    default: 'false'
-
 runs:
   using: composite
   steps:
     - run: |
         \
-            ACTION_REPOSITORY="${{ github.action_repository }}" \
             $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       id: checks
+      env:
+        GITHUB_ACTION_REPOSITORY: ${{ github.action_repository }}
+        ACTION_REPOSITORY: ${{ github.action_repository }}
 
     # - uses: gittools/actions/gitversion/setup@v0.11
     #   with:

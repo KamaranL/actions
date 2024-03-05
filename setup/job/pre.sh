@@ -11,11 +11,12 @@ INPUT_CHECKOUT=($INPUT_CHECKOUT)
 ! git status >/dev/null 2>&1 &&
     echo "checked-out=false" >>"$GITHUB_OUTPUT"
 
-# echo "count: ${#INPUT_CHECKOUT[@]}"
-# echo "index 1: ${INPUT_CHECKOUT[1]}"
-# echo -e "all: ${INPUT_CHECKOUT[*]}"
-
 for option in "${INPUT_CHECKOUT[@]}"; do
     IFS='=' read -ra opt <<<"$option"
-    echo "${opt[0]} -- ${opt[1]}"
+    if [ ! -z "${opt[0]}" ] && [ ! -z "${opt[1]}" ]; then
+        echo "checkout_${opt[0]}=${opt[1]}" >>"$GITHUB_OUTPUT"
+    else
+        echo "\"$option\" is missing a key or value"
+    fi
 done
+unset IFS

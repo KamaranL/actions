@@ -15,70 +15,57 @@ runs:
         \
             $GITHUB_ACTION_PATH/pre.sh
       shell: bash
-      id: pre
-
-    - if: github.event_name != 'pull_request'
-      run: echo "::error::${{ github.action_repository }} can only run on \"pull_request\""; exit 128
-      shell: bash
-
-    - uses: KamaranL/actions/setup@v0
-      with:
-        fetch-depth: 0
-
-    - uses: KamaranL/actions/checks@v0
-      with:
-        github: release
       id: checks
 
-    - uses: gittools/actions/gitversion/setup@v0.11
-      with:
-        versionSpec: 5.x
+    # - uses: gittools/actions/gitversion/setup@v0.11
+    #   with:
+    #     versionSpec: 5.x
 
-    - uses: gittools/actions/gitversion/execute@v0.11
-      with:
-        useConfigFile: true
-        configFilePath: ${{ github.action_path }}/GitVersion.yml
+    # - uses: gittools/actions/gitversion/execute@v0.11
+    #   with:
+    #     useConfigFile: true
+    #     configFilePath: ${{ github.action_path }}/GitVersion.yml
 
-    - run: |
-        { # set CI_VERSION (default)
-            echo "CI_VERSION=$GitVersion_MajorMinorPatch" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
+    # - run: |
+    #     { # set CI_VERSION (default)
+    #         echo "CI_VERSION=$GitVersion_MajorMinorPatch" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
 
-    - if: fromJson(steps.checks.outputs.github).is-prerelease == true
-      run: |
-        { # append prerelease tag
-            echo "CI_VERSION=$CI_VERSION-alpha.$GitVersion_CommitsSinceVersionSource" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
+    # - if: fromJson(steps.checks.outputs.github).is-prerelease == true
+    #   run: |
+    #     { # append prerelease tag
+    #         echo "CI_VERSION=$CI_VERSION-alpha.$GitVersion_CommitsSinceVersionSource" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
 
-    - if: |
-        fromJson(steps.checks.outputs.github).is-prerelease == true &&
-            fromJson(inputs.nuget) == true
-      run: |
-        { # format prerelease tag as nuget-compatible
-            echo "CI_VERSION=${CI_VERSION%.*}${CI_VERSION##*.}" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
+    # - if: |
+    #     fromJson(steps.checks.outputs.github).is-prerelease == true &&
+    #         fromJson(inputs.nuget) == true
+    #   run: |
+    #     { # format prerelease tag as nuget-compatible
+    #         echo "CI_VERSION=${CI_VERSION%.*}${CI_VERSION##*.}" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
 
-    - if: |
-        fromJson(steps.checks.outputs.github).is-release == true &&
-            fromJson(steps.checks.outputs.github).first-release == true
-      run: |
-        { # overwrite CI_VERSION for first major release
-            echo "CI_VERSION=1.0.0" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
+    # - if: |
+    #     fromJson(steps.checks.outputs.github).is-release == true &&
+    #         fromJson(steps.checks.outputs.github).first-release == true
+    #   run: |
+    #     { # overwrite CI_VERSION for first major release
+    #         echo "CI_VERSION=1.0.0" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
 
-    - run: |
-        { # set CI_SOURCE_BRANCH
-            echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
-        }; :
-      shell: bash
+    # - run: |
+    #     { # set CI_SOURCE_BRANCH
+    #         echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
+    #     }; :
+    #   shell: bash
 
-    - run: |
-        { # announce CI vars
-            echo -e "branch:\t\t$CI_SOURCE_BRANCH"
-            echo -e "version:\t\t$CI_VERSION"
-        }; :
-      shell: bash
+    # - run: |
+    #     { # announce CI vars
+    #         echo -e "branch:\t\t$CI_SOURCE_BRANCH"
+    #         echo -e "version:\t\t$CI_VERSION"
+    #     }; :
+    #   shell: bash

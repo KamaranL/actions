@@ -18,5 +18,5 @@ for option in "${INPUT_CHECKOUT[@]}"; do
     else
         echo "checkout option \"$option\" is invalid"
     fi
+    unset IFS
 done
-unset IFS

@@ -34,7 +34,7 @@ $PRERELEASE && {
 echo "branch :  $CI_SOURCE_BRANCH"
 echo "version:  $CI_VERSION"
 
-echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH"
-echo "CI_VERSION=$CI_VERSION"
+echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH" >>"$GITHUB_ENV"
+echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
 
 echo "::endgroup::"

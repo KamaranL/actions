@@ -7,9 +7,9 @@
 
 if git describe --tags --abbrev=0 >/dev/null 2>&1 &&
     gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-    echo "gitversion-execute_overrideConfig=$(
-        cat <<DOC
+    echo "gitversion-execute_overrideConfig=EOF"
+    cat <<DOC
 next-version=1.0.0
 DOC
-    )" >>"$GITHUB_OUTPUT"
+    echo EOF >>"$GITHUB_OUTPUT"
 fi

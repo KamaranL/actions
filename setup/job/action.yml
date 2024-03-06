@@ -45,7 +45,23 @@ runs:
             fromJson(inputs.no-repo) == false
       uses: actions/checkout@v4
       with:
+        repository: ${{ steps.pre.outputs.checkout_repository }}
+        ref: ${{ steps.pre.outputs.checkout_ref }}
         token: ${{ env.GH_TOKEN }}
-        ref: ${{ inputs.ref }}
-        fetch-depth: ${{ inputs.fetch-depth }}
-        fetch-tags: true
+        ssh-key: ${{ steps.pre.outputs.checkout_ssh-key }}
+        ssh-known-hosts: ${{ steps.pre.outputs.checkout_ssh-known-hosts }}
+        ssh-strict: ${{ steps.pre.outputs.checkout_ssh-strict }}
+        persist-credentials: ${{ steps.pre.outputs.checkout_persist-credentials }}
+        path: ${{ steps.pre.outputs.checkout_path }}
+        clean: ${{ steps.pre.outputs.checkout_clean }}
+        filter: ${{ steps.pre.outputs.checkout_filter }}
+        sparse-checkout: ${{ steps.pre.outputs.checkout_sparse-checkout }}
+        sparse-checkout-cone-mode: ${{ steps.pre.outputs.checkout_sparse-checkout-cone-mode }}
+        fetch-depth: ${{ steps.pre.outputs.checkout_fetch-depth }}
+        fetch-tags: ${{ steps.pre.outputs.checkout_fetch-tags }}
+        show-progress: ${{ steps.pre.outputs.checkout_show-progress }}
+        lfs: ${{ steps.pre.outputs.checkout_lfs }}
+        submodules: ${{ steps.pre.outputs.checkout_submodules }}
+        set-safe-directory: ${{ steps.pre.outputs.checkout_set-safe-directory }}
+        github-server-url: ${{ steps.pre.outputs.checkout_github-server-url }}
+

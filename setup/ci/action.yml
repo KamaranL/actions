@@ -19,7 +19,10 @@ runs:
         disableNormalization: true
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml
-        overrideConfig: ${{ steps.pre.outputs.override-config }}
+        overrideConfig: ${{ steps.pre.outputs.gitversion-execute_overrideConfig }}
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
 
     # - run: |
     #     { # set CI_VERSION (default)

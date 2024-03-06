@@ -18,8 +18,8 @@ runs:
         disableCache: true
         disableNormalization: true
         useConfigFile: true
-        configFilePath: ${{ github.action_path }}/GitVersion.yml
-        overrideConfig: ${{ steps.pre.outputs.gitversion-execute_overrideConfig }}
+        configFilePath: '${{ github.action_path }}/GitVersion.yml'
+        overrideConfig: '${{ steps.pre.outputs.gitversion-execute_overrideConfig }}'
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash

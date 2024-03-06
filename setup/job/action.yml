@@ -42,7 +42,7 @@ runs:
 
     - if: |
         fromJson(steps.pre.outputs.checked-out) == false &&
-            fromJson(inputs.no-repo) == false
+            inputs.checkout != null
       uses: actions/checkout@v4
       with:
         repository: ${{ steps.pre.outputs.checkout_repository }}

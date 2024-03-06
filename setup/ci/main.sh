@@ -5,3 +5,6 @@ if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
     # echo "is-prerelease=false" >>"$GITHUB_OUTPUT"
     echo not prerelease
 fi
+
+
+echo running main

@@ -25,3 +25,4 @@ runs:
       env:
         SSH_ID: ${{ steps.op-ssh.outputs.id }}
         SSH_ID_PUB: ${{ steps.op-ssh.outputs.id_pub }}
+      id: main

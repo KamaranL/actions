@@ -1,10 +1,5 @@
 name: ci
 description: ''
-outputs:
-  ci-tag:
-    value: ${{ steps.main.outputs.ci-tag }}
-    description: ''
-
 runs:
   using: composite
   steps:
@@ -16,6 +11,4 @@ runs:
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
-      env:
-        GITHUB_EVENT_NUMBER: ${{ github.event.number }}
       id: main

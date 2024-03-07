@@ -3,7 +3,7 @@
 INPUT_CHECKOUT=($INPUT_CHECKOUT)
 CHECKOUT_DEFAULTS=(
     "repository=$GITHUB_REPOSITORY"
-    "ref=HEAD"
+    "ref="
     # "token=$GITHUB_TOKEN" # using GH_TOKEN (PAT)
     "ssh-key="
     "ssh-known-hosts="

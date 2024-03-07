@@ -1,6 +1,27 @@
 #!/bin/bash
 
 INPUT_CHECKOUT=($INPUT_CHECKOUT)
+CHECKOUT_DEFAULTS=(
+    "repository=$GITHUB_REPOSITORY"
+    "ref=HEAD"
+    # "token=$GITHUB_TOKEN" # using GH_TOKEN (PAT)
+    "ssh-key="
+    "ssh-known-hosts="
+    "ssh-strict=true"
+    "persist-credentials=true"
+    "path="
+    "clean=true"
+    "filter="
+    "sparse-checkout="
+    "sparse-checkout-cone-mode=true"
+    "fetch-depth=1"
+    "fetch-tags=false"
+    "show-progress=true"
+    "lfs=false"
+    "submodules=false"
+    "set-safe-directory=true"
+    "github-server-url="
+)
 
 [ "$(</etc/timezone)" != "America/New_York" ] &&
     echo "timezone-set=false" >>"$GITHUB_OUTPUT"
@@ -11,12 +32,19 @@ INPUT_CHECKOUT=($INPUT_CHECKOUT)
 ! git status >/dev/null 2>&1 &&
     echo "checked-out=false" >>"$GITHUB_OUTPUT"
 
-for option in "${INPUT_CHECKOUT[@]}"; do
-    IFS='=' read -ra opt <<<"$option"
-    if [ ! -z "${opt[0]}" ] && [ ! -z "${opt[1]}" ]; then
-        echo "checkout_${opt[0]}=${opt[1]}" >>"$GITHUB_OUTPUT"
-    else
-        echo "checkout option \"$option\" is invalid"
-    fi
-    unset IFS
+for default in "${CHECKOUT_DEFAULTS[@]}"; do
+    key="${default%%=*}"
+    val="${default#*=}"
+
+    for line in "${INPUT_CHECKOUT[@]}"; do
+        IFS='=' read -ra param <<<"$line"
+        p_key="${param[0]}"
+        p_val="${param[1]}"
+
+        [ "$key" != "$p_key" ] && continue
+        [ ! -z "$p_val" ] &&
+            val="$p_val"
+        unset IFS
+    done
+    echo "checkout_$key=$val" >>"$GITHUB_OUTPUT"
 done

@@ -1,0 +1,21 @@
+name: ci
+description: ''
+outputs:
+  ci-tag:
+    value: ${{ steps.main.outputs.ci-tag }}
+    description: ''
+
+runs:
+  using: composite
+  steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+      id: pre
+      env:
+        ACTION_REPOSITORY: ${{ github.action_repository }}
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+      env:
+        GITHUB_EVENT_NUMBER: ${{ github.event.number }}
+      id: main

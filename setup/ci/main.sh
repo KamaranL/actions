@@ -10,12 +10,12 @@ if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
     PRERELEASE=false
 else
     PRERELEASE=true
+    PRERELEASE_TAG=alpha
 fi
 
 $PRERELEASE && {
-    echo "Appending prerelease tag \"alpha\""
-
-    CI_VERSION+="alpha"
+    echo "- Appending prerelease tag: $PRERELEASE_TAG"
+    CI_VERSION+="$PRERELEASE_TAG"
 
     # check for files that are commonly found in nuget packages
     NU_FILES=($(find . -type f \( \
@@ -26,15 +26,17 @@ $PRERELEASE && {
 
     # append period in prerelease tag if not a nuget package
     ! ((${#NU_FILES[@]})) &&
-        CI_VERSION+="."
+        CI_VERSION+="." ||
+        echo "- Formatting as nuget-compatible version"
 
+    echo "- Appending commit count: $GitVersion_CommitsSinceVersionSource"
     CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
 }
 
+echo "CI_SOURCE_BRANCH: $CI_SOURCE_BRANCH"
+echo "CI_VERSION:       $CI_VERSION"
+
 echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH" >>"$GITHUB_ENV"
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
-
-echo "branch :  $CI_SOURCE_BRANCH"
-echo "version:  $CI_VERSION"
 
 echo "::endgroup::"

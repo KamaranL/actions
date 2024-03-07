@@ -3,8 +3,8 @@
 echo "::group::Integrating code base..."
 
 echo "- Amending commit"
-! git commit -a --amend --no-edit --date-now 2>&1 && {
-    echo "::error::There was a problem with amending the latest changes"
+! git commit -a --amend --no-edit --date=now 2>&1 && {
+    echo "::error::There was a problem with amending the latest changes."
     exit 1
 }
 
@@ -14,13 +14,13 @@ CI_TAG="v$CI_VERSION"
 
 echo "- Creating tag: $CI_TAG"
 ! git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA" 2>&1 && {
-    echo "::error::There was a problem with creating tag \"$CI_TAG\""
+    echo "::error::There was a problem with creating tag \"$CI_TAG\"."
     exit 1
 }
 
 echo "- Pushing changes to origin: $CI_ORIGIN"
 ! git push origin "$CI_ORIGIN" --force-with-lease 2>&1 && {
-    echo "::error::There was a problem with pushing changes to origin"
+    echo "::error::There was a problem with pushing changes to origin."
     exit 1
 }
 

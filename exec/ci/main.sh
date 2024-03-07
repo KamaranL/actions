@@ -24,8 +24,8 @@ echo "- Pushing changes to origin: $CI_ORIGIN"
     exit 1
 }
 
-gh pr comment "$GITHUB_EVENT_NUMBER" --body "Published release can be found \
-at https://github.com/$GITHUB_REPOSITORY/releases/latest" 2>&1
+gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
+merged" 2>&1
 
 echo "ci-tag=$CI_TAG" >>"$GITHUB_OUTPUT"
 

@@ -13,7 +13,7 @@ else
 fi
 
 $PRERELEASE && {
-    echo "Appending prerelease tag (alpha)"
+    echo "Appending prerelease tag \"alpha\""
 
     CI_VERSION+="alpha"
 
@@ -25,16 +25,16 @@ $PRERELEASE && {
         -name 'nuget.config' \)))
 
     # append period in prerelease tag if not a nuget package
-    ((!${#NU_FILES[@]})) &&
+    ! ((${#NU_FILES[@]})) &&
         CI_VERSION+="."
 
     CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
 }
 
-echo "branch :  $CI_SOURCE_BRANCH"
-echo "version:  $CI_VERSION"
-
 echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH" >>"$GITHUB_ENV"
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
+
+echo "branch :  $CI_SOURCE_BRANCH"
+echo "version:  $CI_VERSION"
 
 echo "::endgroup::"

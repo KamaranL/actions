@@ -3,7 +3,7 @@
 CI_TAG="$(gh api /repos/$GITHUB_REPOSITORY/tags --jq '.[0].name')"
 
 # check tag existence
-[ ! -z "$CI_TAG" ] && {
+[ -z "$CI_TAG" ] && {
     echo "::error::No tag is available for release."
     exit 1
 }

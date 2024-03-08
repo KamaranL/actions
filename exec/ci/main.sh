@@ -33,10 +33,9 @@ merged." 2>&1
 echo "- Merging pull request: $GITHUB_EVENT_NUMBER"
 ! gh pr merge "$GITHUB_EVENT_NUMBER" --merge 2>&1 &&
     echo "::error::There was a problem with merging pull request \
-#$GITHUB_EVENT_NUMBER. This pull request will need to be merged manually."
-
-echo "Pull request #$GITHUB_EVENT_NUMBER successfully closed." \
-    >>"$GITHUB_STEP_SUMMARY"
+#$GITHUB_EVENT_NUMBER. This pull request will need to be merged manually." ||
+    echo "Pull request #$GITHUB_EVENT_NUMBER successfully closed." \
+        >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"
 

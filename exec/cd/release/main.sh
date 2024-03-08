@@ -12,7 +12,7 @@ ARGS="release create $CI_TAG --latest --generate-notes --verify-tag --repo $GITH
     exit 1
 }
 
-echo "Release \"$CI_TAG\" can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest."
+echo "Release \"$CI_TAG\" can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest." >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"
 

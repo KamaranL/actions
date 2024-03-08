@@ -48,3 +48,5 @@ for default in "${CHECKOUT_DEFAULTS[@]}"; do
     done
     echo "checkout_$key=$val" >>"$GITHUB_OUTPUT"
 done
+
+exit 0

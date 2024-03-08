@@ -15,3 +15,5 @@ gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && {
 }
 
 echo "tag=$TAG" >>"$GITHUB_OUTPUT"
+
+exit 0

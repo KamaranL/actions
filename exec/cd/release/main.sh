@@ -15,3 +15,5 @@ ARGS="release create $TAG --latest --generate-notes --verify-tag"
 echo "Release \"$TAG\" can be found at https://github.com/$GITHUB_REPOSITORY/releases/latest."
 
 echo "::endgroup::"
+
+exit 0

@@ -25,3 +25,5 @@ echo "- Configured:"
 sed 's/^/\t/' <(git config --list --global)
 
 echo "::endgroup::"
+
+exit 0

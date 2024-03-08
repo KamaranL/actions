@@ -27,6 +27,8 @@ echo "- Pushing changes to origin: $CI_ORIGIN"
 gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
 merged." 2>&1
 
+gh pr merge "$GITHUB_EVENT_NUMBER" --merge
+
 echo "::endgroup::"
 
 exit 0

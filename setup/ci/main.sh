@@ -10,7 +10,7 @@ if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
     PRERELEASE=false
 else
     PRERELEASE=true
-    PRERELEASE_TAG=alpha
+    PRERELEASE_TAG=-alpha
 fi
 
 $PRERELEASE && {

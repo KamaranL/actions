@@ -16,7 +16,7 @@ runs:
     - uses: gittools/actions/gitversion/execute@v0.13
       with:
         disableCache: true
-        disableNormalization: true
+        # disableNormalization: true
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml
         overrideConfig: ${{ steps.pre.outputs.gitversion-execute_overrideConfig }}

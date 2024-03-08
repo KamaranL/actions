@@ -15,5 +15,5 @@ runs:
       shell: bash
       env:
         INPUT_ASSETS: ${{ inputs.assets }}
-        TAG: ${{ steps.pre.outputs.tag }}
+        CI_TAG: ${{ steps.pre.outputs.ci-tag }}
       id: main

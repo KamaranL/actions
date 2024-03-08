@@ -11,4 +11,6 @@ runs:
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
+      env:
+        GITHUB_EVENT_NUMBER: ${{ github.event.number }}
       id: main

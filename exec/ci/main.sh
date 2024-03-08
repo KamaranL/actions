@@ -16,9 +16,7 @@ echo "- Creating tag: $CI_TAG"
 ! git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA" 2>&1 && {
     echo "::error::There was a problem with creating tag \"$CI_TAG\"."
     exit 1
-}
-
-echo "New tag \"$CI_TAG\" successfully created." \
+} || echo "- [x] new tag \"$CI_TAG\" successfully created" \
     >>"$GITHUB_STEP_SUMMARY"
 
 echo "- Pushing changes to origin: $CI_ORIGIN"
@@ -34,7 +32,7 @@ echo "- Merging pull request: $GITHUB_EVENT_NUMBER"
 ! gh pr merge "$GITHUB_EVENT_NUMBER" --merge 2>&1 &&
     echo "::error::There was a problem with merging pull request \
 #$GITHUB_EVENT_NUMBER. This pull request will need to be merged manually." ||
-    echo "Pull request #$GITHUB_EVENT_NUMBER successfully closed." \
+    echo "- [x] pull request #$GITHUB_EVENT_NUMBER successfully closed" \
         >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"

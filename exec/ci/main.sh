@@ -29,7 +29,7 @@ gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
 merged." 2>&1
 
 MERGED=false
-MAX_ATTEMPTS=5
+MAX_ATTEMPTS=10
 for ((i = 1; i <= MAX_ATTEMPTS; i++)); do
     echo "- Merging pull request: $GITHUB_EVENT_NUMBER \
 (attempt $i/$MAX_ATTEMPTS)"
@@ -37,7 +37,7 @@ for ((i = 1; i <= MAX_ATTEMPTS; i++)); do
         MERGED=true
         break
     }
-    sleep 1
+    sleep 0.5
 done
 
 ! $MERGED &&

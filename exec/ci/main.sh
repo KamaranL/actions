@@ -28,6 +28,7 @@ echo "- Pushing changes to origin: $CI_ORIGIN"
 gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
 merged." 2>&1
 
+# base branch might not be updated right away, so loop through merge attempts
 MERGED=false
 MAX_ATTEMPTS=10
 for ((i = 1; i <= MAX_ATTEMPTS; i++)); do

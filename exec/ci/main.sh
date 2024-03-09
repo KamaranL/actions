@@ -25,15 +25,18 @@ echo "- Pushing changes to origin: $CI_ORIGIN"
     exit 1
 }
 
-gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
+echo "- Awaiting checks"
+gh pr checks "$GITHUB_EVENT_NUMBER" --watch 2>&1 && {
+    gh pr comment "$GITHUB_EVENT_NUMBER" --body "This pull request can now be \
 merged." 2>&1
 
-echo "- Merging pull request: $GITHUB_EVENT_NUMBER"
-! gh pr merge "$GITHUB_EVENT_NUMBER" --merge 2>&1 &&
-    echo "::error::There was a problem with merging pull request \
+    echo "- Merging pull request: $GITHUB_EVENT_NUMBER"
+    ! gh pr merge "$GITHUB_EVENT_NUMBER" --merge 2>&1 &&
+        echo "::error::There was a problem with merging pull request \
 #$GITHUB_EVENT_NUMBER. This pull request will need to be merged manually." ||
-    echo "- [x] pull request #$GITHUB_EVENT_NUMBER successfully closed" \
-        >>"$GITHUB_STEP_SUMMARY"
+        echo "- [x] pull request #$GITHUB_EVENT_NUMBER successfully closed" \
+            >>"$GITHUB_STEP_SUMMARY"
+}
 
 echo "::endgroup::"
 

@@ -14,3 +14,8 @@ runs:
       env:
         GITHUB_EVENT_NUMBER: ${{ github.event.number }}
       id: main
+
+    # - uses: actions/upload-artifact
+    #   with:
+    #     path: ${{ github.workspace }}/VERSION.txt
+

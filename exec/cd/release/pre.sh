@@ -1,6 +1,10 @@
 #!/bin/bash
 
-CI_TAG="$(gh api /repos/$GITHUB_REPOSITORY/tags --jq '.[0].name')"
+# CI_TAG="$(gh api /repos/$GITHUB_REPOSITORY/tags --jq '.[0].name')" #old method
+
+CI_TAG="$(curl -H "Authorization: Token $GH_TOKEN" \
+    -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$WORKFLOW_RUN_BASE_REF/VERSION.txt)"
+# https://raw.githubusercontent.com/{repo}/{branch}/VERSION.txt
 
 # check tag existence
 [ -z "$CI_TAG" ] && {

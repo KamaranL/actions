@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# CI_TAG="$(gh api /repos/$GITHUB_REPOSITORY/tags --jq '.[0].name')" #old method
-
 # get base branch from pr that triggered workflow
 PR_NUM="$(echo -e "$WORKFLOW_REF" | grep -oE '[0-9]{1,}')"
 BASE_REF="$(gh pr view "$PR_NUM" --json baseRefName --jq .baseRefName)"

@@ -13,9 +13,9 @@ ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
     exit 1
 }
 
-echo "- [x] published \"$CI_TAG\" to \
-https://github.com/$GITHUB_REPOSITORY/releases/latest." \
-    >>"$GITHUB_STEP_SUMMARY"
+echo "- :package: \
+[$CI_TAG](https://github.com/$GITHUB_REPOSITORY/releases/tag/) :arrow_right: \
+:globe_with_meridians:" >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"
 

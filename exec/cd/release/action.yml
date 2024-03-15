@@ -7,10 +7,16 @@ inputs:
 runs:
   using: composite
   steps:
+
+    - run: echo -e "$WORKFLOW_RUN" && exit 1
+      shell: bash
+      env:
+        WORKFLOW_RUN: ${{ toJson(github.event.workflow_run) }}
+
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       env:
-        WORKFLOW_RUN_BASE_REF: ${{ fromJson(github.event.workflow_run.pull_requests[0].base.ref) }}
+        WORKFLOW_RUN_BASE_REF: ${{ github.event.workflow_run.pull_requests[0].base.ref }}
       id: pre
 
     - run: $GITHUB_ACTION_PATH/main.sh

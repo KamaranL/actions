@@ -8,18 +8,9 @@ runs:
   using: composite
   steps:
 
-    - run: |
-        PR_NUM="$(echo -e "$WORKFLOW_REF" | grep -oE '[0-9]{1,}')"
-        gh pr view "$PR_NUM" --json baseRefName --jq .baseRefName
-        exit 1
-      shell: bash
-      env:
-        WORKFLOW_REF: ${{ github.event.workflow_run.referenced_workflows[0].ref }}
-
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       env:
-        WORKFLOW_RUN_BASE_REF: ${{ github.event.workflow_run.pull_requests[0].base.ref }}
         WORKFLOW_REF: ${{ github.event.workflow_run.referenced_workflows[0].ref }}
       id: pre
 

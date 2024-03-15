@@ -19,14 +19,6 @@ else
     PRERELEASE_TAG=-alpha
 fi
 
-# if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
-#     [[ ${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF} =~ ^dev(elop)?(ment)?$ ]]; then
-#     PRERELEASE=false
-# else
-#     PRERELEASE=true
-#     PRERELEASE_TAG=-alpha
-# fi
-
 $PRERELEASE && {
     echo "- Appending prerelease tag: $PRERELEASE_TAG"
     CI_VERSION+="$PRERELEASE_TAG"

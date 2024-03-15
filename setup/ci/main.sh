@@ -6,13 +6,26 @@ CI_SOURCE_BRANCH="${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF}"
 CI_TARGET_BRANCH="${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}"
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
-if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
-    [[ ${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF} =~ ^dev(elop)?(ment)?$ ]]; then
+if [ "$CI_SOURCE_BRANCH" == main ]; then
+    ! [[ $CI_TARGET_BRANCH =~ ^dev(elop)?(ment)?$ ]] && {
+        echo "::error::\"$CI_SOURCE_BRANCH\" is not a development branch and \
+therefore not allowed to merge into \"$CI_TARGET_BRANCH\". Merge \
+\"$CI_SOURCE_BRANCH\" into a development branch first."
+        exit 1
+    }
     PRERELEASE=false
 else
     PRERELEASE=true
     PRERELEASE_TAG=-alpha
 fi
+
+# if [ "${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}" == main ] &&
+#     [[ ${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF} =~ ^dev(elop)?(ment)?$ ]]; then
+#     PRERELEASE=false
+# else
+#     PRERELEASE=true
+#     PRERELEASE_TAG=-alpha
+# fi
 
 $PRERELEASE && {
     echo "- Appending prerelease tag: $PRERELEASE_TAG"

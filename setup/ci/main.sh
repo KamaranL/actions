@@ -8,8 +8,8 @@ CI_VERSION="$GitVersion_MajorMinorPatch"
 
 if [ "$CI_TARGET_BRANCH" == main ]; then
     ! [[ $CI_SOURCE_BRANCH =~ ^dev(elop)?(ment)?$ ]] && {
-        echo "::error::\"$CI_SOURCE_BRANCH\" is not a development branch and \
-therefore not allowed to merge into \"$CI_TARGET_BRANCH\". Merge \
+        echo "::error::Branch \"$CI_SOURCE_BRANCH\" is not a development \
+branch and therefore not allowed to merge into \"$CI_TARGET_BRANCH\". Merge \
 \"$CI_SOURCE_BRANCH\" into a development branch first."
         exit 1
     }

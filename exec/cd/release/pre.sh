@@ -2,7 +2,7 @@
 
 # CI_TAG="$(gh api /repos/$GITHUB_REPOSITORY/tags --jq '.[0].name')" #old method
 
-CI_TAG="vß$(curl -s -H "Authorization: Token $GH_TOKEN" \
+CI_TAG="v$(curl -s -H "Authorization: Token $GH_TOKEN" \
     -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${WORKFLOW_RUN_BASE_REF:-HEAD}/VERSION.txt)"
 # https://raw.githubusercontent.com/{repo}/{branch}/VERSION.txt
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# get base branch from pr that triggered workflow
+# get base branch from pull_request that triggered workflow
 PR_NUM="$(echo -e "$WORKFLOW_REF" | grep -oE '[0-9]{1,}')"
 BASE_REF="$(gh pr view "$PR_NUM" --json baseRefName --jq .baseRefName)"
 CI_TAG="v$(curl -s -H "Authorization: Token $GH_TOKEN" \

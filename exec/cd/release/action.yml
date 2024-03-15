@@ -7,7 +7,6 @@ inputs:
 runs:
   using: composite
   steps:
-
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       env:

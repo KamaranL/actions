@@ -6,8 +6,8 @@ CI_SOURCE_BRANCH="${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF}"
 CI_TARGET_BRANCH="${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}"
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
-if [ "$CI_SOURCE_BRANCH" == main ]; then
-    ! [[ $CI_TARGET_BRANCH =~ ^dev(elop)?(ment)?$ ]] && {
+if [ "$CI_TARGET_BRANCH" == main ]; then
+    ! [[ $CI_SOURCE_BRANCH =~ ^dev(elop)?(ment)?$ ]] && {
         echo "::error::\"$CI_SOURCE_BRANCH\" is not a development branch and \
 therefore not allowed to merge into \"$CI_TARGET_BRANCH\". Merge \
 \"$CI_SOURCE_BRANCH\" into a development branch first."

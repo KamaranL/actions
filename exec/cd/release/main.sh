@@ -14,7 +14,7 @@ ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
 }
 
 echo ":package: \
-[$CI_TAG](https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
+[**$CI_TAG**](https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
     >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"

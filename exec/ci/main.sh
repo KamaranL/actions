@@ -16,8 +16,7 @@ echo "- Creating tag: $CI_TAG"
 ! git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA" 2>&1 && {
     echo "::error::There was a problem with creating tag \"$CI_TAG\"."
     exit 1
-} || echo ":label: $CI_TAG" \
-    >>"$GITHUB_STEP_SUMMARY"
+} || echo ":label: **$CI_TAG**" >>"$GITHUB_STEP_SUMMARY"
 
 echo "- Pushing changes to origin: $CI_ORIGIN"
 ! git push origin "$CI_ORIGIN" --force-with-lease 2>&1 && {

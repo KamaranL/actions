@@ -13,9 +13,9 @@ ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
     exit 1
 }
 
-echo "- :package: \
-[$CI_TAG](https://github.com/$GITHUB_REPOSITORY/releases/tag/) :arrow_right: \
-:globe_with_meridians:" >>"$GITHUB_STEP_SUMMARY"
+echo ":package: \
+[$CI_TAG](https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
+    >>"$GITHUB_STEP_SUMMARY"
 
 echo "::endgroup::"
 

@@ -8,10 +8,12 @@ runs:
   using: composite
   steps:
 
-    - run: echo -e "$WORKFLOW_RUN" && exit 1
+    - run: |
+        echo -e "$WORKFLOW_REF" | grep -oE '[0-9]{1,}'
+        exit 1
       shell: bash
       env:
-        WORKFLOW_RUN: ${{ toJson(github.event.workflow_run) }}
+        WORKFLOW_REF: ${{ github.event.workflow_run.referenced_workflows[0].ref }}
 
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash

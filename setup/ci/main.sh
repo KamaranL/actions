@@ -1,11 +1,12 @@
 #!/bin/bash
 
-echo "::group::Configuring CI..."
+echo ::group::Setting up CI...
 
 CI_SOURCE_BRANCH="${GITHUB_HEAD_REF:-\$GITHUB_HEAD_REF}"
 CI_TARGET_BRANCH="${GITHUB_BASE_REF:-\$GITHUB_BASE_REF}"
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
+echo - Setting release type
 if [ "$CI_TARGET_BRANCH" == main ]; then
     ! [[ $CI_SOURCE_BRANCH =~ ^dev(elop)?(ment)?$ ]] && {
         echo "::error::Branch \"$CI_SOURCE_BRANCH\" is not a development \
@@ -20,7 +21,7 @@ else
 fi
 
 $PRERELEASE && {
-    echo "- Appending prerelease tag: $PRERELEASE_TAG"
+    echo - Appending prerelease tag: "$PRERELEASE_TAG"
     CI_VERSION+="$PRERELEASE_TAG"
 
     # check for files that are commonly found in nuget packages
@@ -30,23 +31,18 @@ $PRERELEASE && {
         -name '*.psd1' -o \
         -name 'nuget.config' \)))
 
-    # append period in prerelease tag if not a nuget package
     ! ((${#NU_FILES[@]})) &&
         CI_VERSION+="." ||
-        echo "- Formatting as nuget-compatible version"
+        echo - Formatting prerelease version as nuget-compatible
 
-    echo "- Appending commit count: $GitVersion_CommitsSinceVersionSource"
+    echo - Appending commit count: "$GitVersion_CommitsSinceVersionSource"
     CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
 }
-
-echo "CI_SOURCE_BRANCH: $CI_SOURCE_BRANCH"
-echo "CI_TARGET_BRANCH: $CI_TARGET_BRANCH"
-echo "CI_VERSION:       $CI_VERSION"
 
 echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH" >>"$GITHUB_ENV"
 echo "CI_TARGET_BRANCH=$CI_TARGET_BRANCH" >>"$GITHUB_ENV"
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
 
-echo "::endgroup::"
+echo ::endgroup::
 
 exit 0

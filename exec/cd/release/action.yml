@@ -10,7 +10,7 @@ runs:
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       env:
-        WORKFLOW_REF: ${{ github.event.workflow_run.referenced_workflows[0].ref }}
+        WFR_REF: ${{ github.event.workflow_run.referenced_workflows[0].ref }}
       id: pre
 
     - run: $GITHUB_ACTION_PATH/main.sh

@@ -5,17 +5,12 @@ runs:
   steps:
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
-      id: pre
       env:
         ACTION_REPOSITORY: ${{ github.action_repository }}
+      id: pre
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
         GITHUB_EVENT_NUMBER: ${{ github.event.number }}
       id: main
-
-    # - uses: actions/upload-artifact
-    #   with:
-    #     path: ${{ github.workspace }}/VERSION.txt
-

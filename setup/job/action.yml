@@ -47,3 +47,5 @@ runs:
         set-safe-directory: ${{ steps.pre.outputs.checkout_set-safe-directory }}
         github-server-url: ${{ steps.pre.outputs.checkout_github-server-url }}
 
+    - run: 'echo ::endgroup::'
+      shell: bash

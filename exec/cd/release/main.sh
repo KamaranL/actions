@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "::group::Delivering GitHub Release"
+echo ::group::Delivering GitHub release...
 
 ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
 --repo $GITHUB_REPOSITORY"
@@ -8,6 +8,7 @@ ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
 [ ! -z "$INPUT_ASSETS" ] &&
     ARGS+=" $INPUT_ASSETS/*"
 
+echo - Creating release
 ! gh $ARGS 2>&1 && {
     echo "::error::There was a problem creating a release for \"$CI_TAG\"."
     exit 1
@@ -17,6 +18,6 @@ echo ":package: \
 [**$CI_TAG**](https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
     >>"$GITHUB_STEP_SUMMARY"
 
-echo "::endgroup::"
+echo ::endgroup::
 
 exit 0

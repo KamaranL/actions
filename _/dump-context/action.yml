@@ -1,0 +1,10 @@
+name: dump-context
+description: ''
+runs:
+  using: composite
+  steps:
+    - if: github
+      run: echo -e "$GITHUB_CONTEXT" | sed 's/^/(github).../'
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}

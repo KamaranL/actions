@@ -17,12 +17,12 @@ runs:
       env:
         ENV_CONTEXT: ${{ toJson(env) }}
 
-    - if: vars
-      continue-on-error: true
-      run: echo -e "$VARS_CONTEXT" | sed 's/^/(vars).../'
-      shell: bash
-      env:
-        VARS_CONTEXT: ${{ toJson(vars) }}
+    # - if: vars
+    #   continue-on-error: true
+    #   run: echo -e "$VARS_CONTEXT" | sed 's/^/(vars).../'
+    #   shell: bash
+    #   env:
+    #     VARS_CONTEXT: ${{ toJson(vars) }}
 
     - if: job
       continue-on-error: true
@@ -31,12 +31,12 @@ runs:
       env:
         JOB_CONTEXT: ${{ toJson(job) }}
 
-    - if: jobs
-      continue-on-error: true
-      run: echo -e "$JOBS_CONTEXT" | sed 's/^/(jobs).../'
-      shell: bash
-      env:
-        JOBS_CONTEXT: ${{ toJson(jobs) }}
+    # - if: jobs
+    #   continue-on-error: true
+    #   run: echo -e "$JOBS_CONTEXT" | sed 's/^/(jobs).../'
+    #   shell: bash
+    #   env:
+    #     JOBS_CONTEXT: ${{ toJson(jobs) }}
 
     - if: steps
       continue-on-error: true
@@ -52,12 +52,12 @@ runs:
       env:
         RUNNER_CONTEXT: ${{ toJson(runner) }}
 
-    - if: secrets
-      continue-on-error: true
-      run: echo -e "$SECRETS_CONTEXT" | sed 's/^/(secrets).../'
-      shell: bash
-      env:
-        SECRETS_CONTEXT: ${{ toJson(secrets) }}
+    # - if: secrets
+    #   continue-on-error: true
+    #   run: echo -e "$SECRETS_CONTEXT" | sed 's/^/(secrets).../'
+    #   shell: bash
+    #   env:
+    #     SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
     - if: strategy
       continue-on-error: true
@@ -73,12 +73,12 @@ runs:
       env:
         MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
-    - if: needs
-      continue-on-error: true
-      run: echo -e "$NEEDS_CONTEXT" | sed 's/^/(needs).../'
-      shell: bash
-      env:
-        NEEDS_CONTEXT: ${{ toJson(needs) }}
+    # - if: needs
+    #   continue-on-error: true
+    #   run: echo -e "$NEEDS_CONTEXT" | sed 's/^/(needs).../'
+    #   shell: bash
+    #   env:
+    #     NEEDS_CONTEXT: ${{ toJson(needs) }}
 
     - if: inputs
       continue-on-error: true

@@ -3,9 +3,16 @@ description: ''
 runs:
   using: composite
   steps:
-    - run: $GITHUB_ACTION_PATH/pre.sh
-      shell: bash
-      id: pre
+
+    # - if: fromJson(steps.pre.outputs.gh-token) == false
+    #   uses: 1password/load-secrets-action@v1
+    #   env:
+    #     GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+        registry-url: 'https://registry.npmjs.org'
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash

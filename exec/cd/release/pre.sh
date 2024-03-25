@@ -20,7 +20,7 @@ gh release view "$CI_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && {
     exit 1
 }
 
-echo "ci-tag=$CI_TAG" >>"$GITHUB_OUTPUT"
+# echo "ci-tag=$CI_TAG" >>"$GITHUB_OUTPUT"
 
 echo ::endgroup::
 

@@ -13,8 +13,8 @@ echo - Creating release
     exit 1
 }
 
-echo ":package: \
-[**$CI_TAG**](https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
+echo "1. :package: [**github (release)**]\
+(https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
     >>"$GITHUB_STEP_SUMMARY"
 
 echo ::endgroup::

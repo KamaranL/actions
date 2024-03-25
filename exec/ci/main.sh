@@ -16,7 +16,7 @@ echo - Creating tag: "$CI_TAG"
 ! git tag -a "$CI_TAG" -m "$CI_TAG" "$CI_SHA" 2>&1 && {
     echo "::error::There was a problem with creating tag \"$CI_TAG\"."
     exit 1
-} || echo "**$CI_TAG** :label:" >>"$GITHUB_STEP_SUMMARY"
+} || echo "1. :label: **$CI_TAG**" >>"$GITHUB_STEP_SUMMARY"
 
 echo - Pushing changes to origin: "$CI_ORIGIN"
 ! git push origin "$CI_ORIGIN" --force-with-lease 2>&1 && {
@@ -43,7 +43,7 @@ done
 ! $MERGED &&
     echo "::error::There was a problem with merging pull request \
 #$GITHUB_EVENT_NUMBER. This pull request will need to be merged manually." ||
-    echo "**$CI_TARGET_BRANCH** :arrow_left: **$CI_SOURCE_BRANCH**" \
+    echo "1. **$CI_TARGET_BRANCH** :arrow_left: **$CI_SOURCE_BRANCH**" \
         >>"$GITHUB_STEP_SUMMARY"
 
 echo ::endgroup::

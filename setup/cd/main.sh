@@ -12,6 +12,7 @@ echo "- Switching ref to tags/$CI_TAG"
 git checkout tags/"$CI_TAG"
 
 echo "CI_TAG=$CI_TAG" >>"$GITHUB_ENV"
+echo "# $CI_TAG :arrow_right:" >>"$GITHUB_STEP_SUMMARY"
 
 echo ::endgroup::
 

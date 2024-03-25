@@ -2,8 +2,7 @@
 
 echo ::group::Delivering GitHub release...
 
-ARGS="release create $CI_TAG --latest --generate-notes --verify-tag \
---repo $GITHUB_REPOSITORY"
+ARGS="release create $CI_TAG --latest --generate-notes --verify-tag"
 
 [ ! -z "$INPUT_ASSETS" ] &&
     ARGS+=" $INPUT_ASSETS/*"

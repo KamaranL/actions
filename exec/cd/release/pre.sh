@@ -15,7 +15,7 @@ echo - Checking tag existence
 }
 
 echo - Checking release existence
-gh release view "$CI_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && {
+gh release view "$CI_TAG" >/dev/null 2>&1 && {
     echo "::error::A release already exists for \"$CI_TAG\"."
     exit 1
 }

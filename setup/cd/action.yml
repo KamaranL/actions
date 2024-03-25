@@ -3,12 +3,6 @@ description: ''
 runs:
   using: composite
   steps:
-    - uses: KamaranL/actions/setup/job@v0
-      with:
-        checkout: |
-          fetch-depth=0
-          fetch-tags=true
-
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:

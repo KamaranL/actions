@@ -8,3 +8,9 @@ runs:
       shell: bash
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
+
+    - if: env
+      run: echo -e "$ENV_CONTEXT" | sed 's/^/(env).../'
+      shell: bash
+      env:
+        ENV_CONTEXT: ${{ toJson(env) }}

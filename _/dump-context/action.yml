@@ -14,3 +14,63 @@ runs:
       shell: bash
       env:
         ENV_CONTEXT: ${{ toJson(env) }}
+
+    - if: vars
+      run: echo -e "$VARS_CONTEXT" | sed 's/^/(vars).../'
+      shell: bash
+      env:
+        VARS_CONTEXT: ${{ toJson(vars) }}
+
+    - if: job
+      run: echo -e "$JOB_CONTEXT" | sed 's/^/(job).../'
+      shell: bash
+      env:
+        JOB_CONTEXT: ${{ toJson(job) }}
+
+    - if: jobs
+      run: echo -e "$JOBS_CONTEXT" | sed 's/^/(jobs).../'
+      shell: bash
+      env:
+        JOBS_CONTEXT: ${{ toJson(jobs) }}
+
+    - if: steps
+      run: echo -e "$STEPS_CONTEXT" | sed 's/^/(steps).../'
+      shell: bash
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps) }}
+
+    - if: runner
+      run: echo -e "$RUNNER_CONTEXT" | sed 's/^/(runner).../'
+      shell: bash
+      env:
+        RUNNER_CONTEXT: ${{ toJson(runner) }}
+
+    - if: secrets
+      run: echo -e "$SECRETS_CONTEXT" | sed 's/^/(secrets).../'
+      shell: bash
+      env:
+        SECRETS_CONTEXT: ${{ toJson(secrets) }}
+
+    - if: strategy
+      run: echo -e "$STRATEGY_CONTEXT" | sed 's/^/(strategy).../'
+      shell: bash
+      env:
+        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+
+    - if: matrix
+      run: echo -e "$MATRIX_CONTEXT" | sed 's/^/(matrix).../'
+      shell: bash
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+    - if: needs
+      run: echo -e "$NEEDS_CONTEXT" | sed 's/^/(needs).../'
+      shell: bash
+      env:
+        NEEDS_CONTEXT: ${{ toJson(needs) }}
+
+    - if: inputs
+      run: echo -e "$INPUTS_CONTEXT" | sed 's/^/(inputs).../'
+      shell: bash
+      env:
+        INPUTS_CONTEXT: ${{ toJson(inputs) }}

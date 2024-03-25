@@ -1,10 +1,5 @@
 name: issue
 description: ''
-inputs:
-  workflow-run:
-    description: ''
-    required: true
-
 runs:
   using: composite
   steps:

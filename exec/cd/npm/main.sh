@@ -10,7 +10,7 @@ echo - Publishing package
 
 NAME="$(npm pkg get name --json | jq -r)"
 
-echo "1. :package: [**npm**]\
+echo "- :package: [**npm**]\
 (https://www.npmjs.com/package/$NAME/v/$CI_VERSION)" \
     >>"$GITHUB_STEP_SUMMARY"
 

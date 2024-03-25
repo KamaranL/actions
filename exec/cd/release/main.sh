@@ -13,7 +13,7 @@ echo - Creating release
     exit 1
 }
 
-echo "1. :package: [**github (release)**]\
+echo "- :package: [**github (release)**]\
 (https://github.com/$GITHUB_REPOSITORY/releases/tag/$CI_TAG)" \
     >>"$GITHUB_STEP_SUMMARY"
 

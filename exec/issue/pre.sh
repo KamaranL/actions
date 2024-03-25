@@ -22,8 +22,8 @@ LOG_FILE="$LOG_TEMP/$WFR-${WFR_ID}_$WFR_ATTEMPT.log"
 [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
 
 echo - Pulling logs from triggering workflow
-gh run view $WFR_ID --verbose --log \
-    --attempt $WFR_ATTEMPT \
+gh run view "$WFR_ID" --verbose --log \
+    --attempt "$WFR_ATTEMPT" \
     --repo "$GITHUB_REPOSITORY" >"$LOG_FILE"
 
 echo ::endgroup::

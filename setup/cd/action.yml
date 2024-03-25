@@ -1,0 +1,14 @@
+name: setup-cd
+description: ''
+runs:
+  using: composite
+  steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+      id: pre
+
+    - uses: KamaranL/actions/setup/job@v0
+      with:
+        checkout: |
+          ref=${{ env.CI_TAG }}
+          fetch-tags=true

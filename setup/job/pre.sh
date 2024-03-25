@@ -46,7 +46,7 @@ echo - Checking for repo in workspace
             IFS='=' read -ra param <<<"$LINE"
             P_KEY="${param[0]}"
             P_VAL="${param[1]}"
-            # [ "$KEY" != "$P_KEY" ] && continue # old
+
             [ "$KEY" == "$P_KEY" ] &&
                 [ ! -z "$P_VAL" ] &&
                 VAL="$P_VAL" &&

@@ -11,7 +11,7 @@ echo - Checking event type
 
 echo - Checking for existing tags \& releases
 if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
-    ! gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+    ! gh release view >/dev/null 2>&1; then
     echo gitversion-execute_overrideConfig=next-version=1.0.0 \
         >>"$GITHUB_OUTPUT"
 fi

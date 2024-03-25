@@ -17,7 +17,7 @@ echo - Checking for ci label in repository
     gh label create ci --description "Workflow-related" --color 5319E7 \
         --repo "$GITHUB_REPOSITORY"
 
-LOG_TEMP="$RUNNER_TEMP/.logs"
+LOG_TEMP="$RUNNER_TEMP/.log"
 LOG_FILE="$LOG_TEMP/$WFR-${WFR_ID}_$WFR_ATTEMPT.log"
 [ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
 

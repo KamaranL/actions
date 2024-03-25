@@ -3,7 +3,7 @@ description: ''
 runs:
   using: composite
   steps:
-    - uses: KamaranL/actions/setup@v0
+    - uses: KamaranL/actions/setup/job@v0
 
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash

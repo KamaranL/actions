@@ -1,0 +1,40 @@
+name: ci
+
+# continuously integrates changes back into the codebase
+
+on:
+  pull_request:
+    types: opened
+
+concurrency: ${{ github.event_name }}-${{ github.workflow }}
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  ci:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_TOKEN }}
+    steps:
+      - uses: KamaranL/actions/setup/job@v0
+        with:
+          checkout: |
+            fetch-depth=0
+            fetch-tags=true
+
+      - uses: KamaranL/actions/setup/identity@v0
+
+      - uses: KamaranL/actions/setup/ci@v0
+
+      - run: |
+          # update manifests
+          echo "$CI_VERSION" >VERSION.txt
+          npm version --quiet --allow-same-version --no-commit-hooks --no-git-tag-version "$CI_VERSION"
+
+      - uses: KamaranL/actions/exec/ci@v0

@@ -52,7 +52,7 @@ for RID in "${RIDS[@]}"; do
         tar -czf "$DIST_TEMP/${ASSY_NAME,,}-$CI_VERSION-$RID.tgz" \
             -C "$PUB_TEMP" .
 
-    echo - Cleaning "$PUB_TEMP of $RID"
+    echo - Cleaning "$PUB_TEMP ($RID)"
     rm -rf "$PUB_TEMP"/*
 done
 

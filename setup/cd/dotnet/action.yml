@@ -5,6 +5,10 @@ inputs:
     description: ''
   release-identifiers:
     description: ''
+outputs:
+  dist:
+    description: ''
+    value: ${{ steps.main.outputs.dist }}
 
 runs:
   using: composite

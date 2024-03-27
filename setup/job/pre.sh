@@ -50,7 +50,7 @@ echo - Checking for repo in workspace
             [ "$KEY" == "$P_KEY" ] &&
                 [ ! -z "$P_VAL" ] &&
                 VAL="$P_VAL" &&
-                break # new
+                break
             unset IFS
         done
         echo - Setting "$KEY = $VAL"

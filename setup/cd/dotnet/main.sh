@@ -56,7 +56,7 @@ for RID in "${RIDS[@]}"; do
     rm -rf "$PUB_TEMP"/*
 done
 
-echo "di=$DIST_TEMP" >>"$GITHUB_OUTPUT"
+echo "dist=$DIST_TEMP" >>"$GITHUB_OUTPUT"
 
 echo ::endgroup::
 

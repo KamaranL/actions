@@ -41,7 +41,7 @@ for RID in "${RIDS[@]}"; do
     }
 
     [ -f LICENSE.txt ] && cp LICENSE.txt "$PUB_TEMP/"
-    [ -f README.md ] && cp README.txt "$PUB_TEMP/"
+    [ -f README.md ] && cp README.md "$PUB_TEMP/"
     [ -d docs ] && cp -R docs "$PUB_TEMP/"
 
     echo - Packaging "$RID"

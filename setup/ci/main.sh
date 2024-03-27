@@ -2,8 +2,6 @@
 
 echo ::group::Setting up CI...
 
-CI_SOURCE_BRANCH="$GITHUB_HEAD_REF"
-CI_TARGET_BRANCH="$GITHUB_BASE_REF"
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
 echo - Setting release type
@@ -39,8 +37,6 @@ $PRERELEASE && {
     CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
 }
 
-echo "CI_SOURCE_BRANCH=$CI_SOURCE_BRANCH" >>"$GITHUB_ENV"
-echo "CI_TARGET_BRANCH=$CI_TARGET_BRANCH" >>"$GITHUB_ENV"
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
 
 echo ::endgroup::

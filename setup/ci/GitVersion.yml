@@ -1,5 +1,7 @@
 mode: ContinuousDeployment
-assembly-informational-format: '{MajorMinorPatch}-{CommitsSinceVersionSource}+Branch.{env:GITHUB_BASE_REF ?? HEAD}.Sha.{Sha}'
+assembly-file-versioning-format: '{MajorMinorPatch}.{PreReleaseNumber}'
+assembly-versioning-format: '{MajorMinorPatch}.{PreReleaseNumber}'
+assembly-informational-format: '{MajorMinorPatch}.{PreReleaseNumber}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
 branches: {}
 ignore:
   sha: []

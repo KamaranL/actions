@@ -27,6 +27,11 @@ PROJ_FILES=($(find . -type f \( \
     echo gitversion-execute_additionalArguments=/updateprojectfiles \
         >>"$GITHUB_OUTPUT"
 
+echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
+echo "CI_TARGET_BRANCH=$GITHUB_BASE_REF" >>"$GITHUB_ENV"
+echo "CI_SOURCE_SHA=$PR_HEAD_SHA" >>"$GITHUB_ENV"
+echo "CI_TARGET_SHA=$PR_BASE_SHA" >>"$GITHUB_ENV"
+
 echo ::endgroup::
 
 exit 0

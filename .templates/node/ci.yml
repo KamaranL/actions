@@ -33,7 +33,6 @@ jobs:
       - uses: KamaranL/actions/setup/ci@v0
 
       - run: |
-          # update manifests
           echo "$CI_VERSION" >VERSION.txt
           npm version --quiet --allow-same-version --no-commit-hooks --no-git-tag-version "$CI_VERSION"
 

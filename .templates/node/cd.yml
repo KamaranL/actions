@@ -31,7 +31,7 @@ jobs:
       - uses: KamaranL/actions/exec/cd/release@v0
         continue-on-error: true
 
-      # - uses: KamaranL/actions/exec/cd/npm@v0
-      #   continue-on-error: true
+      - uses: KamaranL/actions/exec/cd/npm@v0
+        continue-on-error: true
 
 

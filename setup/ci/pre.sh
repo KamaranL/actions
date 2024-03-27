@@ -16,6 +16,17 @@ if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
         >>"$GITHUB_OUTPUT"
 fi
 
+echo - Checking for project files
+PROJ_FILES=($(find . -type f \( \
+    -name '*.csproj' -o \
+    -name '*.fsproj' -o \
+    -name '*.vcproj' -o \
+    -name '*.vcxproj' \)))
+
+((${#PROJ_FILES[@]})) &&
+    echo gitversion-execute_additionalArguments=/updateprojectfiles \
+        >>"$GITHUB_OUTPUT"
+
 echo ::endgroup::
 
 exit 0

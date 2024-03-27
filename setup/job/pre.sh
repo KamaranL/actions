@@ -53,7 +53,7 @@ echo - Checking for repo in workspace
                 break # new
             unset IFS
         done
-        echo -e - Setting "$KEY = $VAL"
+        echo - Setting "$KEY = $VAL"
         echo "checkout_$KEY=$VAL" >>"$GITHUB_OUTPUT"
     done
 }

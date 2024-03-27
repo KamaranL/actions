@@ -1,0 +1,19 @@
+name: setup-cd-dotnet
+description: ''
+inputs:
+  override-params:
+    description: ''
+  release-identifiers:
+    description: ''
+
+runs:
+  using: composite
+  steps:
+    - uses: KamaranL/actions/setup/cd@v0
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+      env:
+        INPUT_PARAMS: ${{ inputs.override-params }}
+        INPUT_RIDS: ${{ inputs.release-identifiers }}
+      id: main

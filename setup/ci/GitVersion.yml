@@ -2,7 +2,10 @@ mode: ContinuousDeployment
 assembly-file-versioning-format: '{MajorMinorPatch}.{PreReleaseNumber}'
 assembly-versioning-format: '{MajorMinorPatch}.{PreReleaseNumber}'
 assembly-informational-format: '{MajorMinorPatch}.{PreReleaseNumber}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
-branches: {}
+# branches: {}
+branches:
+  pull-request:
+    tag: ''
 ignore:
   sha: []
 merge-message-formats: {}

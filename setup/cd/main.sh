@@ -9,6 +9,8 @@ CI_VERSION="$(curl -s -H "Authorization: Token $GH_TOKEN" \
     -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${BASE_REF:-HEAD}/VERSION.txt)"
 CI_TAG="v$CI_VERSION"
 
+echo found tag: "$(<VERSION.txt)" # test matching above
+
 echo - Switching ref to tags/"$CI_TAG"
 git checkout tags/"$CI_TAG"
 

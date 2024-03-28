@@ -17,7 +17,7 @@ runs:
 
     - uses: gittools/actions/gitversion/execute@v0.13
       with:
-        target-path: ${{ runner.temp }}
+        targetPath: ${{ runner.temp }}
         disableCache: true
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml

@@ -8,7 +8,7 @@ GVE_AA="\
 /p \"$GH_TOKEN\" \
 /b \"$GITHUB_BASE_REF\" \
 /c \"$PR_BASE_SHA\" \
-" # testing base vs head
+"
 GVE_OC=()
 
 echo - Checking event type

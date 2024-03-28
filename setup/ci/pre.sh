@@ -6,9 +6,9 @@ GVE_AA="\
 /url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
 /u \"$GITHUB_REPOSITORY_OWNER\" \
 /p \"$GH_TOKEN\" \
-/b \"$GITHUB_HEAD_REF\" \
-/c \"$PR_HEAD_SHA\" \
-" # testing
+/b \"$GITHUB_BASE_REF\" \
+/c \"$PR_BASE_SHA\" \
+" # testing base vs head
 GVE_OC=()
 
 echo - Checking event type
@@ -45,10 +45,7 @@ branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
     PRERELEASE=false
 else
     PRERELEASE=true
-    PRERELEASE_LABEL=alpha
 fi
-
-GVE_OC+=("continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}")
 
 echo "gitversion-execute_additionalArguments=${GVE_AA% *}" >>"$GITHUB_OUTPUT"
 {

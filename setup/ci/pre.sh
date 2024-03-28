@@ -27,6 +27,22 @@ PROJ_FILES=($(find . -type f \( \
     echo gitversion-execute_additionalArguments=/updateprojectfiles \
         >>"$GITHUB_OUTPUT"
 
+echo - Setting release type
+if [ "$GITHUB_BASE_REF" == main ]; then
+    ! [[ "$GITHUB_HEAD_REF" =~ ^dev(elop)?(ment)?$ ]] && {
+        echo "::error::Branch \"$GITHUB_HEAD_REF\" is not a development \
+branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
+\"$GITHUB_HEAD_REF\" into a development branch first."
+        exit 1
+    }
+    PRERELEASE=false
+else
+    PRERELEASE=true
+    PRERELEASE_LABEL=-alpha
+fi
+
+echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"
+echo "CI_PRERELEASE_LABEL=$PRERELEASE_LABEL" >>"$GITHUB_ENV"
 echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
 echo "CI_TARGET_BRANCH=$GITHUB_BASE_REF" >>"$GITHUB_ENV"
 echo "CI_SOURCE_SHA=$PR_HEAD_SHA" >>"$GITHUB_ENV"

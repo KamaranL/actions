@@ -2,8 +2,14 @@
 
 echo ::group::Running setup-ci pre-checks...
 
+GVE_AA="\
+/url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
+/u \"$GITHUB_REPOSITORY_OWNER\" \
+/p \"$GITHUB_TOKEN\" \
+/b \"$GITHUB_HEAD_REF\" \
+/c \"$PR_HEAD_SHA\" \
+" # testing
 GVE_OC=()
-# GVE_AA=""
 
 echo - Checking event type
 [ "$GITHUB_EVENT_NAME" != pull_request ] && {
@@ -43,12 +49,10 @@ else
 fi
 
 GVE_OC+=("continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}")
-GVE_OC+=("assembly-informational-format=\"{InformationalVersion}\"") # test
 
-echo "gitversion-execute_additionalArguments=$GVE_AA" >>"$GITHUB_OUTPUT"
+echo "gitversion-execute_additionalArguments=${GVE_AA% *}" >>"$GITHUB_OUTPUT"
 {
     echo 'gitversion-execute_overrideConfig<<EOF'
-    # echo -e "$GVE_OC"
     for CFG in "${GVE_OC[@]}"; do echo "$CFG"; done
     echo EOF
 } >>"$GITHUB_OUTPUT"

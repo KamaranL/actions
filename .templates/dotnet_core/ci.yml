@@ -32,6 +32,4 @@ jobs:
 
       - uses: KamaranL/actions/setup/ci@v0
 
-      - run: npm version --quiet --allow-same-version --no-commit-hooks --no-git-tag-version "$CI_VERSION"
-
       - uses: KamaranL/actions/exec/ci@v0

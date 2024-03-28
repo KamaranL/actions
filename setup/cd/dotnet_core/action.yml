@@ -1,4 +1,4 @@
-name: setup-cd-dotnet
+name: setup-cd-dotnet_core
 description: ''
 inputs:
   override-params:

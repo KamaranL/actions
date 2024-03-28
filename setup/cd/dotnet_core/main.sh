@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "::group::Setting up CD (for dotnet)..."
+echo "::group::Setting up CD (for dotnet core)..."
 
 SLN="$(find . -type f -name '*.sln')"
 ASSY_NAME="$(awk -F'= ' '/^Project(.*).*/{print $2}' "$SLN" |
     awk -F', ' '{gsub(/^"|"$/,"",$1); print $1}')"
-DIST_TEMP="$RUNNER_TEMP/dotnet/dist"
-PUB_TEMP="$RUNNER_TEMP/dotnet/publish"
+DIST_TEMP="$RUNNER_TEMP/dotnet_core/dist"
+PUB_TEMP="$RUNNER_TEMP/dotnet_core/publish"
 [ ! -d "$DIST_TEMP" ] && mkdir -p "$DIST_TEMP"
 [ ! -d "$PUB_TEMP" ] && mkdir -p "$PUB_TEMP"
 

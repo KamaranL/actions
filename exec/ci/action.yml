@@ -9,6 +9,9 @@ runs:
         ACTION_REPOSITORY: ${{ github.action_repository }}
       id: pre
 
+    - run: echo "$CI_VERSION" >VERSION.txt
+      shell: bash
+
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:

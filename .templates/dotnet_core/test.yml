@@ -1,0 +1,31 @@
+name: test
+
+# performs testing against codebase
+
+on:
+  workflow_call:
+  pull_request:
+    types: [synchronize, edited]
+    paths:
+      - '!VERSION.txt'
+      - '!<PROJECT_FILE>'
+
+concurrency: ${{ github.event_name }}-${{ github.job }}
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - run: dotnet build -c Release
+
+      # unit tests TBA

@@ -62,6 +62,5 @@ echo - Checking for repo in workspace
 }
 
 echo ::endgroup::
-echo ::group::Setting up job...
 
 exit 0

@@ -2,6 +2,8 @@
 
 echo ::group::Setting up CI...
 
+dotnet-gitversion
+
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
 echo - Setting release type

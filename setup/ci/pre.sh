@@ -12,8 +12,7 @@ echo - Checking event type
 echo - Checking for existing tags \& releases
 if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
     ! gh release view >/dev/null 2>&1; then
-    echo gitversion-execute_overrideConfig=next-version=1.0.0 \
-        >>"$GITHUB_OUTPUT"
+    GVE_OC="next-version=1.0.0\n"
 fi
 
 echo - Checking for project files
@@ -27,7 +26,7 @@ PROJ_FILES=($(find . -type f \( \
     echo gitversion-execute_additionalArguments=/updateprojectfiles \
         >>"$GITHUB_OUTPUT"
 
-echo - Setting release type
+echo - Checking prerelease
 if [ "$GITHUB_BASE_REF" == main ]; then
     ! [[ "$GITHUB_HEAD_REF" =~ ^dev(elop)?(ment)?$ ]] && {
         echo "::error::Branch \"$GITHUB_HEAD_REF\" is not a development \
@@ -36,11 +35,14 @@ branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
         exit 1
     }
     PRERELEASE=false
-    PRERELEASE_LABEL=
 else
     PRERELEASE=true
     PRERELEASE_LABEL=alpha
 fi
+
+GVE_OC+="continuous-delivery-fallback-tag=$PRERELEASE_LABEL"
+
+echo -e "gitversion-execute_overrideConfig=$GVE_OC" >>"$GITHUB_OUTPUT"
 
 echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"
 echo "CI_PRERELEASE_LABEL=$PRERELEASE_LABEL" >>"$GITHUB_ENV"

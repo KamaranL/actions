@@ -5,7 +5,7 @@ echo ::group::Running setup-job pre-checks...
 INPUT_CHECKOUT=($INPUT_CHECKOUT)
 CHECKOUT_DEFAULTS=(
     "repository=$GITHUB_REPOSITORY"
-    "ref=${GITHUB_HEAD_REF:-$GITHUB_REF}" # test ci/cd
+    "ref=${GITHUB_HEAD_REF:-$GITHUB_REF}"
     # "token= # using GH_TOKEN (PAT)
     "ssh-key="
     "ssh-known-hosts="

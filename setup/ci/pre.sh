@@ -36,9 +36,10 @@ branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
         exit 1
     }
     PRERELEASE=false
+    PRERELEASE_LABEL=
 else
     PRERELEASE=true
-    PRERELEASE_LABEL=-alpha
+    PRERELEASE_LABEL=alpha
 fi
 
 echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"

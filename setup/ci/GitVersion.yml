@@ -1,6 +1,5 @@
 mode: ContinuousDeployment
-assembly-informational-format: '{MajorMinorPatch}-{env:CI_PRERELEASE_LABEL}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
-# continuous-delivery-fallback-tag: '{env:CI_PRERELEASE_LABEL}'
+assembly-informational-format: '{MajorMinorPatch}-{PreReleaseTagWithDash}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
 branches:
   pull-request:
     tag: ''

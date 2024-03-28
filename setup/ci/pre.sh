@@ -6,8 +6,8 @@ GVE_AA="\
 /url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
 /u \"$GITHUB_REPOSITORY_OWNER\" \
 /p \"$GH_TOKEN\" \
-/b \"$GITHUB_BASE_REF\" \
-/c \"$PR_BASE_SHA\" \
+/b \"$GITHUB_HEAD_REF\" \
+/c \"$PR_HEAD_SHA\" \
 "
 GVE_OC=()
 
@@ -34,7 +34,7 @@ PROJ_FILES=($(find . -type f \( \
 ((${#PROJ_FILES[@]})) &&
     GVE_AA+="/updateprojectfiles "
 
-echo - Checking prerelease
+echo - Checking source/target branches
 if [ "$GITHUB_BASE_REF" == main ]; then
     ! [[ "$GITHUB_HEAD_REF" =~ ^dev(elop)?(ment)?$ ]] && {
         echo "::error::Branch \"$GITHUB_HEAD_REF\" is not a development \
@@ -45,6 +45,7 @@ branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
     PRERELEASE=false
 else
     PRERELEASE=true
+    GVE_OC+=("continuous-delivery-fallback-tag=alpha")
 fi
 
 echo "gitversion-execute_additionalArguments=${GVE_AA% *}" >>"$GITHUB_OUTPUT"

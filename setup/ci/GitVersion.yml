@@ -1,5 +1,5 @@
 mode: ContinuousDeployment
-assembly-informational-format: '{MajorMinorPatch}-{PreReleaseTagWithDash}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
+assembly-informational-format: '{MajorMinorPatch}{PreReleaseTagWithDash}+Branch.{env:CI_TARGET_BRANCH}.Sha.{env:CI_SOURCE_SHA}'
 branches:
   pull-request:
     tag: ''

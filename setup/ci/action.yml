@@ -17,12 +17,12 @@ runs:
 
     - uses: gittools/actions/gitversion/execute@v0.13
       with:
+        target-path: ${{ runner.temp }}
         disableCache: true
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml
         overrideConfig: ${{ steps.pre.outputs.gitversion-execute_overrideConfig }}
         additionalArguments: ${{ steps.pre.outputs.gitversion-execute_additionalArguments }}
-      working-directory: ${{ runner.temp }}
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash

@@ -5,7 +5,7 @@ echo ::group::Running setup-job pre-checks...
 INPUT_CHECKOUT=($INPUT_CHECKOUT)
 CHECKOUT_DEFAULTS=(
     "repository=$GITHUB_REPOSITORY"
-    "ref="
+    "ref=${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" # gitversion prerelease tag fix
     # "token= # using GH_TOKEN (PAT)
     "ssh-key="
     "ssh-known-hosts="
@@ -24,6 +24,9 @@ CHECKOUT_DEFAULTS=(
     "set-safe-directory=true"
     "github-server-url="
 )
+
+# [ "$GITHUB_EVENT_NAME" == pull_request ] &&
+#     CHECKOUT_DEFAULTS+="ref=$
 
 echo - Checking for correct timezone
 [ "$(</etc/timezone)" != America/New_York ] &&

@@ -9,8 +9,8 @@ echo - Checking event type
     exit 1
 }
 
-echo - Switching ref to "$GITHUB_HEAD_REF" # testing gitversion output
-git checkout "$GITHUB_HEAD_REF"
+# echo - Switching ref to "$GITHUB_HEAD_REF" # testing gitversion output
+# git checkout "$GITHUB_HEAD_REF"
 
 echo - Checking for existing tags \& releases
 if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&

@@ -9,12 +9,6 @@ CI_VERSION="$(curl -s -H "Authorization: Token $GH_TOKEN" \
     -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${BASE_REF:-HEAD}/VERSION.txt)"
 CI_TAG="v$CI_VERSION"
 
-# comparison to see if above can be simplified/removed
-echo CI_VERSION: "$CI_VERSION"
-echo VERSION.txt: "$(<VERSION.txt)"
-echo BASE_REF: "$BASE_REF"
-echo GITHUB_REF: "$GITHUB_BASE_REF"
-
 echo - Switching ref to tags/"$CI_TAG"
 git checkout tags/"$CI_TAG"
 

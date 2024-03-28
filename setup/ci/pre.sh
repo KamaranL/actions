@@ -2,13 +2,13 @@
 
 echo ::group::Running setup-ci pre-checks...
 
-# GVE_AA="\
-# /url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
-# /u \"$GITHUB_REPOSITORY_OWNER\" \
-# /p \"$GH_TOKEN\" \
-# /b \"$GITHUB_HEAD_REF\" \
-# /c \"$PR_HEAD_SHA\" \
-# "
+GVE_AA="\
+/url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
+/u \"$GITHUB_REPOSITORY_OWNER\" \
+/p \"$GH_TOKEN\" \
+/b \"$GITHUB_HEAD_REF\" \
+/c \"$PR_HEAD_SHA\" \
+"
 GVE_OC=()
 
 echo - Checking event type

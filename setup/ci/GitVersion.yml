@@ -1,4 +1,5 @@
 mode: ContinuousDeployment
+assembly-informational-format: '{FullSemVer}+{env:CI_SOURCE_BRANCH}.{env:CI_TARGET_SHA}'
 branches:
   main:
     tag: ''

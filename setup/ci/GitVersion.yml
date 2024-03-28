@@ -8,7 +8,7 @@ branches:
     tag: ''
   feature:
     tag: ''
-  pull_request:
+  pull-request:
     tag: ''
     tag-number-pattern: ''
   hotfix:

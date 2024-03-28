@@ -46,7 +46,7 @@ fi
 GVE_OC+="continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}\n"
 GVE_OC+="assembly-informational-format=\"{InformationalVersion}\"\n" # test
 
-echo -e "gitversion-execute_overrideConfig=$GVE_OC" >>"$GITHUB_OUTPUT"
+echo "gitversion-execute_overrideConfig=$(echo -e "$GVE_OC")" >>"$GITHUB_OUTPUT"
 echo "gitversion-execute_additionalArguments=$GVE_AA" >>"$GITHUB_OUTPUT"
 
 echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"

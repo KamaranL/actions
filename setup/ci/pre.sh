@@ -40,7 +40,7 @@ else
     PRERELEASE_LABEL=alpha
 fi
 
-GVE_OC+="continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-\"\"}"
+GVE_OC+="continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}"
 
 echo -e "gitversion-execute_overrideConfig=$GVE_OC" >>"$GITHUB_OUTPUT"
 

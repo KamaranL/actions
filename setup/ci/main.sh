@@ -29,14 +29,12 @@ $PRERELEASE && {
         -name '*.psd1' -o \
         -name 'nuget.config' \)))
 
-    echo - Appending commit count: "$GitVersion_CommitsSinceVersionSource"
-    ! ((${#NU_FILES[@]})) && {
-        CI_VERSION+="."
-        CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
-    } || {
+    ! ((${#NU_FILES[@]})) &&
+        CI_VERSION+="." ||
         echo - Formatting prerelease version as nuget-compatible
-        CI_VERSION+="$GitVersion_CommitsSinceVersionSourcePadded"
-    }
+
+    echo - Appending commit count: "$GitVersion_CommitsSinceVersionSource"
+    CI_VERSION+="$GitVersion_CommitsSinceVersionSource"
 }
 
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"

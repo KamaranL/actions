@@ -2,6 +2,7 @@
 
 echo ::group::Running setup-ci pre-checks...
 
+GVE_OC=()
 # GVE_AA=""
 
 echo - Checking event type
@@ -14,7 +15,7 @@ echo - Checking event type
 echo - Checking for existing tags \& releases
 if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
     ! gh release view >/dev/null 2>&1; then
-    GVE_OC+="next-version=1.0.0\n"
+    GVE_OC+=("next-version=1.0.0")
 fi
 
 echo - Checking for project files
@@ -25,9 +26,7 @@ PROJ_FILES=($(find . -type f \( \
     -name '*.vcxproj' \)))
 
 ((${#PROJ_FILES[@]})) &&
-    GVE_AA+="/updateprojectfiles"
-# echo gitversion-execute_additionalArguments=/updateprojectfiles \
-#     >>"$GITHUB_OUTPUT"
+    GVE_AA+="/updateprojectfiles "
 
 echo - Checking prerelease
 if [ "$GITHUB_BASE_REF" == main ]; then
@@ -43,14 +42,14 @@ else
     PRERELEASE_LABEL=alpha
 fi
 
-GVE_OC+="continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}\n"
-GVE_OC+="assembly-informational-format=\"{InformationalVersion}\"\n" # test
+GVE_OC+=("continuous-delivery-fallback-tag=${PRERELEASE_LABEL:-ci}")
+GVE_OC+=("assembly-informational-format=\"{InformationalVersion}\"") # test
 
-# echo "gitversion-execute_overrideConfig=$(echo -e "$GVE_OC")" >>"$GITHUB_OUTPUT"
 echo "gitversion-execute_additionalArguments=$GVE_AA" >>"$GITHUB_OUTPUT"
 {
     echo 'gitversion-execute_overrideConfig<<EOF'
-    echo -e "$GVE_OC"
+    # echo -e "$GVE_OC"
+    for CFG in "${GVE_OC[@]}"; do echo "$CFG"; done
     echo EOF
 } >>"$GITHUB_OUTPUT"
 

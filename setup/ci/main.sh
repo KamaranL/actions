@@ -4,29 +4,17 @@ echo ::group::Setting up CI...
 
 CI_VERSION="$GitVersion_MajorMinorPatch"
 
-$CI_PRERELEASE &&
+$CI_PRERELEASE && {
+    echo - Appending prerelease tag: "$GitVersion_PreReleaseTagWithDash"
     CI_VERSION+="$GitVersion_PreReleaseTagWithDash"
 
-# $CI_PRERELEASE && {
-#     echo - Appending prerelease label: "$GitVersion_PreReleaseLabelWithDash"
-#     CI_VERSION+="$GitVersion_PreReleaseLabelWithDash"
-
-#     # check for files that are commonly found in nuget packages
-#     NU_FILES=($(find . -type f \( \
-#         -name '*.sln' -o \
-#         -name '*.ps1' -o \
-#         -name '*.psd1' -o \
-#         -name 'nuget.config' \)))
-
-#     ! ((${#NU_FILES[@]})) &&
-#         CI_VERSION+="." ||
-#         echo - Formatting prerelease version as nuget-compatible
-
-#     echo - Appending prerelease number: "$GitVersion_PreReleaseNumber"
-#     CI_VERSION+="$GitVersion_PreReleaseNumber"
-# }
+    $NU_PKG &&
+        NU_PKG_VERSION=$GitVersion_NuGetVersion
+}
 
 echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
+echo "NU_PKG_VERSION=${NU_PKG_VERSION:-$GitVersion_MajorMinorPatch}" \
+    >>"$GITHUB_ENV"
 
 echo ::endgroup::
 

@@ -7,13 +7,13 @@ GVE_AA="\
 /u \"$GITHUB_REPOSITORY_OWNER\" \
 /p \"$GH_TOKEN\" \
 /b \"$GITHUB_HEAD_REF\" \
-/c \"$PR_HEAD_SHA\" \
-"
+/c \"$PR_BASE_SHA\" \
+" # testing base sha vs head sha
 GVE_OC=()
 
 echo - Checking event type
 [ "$GITHUB_EVENT_NAME" != pull_request ] && {
-    echo "::error::$ACTION_REPOSITORY/setup/ci can only run on \
+    echo "::error::${GITHUB_ACTION_PATH##*_actions/} can only run on \
 \"pull_request\"."
     exit 1
 }
@@ -24,13 +24,22 @@ if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
     GVE_OC+=("next-version=1.0.0")
 fi
 
+echo - Checking for common nuget package files
+NU_FILES=($(find . -type f \( \
+    -name '*.sln' -o \
+    -name '*.ps1' -o \
+    -name '*.psd1' -o \
+    -name 'nuget.config' \)))
+((${#NU_FILES[@]})) &&
+    NU_PKG=true ||
+    NU_PKG=false
+
 echo - Checking for project files
 PROJ_FILES=($(find . -type f \( \
     -name '*.csproj' -o \
     -name '*.fsproj' -o \
     -name '*.vcproj' -o \
     -name '*.vcxproj' \)))
-
 ((${#PROJ_FILES[@]})) &&
     GVE_AA+="/updateprojectfiles "
 
@@ -57,9 +66,10 @@ echo "gitversion-execute_additionalArguments=${GVE_AA% *}" >>"$GITHUB_OUTPUT"
 
 echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"
 echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
-echo "CI_TARGET_BRANCH=$GITHUB_BASE_REF" >>"$GITHUB_ENV"
 echo "CI_SOURCE_SHA=$PR_HEAD_SHA" >>"$GITHUB_ENV"
+echo "CI_TARGET_BRANCH=$GITHUB_BASE_REF" >>"$GITHUB_ENV"
 echo "CI_TARGET_SHA=$PR_BASE_SHA" >>"$GITHUB_ENV"
+echo "NU_PKG=$NU_PKG" >>"$GITHUB_ENV"
 
 echo ::endgroup::
 

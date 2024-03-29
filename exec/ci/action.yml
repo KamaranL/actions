@@ -5,8 +5,6 @@ runs:
   steps:
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
-      env:
-        ACTION_REPOSITORY: ${{ github.action_repository }}
       id: pre
 
     - run: echo "$CI_VERSION" >VERSION.txt

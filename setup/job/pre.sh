@@ -43,23 +43,23 @@ echo - Checking for repo in workspace
 
     echo - Parsing input for checkout parameters
     for default in "${checkout_defaults[@]}"; do
-        KEY="${default%%=*}"
-        VAL="${default#*=}"
+        key="${default%%=*}"
+        val="${default#*=}"
 
-        for LINE in "${INPUT_CHECKOUT[@]}"; do
-            IFS='=' read -ra param <<<"$LINE"
-            P_KEY="${param[0]}"
-            P_VAL="${param[1]}"
+        for line in "${inputs_checkout[@]}"; do
+            IFS='=' read -ra param <<<"$line"
+            p_key="${param[0]}"
+            p_val="${param[1]}"
 
-            [ "$KEY" == "$P_KEY" ] &&
-                [ ! -z "$P_VAL" ] &&
-                VAL="$P_VAL" &&
+            [ "$key" == "$p_key" ] &&
+                [ ! -z "$p_val" ] &&
+                val="$p_val" &&
                 break
             unset IFS
         done
-        echo - Setting "$KEY = $VAL"
-        # echo "checkout_$KEY=$VAL" >>"$GITHUB_OUTPUT"
-        outputs+=("checkout_$KEY=$VAL")
+        echo - Setting "$key = $val"
+        # echo "checkout_$key=$val" >>"$GITHUB_OUTPUT"
+        outputs+=("checkout_$key=$val")
     done
 }
 

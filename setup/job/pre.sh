@@ -29,17 +29,14 @@ checkout_defaults=(
 echo - Checking for correct timezone
 [ "$(</etc/timezone)" != America/New_York ] &&
     outputs+=(timezone-set=false)
-# echo timezone-set=false >>"$GITHUB_OUTPUT"
 
 echo - Checking for \$GH_TOKEN
 [ -z "$GH_TOKEN" ] &&
     outputs+=(gh-token=false)
-# echo gh-token=false >>"$GITHUB_OUTPUT"
 
 echo - Checking for repo in workspace
 ! git status >/dev/null 2>&1 && {
     outputs+=(checked-out=false)
-    # echo checked-out=false >>"$GITHUB_OUTPUT"
 
     echo - Parsing input for checkout parameters
     for default in "${checkout_defaults[@]}"; do
@@ -58,7 +55,6 @@ echo - Checking for repo in workspace
             unset IFS
         done
         echo - Setting "$key = $val"
-        # echo "checkout_$key=$val" >>"$GITHUB_OUTPUT"
         outputs+=("checkout_$key=$val")
     done
 }

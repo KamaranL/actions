@@ -10,7 +10,7 @@ runs:
     - run: $GITHUB_ACTION_PATH/pre.sh
       shell: bash
       env:
-        INPUT_CHECKOUT: ${{ inputs.checkout }}
+        INPUTS_CHECKOUT: ${{ inputs.checkout }}
       id: pre
 
     - if: fromJson(steps.pre.outputs.timezone-set) == false

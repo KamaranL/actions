@@ -2,8 +2,9 @@
 
 echo ::group::Running setup-job pre-checks...
 
-INPUT_CHECKOUT=($INPUT_CHECKOUT)
-CHECKOUT_DEFAULTS=(
+inputs_checkout=($INPUTS_CHECKOUT)
+outputs=()
+checkout_defaults=(
     "repository=$GITHUB_REPOSITORY"
     "ref=${GITHUB_HEAD_REF:-$GITHUB_REF}"
     # "token= # using GH_TOKEN (PAT)
@@ -27,20 +28,23 @@ CHECKOUT_DEFAULTS=(
 
 echo - Checking for correct timezone
 [ "$(</etc/timezone)" != America/New_York ] &&
-    echo timezone-set=false >>"$GITHUB_OUTPUT"
+    outputs+=(timezone-set=false)
+# echo timezone-set=false >>"$GITHUB_OUTPUT"
 
 echo - Checking for \$GH_TOKEN
 [ -z "$GH_TOKEN" ] &&
-    echo gh-token=false >>"$GITHUB_OUTPUT"
+    outputs+=(gh-token=false)
+# echo gh-token=false >>"$GITHUB_OUTPUT"
 
 echo - Checking for repo in workspace
 ! git status >/dev/null 2>&1 && {
-    echo checked-out=false >>"$GITHUB_OUTPUT"
+    outputs+=(checked-out=false)
+    # echo checked-out=false >>"$GITHUB_OUTPUT"
 
     echo - Parsing input for checkout parameters
-    for DEFAULT in "${CHECKOUT_DEFAULTS[@]}"; do
-        KEY="${DEFAULT%%=*}"
-        VAL="${DEFAULT#*=}"
+    for default in "${checkout_defaults[@]}"; do
+        KEY="${default%%=*}"
+        VAL="${default#*=}"
 
         for LINE in "${INPUT_CHECKOUT[@]}"; do
             IFS='=' read -ra param <<<"$LINE"
@@ -54,9 +58,12 @@ echo - Checking for repo in workspace
             unset IFS
         done
         echo - Setting "$KEY = $VAL"
-        echo "checkout_$KEY=$VAL" >>"$GITHUB_OUTPUT"
+        # echo "checkout_$KEY=$VAL" >>"$GITHUB_OUTPUT"
+        outputs+=("checkout_$KEY=$VAL")
     done
 }
+
+for output in "${outputs[@]}"; do echo "$output" >>"$GITHUB_OUTPUT"; done
 
 echo ::endgroup::
 

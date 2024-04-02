@@ -24,4 +24,5 @@ runs:
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
+
       id: main

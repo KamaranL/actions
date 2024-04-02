@@ -1,20 +1,20 @@
 #!/bin/bash
 
-echo ::group::Setting up Git identity...
+echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
 
 echo - Writing ssh keypair
-SSH_TEMP="$RUNNER_TEMP/.ssh"
-[ ! -d "$SSH_TEMP" ] && mkdir -p "$SSH_TEMP"
-echo "$SSH_ID" >"$SSH_TEMP/id_ed25519"
-echo "$SSH_ID_PUB" >"$SSH_TEMP/id_ed25519.pub"
-echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$SSH_TEMP/allowed_signers"
-chmod 0600 "$SSH_TEMP/id_ed25519"
+ssh_temp="$RUNNER_TEMP/.ssh"
+[ ! -d "$ssh_temp" ] && mkdir -p "$ssh_temp"
+echo "$SSH_ID" >"$ssh_temp/id_ed25519"
+echo "$SSH_ID_PUB" >"$ssh_temp/id_ed25519.pub"
+echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$ssh_temp/allowed_signers"
+chmod 0600 "$ssh_temp/id_ed25519"
 
 echo - Configuring Git
 git config --global user.name "GitHub Actions"
 git config --global user.email "bot@kamaranl.vip"
-git config --global user.signingkey "$SSH_TEMP/id_ed25519.pub"
-git config --global gpg.ssh.allowedsignersfile "$SSH_TEMP/allowed_signers"
+git config --global user.signingkey "$ssh_temp/id_ed25519.pub"
+git config --global gpg.ssh.allowedsignersfile "$ssh_temp/allowed_signers"
 git config --global gpg.format ssh
 git config --global commit.gpgsign true
 git config --global tag.gpgsign true

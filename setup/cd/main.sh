@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo ::group::Setting up CD...
+echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
 
 echo - Getting recently pushed tag
 PR_NUM="$(echo -e "$WFR_REF" | grep -oE '[0-9]{1,}')"

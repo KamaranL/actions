@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "::group::Setting up CD (for dotnet core)..."
+echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
 
 SLN="$(find . -type f -name '*.sln')"
 ASSY_NAME="$(awk -F'= ' '/^Project(.*).*/{print $2}' "$SLN" |

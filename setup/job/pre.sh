@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo ::group::Running setup-job pre-checks...
+echo ::group::Running "${GITHUB_ACTION_PATH##*_actions\/}" pre-checks...
 
+declare -A out
 inputs_checkout=($INPUTS_CHECKOUT)
-outputs=()
 checkout_defaults=(
     "repository=$GITHUB_REPOSITORY"
     "ref=${GITHUB_HEAD_REF:-$GITHUB_REF}"
@@ -28,15 +28,15 @@ checkout_defaults=(
 
 echo - Checking for correct timezone
 [ "$(</etc/timezone)" != America/New_York ] &&
-    outputs+=(timezone-set=false)
+    out["timezone-set"]=false
 
 echo - Checking for \$GH_TOKEN
 [ -z "$GH_TOKEN" ] &&
-    outputs+=(gh-token=false)
+    out["gh-token"]=false
 
 echo - Checking for repo in workspace
 ! git status >/dev/null 2>&1 && {
-    outputs+=(checked-out=false)
+    out["checked-out"]=false
 
     echo - Parsing input for checkout parameters
     for default in "${checkout_defaults[@]}"; do
@@ -55,11 +55,14 @@ echo - Checking for repo in workspace
             unset IFS
         done
         echo - Setting "$key = $val"
-        outputs+=("checkout_$key=$val")
+        out["checkout_$key"]="$val"
     done
 }
 
-for output in "${outputs[@]}"; do echo "$output" >>"$GITHUB_OUTPUT"; done
+for k in "${!out[@]}"; do
+    v="${out[$k]}"
+    echo "$k=$v" >>"$GITHUB_OUTPUT"
+done
 
 echo ::endgroup::
 

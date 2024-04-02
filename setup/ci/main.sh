@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo ::group::Setting up CI...
+echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
 
 CI_VERSION="$GitVersion_MajorMinorPatch"
 

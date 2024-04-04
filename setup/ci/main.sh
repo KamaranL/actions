@@ -2,7 +2,7 @@
 
 declare -A env
 
-echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
+echo ::group::bash "$0"
 
 env[CI_VERSION]="$GitVersion_MajorMinorPatch"
 
@@ -13,7 +13,7 @@ $CI_PRERELEASE && {
     $NU_PKG &&
         nu_pkg_version=$GitVersion_NuGetVersion
 }
-env[NU_PKG_VERSION]="${NU_PKG_VERSION:-$GitVersion_MajorMinorPatch}"
+env[NU_PKG_VERSION]="${nu_pkg_version:-$GitVersion_MajorMinorPatch}"
 
 for k in "${!env[@]}"; do
     v="${env[$k]}"

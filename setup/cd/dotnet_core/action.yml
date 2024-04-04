@@ -18,6 +18,6 @@ runs:
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
-        INPUT_PARAMS: ${{ inputs.override-params }}
-        INPUT_RIDS: ${{ inputs.release-identifiers }}
+        INPUTS_PARAMS: ${{ inputs.override-params }}
+        INPUTS_RIDS: ${{ inputs.release-identifiers }}
       id: main

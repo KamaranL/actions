@@ -2,10 +2,7 @@
 
 declare -A out
 
-echo ::group::Running "${GITHUB_ACTION_PATH##*_actions\/}" pre-checks...
-
-echo "${GITHUB_ACTION_REF:-github.action_ref}"
-echo "0: $0"
+echo ::group::bash "$0"
 
 inputs_checkout=($INPUTS_CHECKOUT)
 checkout_defaults=(

@@ -2,7 +2,7 @@
 
 declare -A out
 
-echo ::group::Running "${GITHUB_ACTION_PATH##*_actions\/}" pre-checks...
+echo ::group::bash "$0"
 
 [ "$(git config --global user.email)" != "bot@kamaranl.vip" ] &&
     out[configured]=false

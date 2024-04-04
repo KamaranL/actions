@@ -1,62 +1,75 @@
 #!/bin/bash
 
-echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
+declare -A env
 
-SLN="$(find . -type f -name '*.sln')"
-ASSY_NAME="$(awk -F'= ' '/^Project(.*).*/{print $2}' "$SLN" |
+echo ::group::bash "$0"
+
+solution=($(find . -type f -name '*.sln'))
+((${#solution[@]} > 1)) && {
+    echo -e "::error::More than one solution found:\n$(
+        printf "%s\n" "${solution[@]}"
+    )"
+    exit 1
+}
+! ((${#solution[@]})) && {
+    echo ::error::No solution found
+    exit 1
+}
+assembly="$(awk -F'= ' '/^Project(.*).*/{print $2}' "$solution" |
     awk -F', ' '{gsub(/^"|"$/,"",$1); print $1}')"
-DIST_TEMP="$RUNNER_TEMP/dotnet_core/dist"
-PUB_TEMP="$RUNNER_TEMP/dotnet_core/publish"
-[ ! -d "$DIST_TEMP" ] && mkdir -p "$DIST_TEMP"
-[ ! -d "$PUB_TEMP" ] && mkdir -p "$PUB_TEMP"
+dotnet_dir="$RUNNER_TEMP/dotnet_core"
+dist_dir="$dotnet_dir/dist"
+pub_dir="$dotnet_dir/publish"
+[ ! -d "$dist_dir" ] && mkdir -p "$dist_dir"
+[ ! -d "$pub_dir" ] && mkdir -p "$pub_dir"
 
-[ ! -z "$INPUT_PARAMS" ] && {
+[ ! -z "$INPUTS_PARAMS" ] && {
     echo - Parsing input for override parameters
-    INPUT_PARAMS=($INPUT_PARAMS)
+    inputs_params=($INPUTS_PARAMS)
 
-    for PARAM in "${INPUT_PARAMS[@]}"; do
-        PARAMS+=" -p:$PARAM"
-        echo - Setting "$PARAM"
+    for p in "${inputs_params[@]}"; do
+        params+=" -p:$p"
+        echo - Setting "$p"
     done
 } ||
-    PARAMS=" -p:PublishSingleFile=true -p:PublishTrimmed=true \
--p:PublishDir=$PUB_TEMP"
+    params=" -p:PublishSingleFile=true -p:PublishTrimmed=true \
+-p:PublishDir=$pub_dir"
 
-[ ! -z "$INPUT_RIDS" ] && {
+[ ! -z "$INPUTS_RIDS" ] && {
     echo - Parsing input for release identifiers
-    RIDS=($INPUT_RIDS)
-    RIDS=($(printf "%s\n" "${RIDS[@]}" | sort))
+    inputs_rids=($INPUTS_RIDS)
+    rids=($(printf "%s\n" "${inputs_rids[@]}" | sort))
 } ||
-    RIDS=(win-x64)
+    rids=(win-x64)
 
-for RID in "${RIDS[@]}"; do
-    ARGS="publish -c Release -r $RID --self-contained$PARAMS"
-    [ "$RID" == win-x64 ] &&
-        ARGS+=" -p:PublishReadyToRun=true"
+for r in "${rids[@]}"; do
+    args="publish -c Release -r $r --self-contained$params"
+    [ "$r" == win-x64 ] &&
+        args+=" -p:PublishReadyToRun=true"
 
-    echo - Compiling "$RID"
-    ! dotnet $ARGS 2>&1 && {
-        echo "::error::There was a problem compiling for $RID."
+    echo - Compiling "$r"
+    ! dotnet $args 2>&1 && {
+        echo ::error::There was a problem compiling for "$r."
         exit 1
     }
 
-    [ -f LICENSE.txt ] && cp LICENSE.txt "$PUB_TEMP/"
-    [ -f README.md ] && cp README.md "$PUB_TEMP/"
-    [ -d docs ] && cp -R docs "$PUB_TEMP/"
+    [ -f LICENSE.txt ] && cp LICENSE.txt "$pub_dir/"
+    [ -f README.md ] && cp README.md "$pub_dir/"
+    [ -d docs ] && cp -R docs "$pub_dir/"
 
-    echo - Packaging "$RID"
-    [ "$RID" == win-x64 ] && (
-        cd "$PUB_TEMP"
-        zip -9r "$DIST_TEMP/$ASSY_NAME-$CI_VERSION-$RID.zip" .
+    echo - Packaging "$r"
+    [ "$r" == win-x64 ] && (
+        cd "$pub_dir"
+        zip -9r "$dist_dir/$assembly-$CI_VERSION-$r.zip" .
     ) ||
-        tar -czf "$DIST_TEMP/${ASSY_NAME,,}-$CI_VERSION-$RID.tgz" \
-            -C "$PUB_TEMP" .
+        tar -czf "$dist_dir/${assembly,,}-$CI_VERSION-$r.tgz" \
+            -C "$pub_dir" .
 
-    echo - Cleaning "$PUB_TEMP ($RID)"
-    rm -rf "$PUB_TEMP"/*
+    echo - Cleaning "$pub_dir ($r)"
+    rm -rf "$pub_dir"/*
 done
 
-echo "dist=$DIST_TEMP" >>"$GITHUB_OUTPUT"
+echo "dist=$dist_dir" >>"$GITHUB_OUTPUT"
 
 echo ::endgroup::
 

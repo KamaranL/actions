@@ -12,15 +12,15 @@ env[CI_VERSION]="$(curl -s -H "Authorization: Token $GH_TOKEN" \
 /VERSION.txt")"
 env[CI_TAG]="v${env[CI_VERSION]}"
 
-echo - Switching ref to tags/"$CI_TAG"
-git checkout tags/"$CI_TAG"
+echo - Switching ref to tags/"${env[CI_TAG]}"
+git checkout tags/"${env[CI_TAG]}"
 
 for k in "${!env[@]}"; do
     v="${env[$k]}"
     echo "$k=$v" >>"$GITHUB_ENV"
 done
 
-echo "# $CI_TAG :arrow_right:" >>"$GITHUB_STEP_SUMMARY"
+echo "# ${env[CI_TAG]} :arrow_right:" >>"$GITHUB_STEP_SUMMARY"
 
 echo ::endgroup::
 

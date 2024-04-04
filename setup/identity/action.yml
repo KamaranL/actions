@@ -7,7 +7,7 @@ runs:
       shell: bash
       id: pre
 
-    - if: fromJson(steps.pre.outputs.is-configured) == false
+    - if: fromJson(steps.pre.outputs.configured) == false
       uses: 1password/load-secrets-action@v1
       with:
         export-env: false
@@ -17,7 +17,7 @@ runs:
       id: op-ssh
 
     - if: |
-        fromJson(steps.pre.outputs.is-configured) == false &&
+        fromJson(steps.pre.outputs.configured) == false &&
             steps.op-ssh.outputs.id &&
             steps.op-ssh.outputs.id_pub
       run: $GITHUB_ACTION_PATH/main.sh

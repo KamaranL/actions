@@ -13,17 +13,17 @@ runs:
         INPUTS_CHECKOUT: ${{ inputs.checkout }}
       id: pre
 
-    - if: fromJson(steps.pre.outputs.timezone-set) == false
+    - if: fromJson(steps.pre.outputs.timezone) == false
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 
-    - if: fromJson(steps.pre.outputs.gh-token) == false
+    - if: fromJson(steps.pre.outputs.gh_token) == false
       uses: 1password/load-secrets-action@v1
       env:
         GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
 
     - if: |
-        fromJson(steps.pre.outputs.checked-out) == false &&
+        fromJson(steps.pre.outputs.repository) == false &&
             inputs.checkout != null
       uses: actions/checkout@v4
       with:

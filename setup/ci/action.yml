@@ -19,8 +19,8 @@ runs:
         disableCache: true
         useConfigFile: true
         configFilePath: ${{ github.action_path }}/GitVersion.yml
-        overrideConfig: ${{ steps.pre.outputs.gitversion-execute_overrideConfig }}
-        additionalArguments: ${{ steps.pre.outputs.gitversion-execute_additionalArguments }}
+        overrideConfig: ${{ steps.pre.outputs.overrideConfig }}
+        additionalArguments: ${{ steps.pre.outputs.additionalArguments }}
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash

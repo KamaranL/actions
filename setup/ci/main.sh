@@ -1,20 +1,24 @@
 #!/bin/bash
 
+declare -A env
+
 echo ::group::Executing "${GITHUB_ACTION_PATH##*_actions\/}"
 
-CI_VERSION="$GitVersion_MajorMinorPatch"
+env[CI_VERSION]="$GitVersion_MajorMinorPatch"
 
 $CI_PRERELEASE && {
     echo - Appending prerelease tag: "$GitVersion_PreReleaseTagWithDash"
-    CI_VERSION+="$GitVersion_PreReleaseTagWithDash"
+    env[CI_VERSION]+="$GitVersion_PreReleaseTagWithDash"
 
     $NU_PKG &&
-        NU_PKG_VERSION=$GitVersion_NuGetVersion
+        nu_pkg_version=$GitVersion_NuGetVersion
 }
+env[NU_PKG_VERSION]="${NU_PKG_VERSION:-$GitVersion_MajorMinorPatch}"
 
-echo "CI_VERSION=$CI_VERSION" >>"$GITHUB_ENV"
-echo "NU_PKG_VERSION=${NU_PKG_VERSION:-$GitVersion_MajorMinorPatch}" \
-    >>"$GITHUB_ENV"
+for k in "${!env[@]}"; do
+    v="${env[$k]}"
+    echo "$k=$v" >>"$GITHUB_ENV"
+done
 
 echo ::endgroup::
 

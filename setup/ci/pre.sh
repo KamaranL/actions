@@ -1,21 +1,22 @@
 #!/bin/bash
 
+declare -A out env
+declare -a overrideConfig
+
 echo ::group::Running "${GITHUB_ACTION_PATH##*_actions\/}" pre-checks...
 
-env=(
-    "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF"
-    "CI_SOURCE_SHA=$PR_HEAD_SHA"
-    "CI_TARGET_BRANCH=$GITHUB_BASE_REF"
-    "CI_TARGET_SHA=$PR_BASE_SHA"
-)
-gve_aa="\
+env[CI_SOURCE_BRANCH]="$GITHUB_HEAD_REF"
+env[CI_SOURCE_SHA]="$PR_HEAD_SHA"
+env[CI_TARGET_BRANCH]="$GITHUB_BASE_REF"
+env[CI_TARGET_SHA]="$PR_BASE_SHA"
+
+out[additionalArguments]="\
 /url \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY\" \
 /u \"$GITHUB_REPOSITORY_OWNER\" \
 /p \"$GH_TOKEN\" \
 /b \"$GITHUB_HEAD_REF\" \
 /c \"$PR_BASE_SHA\" \
 "
-gve_oc=()
 
 echo - Checking event type
 [ "$GITHUB_EVENT_NAME" != pull_request ] && {
@@ -27,7 +28,7 @@ echo - Checking event type
 echo - Checking for existing tags \& releases
 if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
     ! gh release view >/dev/null 2>&1; then
-    gve_oc+=("next-version=1.0.0")
+    overrideConfig+=("next-version=1.0.0")
 fi
 
 echo - Checking for common nuget package files
@@ -38,7 +39,7 @@ nu_files=($(find . -type f \( \
     -name 'nuget.config' \)))
 ((${#nu_files[@]})) &&
     nu_pkg=true
-env+=(NU_PKG=${nu_pkg:-false})
+env[NU_PKG]=${nu_pkg:-false}
 
 echo - Checking for project files
 project_files=($(find . -type f \( \
@@ -47,7 +48,7 @@ project_files=($(find . -type f \( \
     -name '*.vcproj' -o \
     -name '*.vcxproj' \)))
 ((${#project_files[@]})) &&
-    gve_aa+="/updateprojectfiles "
+    out[additionalArguments]+="/updateprojectfiles "
 
 echo - Checking source/target branches
 if [ "$GITHUB_BASE_REF" == main ]; then
@@ -59,25 +60,26 @@ branch and therefore not allowed to merge into \"$GITHUB_BASE_REF\". Merge \
     }
 else
     prerelease=true
-    gve_oc+=("continuous-delivery-fallback-tag=alpha")
+    overrideConfig+=("continuous-delivery-fallback-tag=alpha")
 fi
-env+=(CI_PRERELEASE=${prerelease:-false})
+env[CI_PRERELEASE]=${prerelease:-false}
 
-echo "gitversion-execute_additionalArguments=${gve_aa% *}" >>"$GITHUB_OUTPUT"
 {
-    echo 'gitversion-execute_overrideConfig<<EOF'
-    for cfg in "${gve_oc[@]}"; do echo "$cfg"; done
+    echo 'overrideConfig<<EOF'
+    for cfg in "${overrideConfig[@]}"; do echo "$cfg"; done
     echo EOF
 } >>"$GITHUB_OUTPUT"
 
-# echo "CI_PRERELEASE=$PRERELEASE" >>"$GITHUB_ENV"
-# echo "CI_SOURCE_BRANCH=$GITHUB_HEAD_REF" >>"$GITHUB_ENV"
-# echo "CI_SOURCE_SHA=$PR_HEAD_SHA" >>"$GITHUB_ENV"
-# echo "CI_TARGET_BRANCH=$GITHUB_BASE_REF" >>"$GITHUB_ENV"
-# echo "CI_TARGET_SHA=$PR_BASE_SHA" >>"$GITHUB_ENV"
-# echo "NU_PKG=$NU_PKG" >>"$GITHUB_ENV"
+for k in "${!env[@]}"; do
+    v="${env[$k]}"
+    echo "$k=$v" >>"$GITHUB_ENV"
+done
+unset k v
 
-for e in "${env[@]}"; do echo "$e" >>"$GITHUB_ENV"; done
+for k in "${!out[@]}"; do
+    v="${out[$k]}"
+    echo "$k=$v" >>"$GITHUB_OUTPUT"
+done
 
 echo ::endgroup::
 

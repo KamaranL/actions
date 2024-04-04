@@ -53,14 +53,14 @@ if ! git describe --tags --abbrev=0 >/dev/null 2>&1 &&
 fi
 
 echo - Checking for common nuget package files
-nu_files=($(find . -type f \( \
+nuget_files=($(find . -type f \( \
     -name '*.sln' -o \
     -name '*.ps1' -o \
     -name '*.psd1' -o \
     -name 'nuget.config' \)))
-((${#nu_files[@]})) &&
-    nu_pkg=true
-env[NU_PKG]=${nu_pkg:-false}
+((${#nuget_files[@]})) &&
+    nuget=true
+env[CI_NUGET]=${nuget:-false}
 
 echo - Checking for project files
 project_files=($(find . -type f \( \

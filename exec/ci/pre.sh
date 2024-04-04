@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo ::group::Running exec-ci pre-checks...
+echo ::group::bash "$0"
 
 echo - Checking event type
 [ "$GITHUB_EVENT_NAME" != pull_request ] && {

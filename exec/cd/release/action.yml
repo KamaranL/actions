@@ -14,5 +14,5 @@ runs:
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
-        INPUT_ASSETS: ${{ inputs.assets }}
+        INPUTS_ASSETS: ${{ inputs.assets }}
       id: main

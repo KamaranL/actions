@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo ::group::Running exec-cd-npm pre-checks...
+echo ::group::bash "$0"
 
 echo - Checking package existence
 npm view .@"$CI_VERSION" >/dev/null 2>&1 && {

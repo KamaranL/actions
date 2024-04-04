@@ -10,10 +10,10 @@ $CI_PRERELEASE && {
     echo - Appending prerelease tag: "$GitVersion_PreReleaseTagWithDash"
     env[CI_VERSION]+="$GitVersion_PreReleaseTagWithDash"
 
-    $NU_PKG &&
+    $CI_NUGET &&
         nu_pkg_version=$GitVersion_NuGetVersion
 }
-env[NU_PKG_VERSION]="${nu_pkg_version:-$GitVersion_MajorMinorPatch}"
+env[CI_NUGET_VERSION]="${nu_pkg_version:-$GitVersion_MajorMinorPatch}"
 
 for k in "${!env[@]}"; do
     v="${env[$k]}"

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo ::group::Running exec-cd-release pre-checks...
+echo ::group::bash "$0"
 
 echo - Checking tag existence
 [ -z "$CI_TAG" ] && {
-    echo ::error::No tag is available for release.
+    echo ::error::No tag was found for release.
     exit 1
 }
 

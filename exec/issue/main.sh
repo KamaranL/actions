@@ -1,7 +1,9 @@
 #!/bin/bash
 
-TITLE="${WFR_PATH##*\/} (#$WFR_NUMBER): $WFR_EVENT $WFR_CONCLUSION"
-BODY="$(
+echo ::group::bash "$0"
+
+title="${WFR_PATH##*\/} (#$WFR_NUMBER): $WFR_EVENT $WFR_CONCLUSION"
+body="$(
     cat <<EOF
 | Workflow      |                   |
 | ------------- | ----------------- |
@@ -34,12 +36,14 @@ DOC
 EOF
 )"
 
-echo Creating issue...
+echo - Creating issue...
 gh issue create \
     --assignee "$GITHUB_TRIGGERING_ACTOR" \
     --label ci \
-    --title "$TITLE" \
-    --body "$BODY" \
+    --title "$title" \
+    --body "$body" \
     --repo "$GITHUB_REPOSITORY"
+
+echo ::endgroup::
 
 exit 0

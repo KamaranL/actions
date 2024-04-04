@@ -1,30 +1,30 @@
 #!/bin/bash
 
-echo ::group::Running exec-issue pre-checks...
+echo ::group::bash "$0"
 
-EXIST=false
-LABELS=($(gh label list --json name --jq .[].name --repo "$GITHUB_REPOSITORY"))
+exists=false
+labels=($(gh label list --json name --jq .[].name --repo "$GITHUB_REPOSITORY"))
 
-for LABEL in "${LABELS[@]}"; do
-    [ "$LABEL" == ci ] && {
-        EXIST=true
+for l in "${labels[@]}"; do
+    [ "$l" == ci ] && {
+        exists=true
         break
     }
 done
 
 echo - Checking for ci label in repository
-! $EXIST &&
+! $exists &&
     gh label create ci --description "Workflow-related" --color 5319E7 \
         --repo "$GITHUB_REPOSITORY"
 
-LOG_TEMP="$RUNNER_TEMP/.log"
-LOG_FILE="$LOG_TEMP/$WFR-${WFR_ID}_$WFR_ATTEMPT.log"
-[ ! -d "$LOG_TEMP" ] && mkdir -p "$LOG_TEMP"
+log_dir="$RUNNER_TEMP/.log"
+log_file="$log_dir/$WFR-${WFR_ID}_$WFR_ATTEMPT.log"
+[ ! -d "$log_dir" ] && mkdir -p "$log_dir"
 
 echo - Pulling logs from triggering workflow
 gh run view "$WFR_ID" --verbose --log \
     --attempt "$WFR_ATTEMPT" \
-    --repo "$GITHUB_REPOSITORY" >"$LOG_FILE"
+    --repo "$GITHUB_REPOSITORY" >"$log_file"
 
 echo ::endgroup::
 

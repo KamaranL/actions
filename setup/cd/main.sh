@@ -10,7 +10,7 @@ base_ref="$(gh pr view "$pr" --json baseRefName --jq .baseRefName)"
 env[CI_VERSION]="$(curl -s -H "Authorization: Token $GH_TOKEN" \
     -L "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${base_ref:-HEAD}\
 /VERSION.txt")"
-env[CI_TAG]="v$CI_VERSION"
+env[CI_TAG]="v${env[CI_VERSION]}"
 
 echo - Switching ref to tags/"$CI_TAG"
 git checkout tags/"$CI_TAG"

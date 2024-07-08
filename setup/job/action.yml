@@ -14,8 +14,8 @@ runs:
       id: pre
 
     - if: |
-        runner.os != "Windows"
-        fromJson(steps.pre.outputs.timezone) == false
+        fromJson(steps.pre.outputs.timezone) == false &&
+            runner.os != Windows
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 

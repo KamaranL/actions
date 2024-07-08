@@ -13,9 +13,7 @@ runs:
         INPUTS_CHECKOUT: ${{ inputs.checkout }}
       id: pre
 
-    - if: |
-        fromJson(steps.pre.outputs.timezone) == false &&
-            runner.os != Windows
+    - if: fromJson(steps.pre.outputs.timezone) == false
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 

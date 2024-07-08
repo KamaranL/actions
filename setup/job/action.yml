@@ -20,7 +20,7 @@ runs:
       shell: bash
 
     - if: fromJson(steps.pre.outputs.gh_token) == false
-      uses: 1password/load-secrets-action@v1
+      uses: 1password/load-secrets-action@v2
       env:
         GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
 

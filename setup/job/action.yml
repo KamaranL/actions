@@ -15,9 +15,21 @@ runs:
 
     - if: |
         fromJson(steps.pre.outputs.timezone) == false &&
-            runner.os != 'Windows'
+            runner.os == 'Linux'
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
+
+    - if: |
+        fromJson(steps.pre.outputs.timezone) == false &&
+            runner.os == 'macOS'
+      run: sudo systemsetup -settimezone "America/New_York"
+      shell: bash
+
+    - if: |
+        fromJson(steps.pre.outputs.timezone) == false &&
+            runner.os == 'Windows'
+      run: tzutil /s "Eastern Standard Time"
+      shell: cmd
 
     - if: fromJson(steps.pre.outputs.gh_token) == false
       uses: 1password/load-secrets-action@v2

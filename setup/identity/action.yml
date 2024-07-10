@@ -8,7 +8,7 @@ runs:
       id: pre
 
     - if: fromJson(steps.pre.outputs.configured) == false
-      uses: 1password/load-secrets-action@v1
+      uses: KamaranL/1password-load-secrets-action@v1
       with:
         export-env: false
       env:

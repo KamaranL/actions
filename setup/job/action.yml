@@ -32,7 +32,7 @@ runs:
       shell: cmd
 
     - if: fromJson(steps.pre.outputs.gh_token) == false
-      uses: 1password/load-secrets-action@v2
+      uses: KamaranL/1password-load-secrets-action@v1
       env:
         GH_TOKEN: op://Integrations/GitHub.kamaranl.CICD/credential
 

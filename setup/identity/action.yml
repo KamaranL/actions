@@ -1,4 +1,4 @@
-name: setup-identity
+name: setup/identity
 description: ''
 runs:
   using: composite
@@ -12,17 +12,16 @@ runs:
       with:
         export-env: false
       env:
-        id: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
-        id_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
+        key: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
+        key_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
       id: op-ssh
 
     - if: |
         fromJson(steps.pre.outputs.configured) == false &&
-            steps.op-ssh.outputs.id &&
-            steps.op-ssh.outputs.id_pub
+            steps.op-ssh.outputs.key &&
+            steps.op-ssh.outputs.key_pub
       run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
-        SSH_ID: ${{ steps.op-ssh.outputs.id }}
-        SSH_ID_PUB: ${{ steps.op-ssh.outputs.id_pub }}
-      id: main
+        SSH_KEY: ${{ steps.op-ssh.outputs.key }}
+        SSH_KEY_PUB: ${{ steps.op-ssh.outputs.key_pub }}

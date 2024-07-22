@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo ::group::bash "$0"
 
-echo - Writing ssh keypair
+echo - Installing ssh keypair
 ssh_dir="$RUNNER_TEMP/.ssh"
 [ ! -d "$ssh_dir" ] && mkdir -p "$ssh_dir"
-echo "$SSH_ID" >"$ssh_dir/id_ed25519"
-echo "$SSH_ID_PUB" >"$ssh_dir/id_ed25519.pub"
-echo "${SSH_ID_PUB##* } ${SSH_ID_PUB% *}" >"$ssh_dir/allowed_signers"
+echo "$SSH_KEY" >"$ssh_dir/id_ed25519"
+echo "$SSH_KEY_PUB" >"$ssh_dir/id_ed25519.pub"
+echo "${SSH_KEY_PUB##* } ${SSH_KEY_PUB% *}" >"$ssh_dir/allowed_signers"
 chmod 0600 "$ssh_dir/id_ed25519"
 
 echo - Configuring Git
@@ -21,8 +21,8 @@ git config --global tag.gpgsign true
 git config --global push.followtags true
 git config --global push.default upstream
 
-echo - Configured as:
-sed 's/^/\t/' <(git config --list --global)
+echo - Dumping config
+sed 's/^/\t/' <(git config -l --show-scope | sort)
 
 echo ::endgroup::
 

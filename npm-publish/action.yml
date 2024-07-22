@@ -1,0 +1,19 @@
+name: npm-publish
+description: ''
+runs:
+  using: composite
+  steps:
+    - uses: KamaranL/1password-load-secrets-action@v1
+      env:
+        NODE_AUTH_TOKEN: op://Integrations/npm.kamaranl.CICD/credential
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        registry-url: https://registry.npmjs.org
+
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash

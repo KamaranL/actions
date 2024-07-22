@@ -1,0 +1,33 @@
+name: dotnet-build
+description: ''
+inputs:
+  out:
+    description: ''
+  params:
+    description: ''
+  project:
+    description: ''
+  release-ids:
+    description: ''
+  solution:
+    description: ''
+
+outputs:
+  out-dir:
+    description: ''
+    value: ${{ steps.main.outputs.out-dir }}
+
+runs:
+  using: composite
+  steps:
+    - uses: KamaranL/actions/setup/cd@v0
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+      env:
+        INPUTS_OUT: ${{ inputs.out }}
+        INPUTS_PARAMS: ${{ inputs.params }}
+        INPUTS_PROJ: ${{ inputs.project }}
+        INPUTS_RIDS: ${{ inputs.release-ids }}
+        INPUTS_SLN: ${{ inputs.solution }}
+      id: main

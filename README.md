@@ -1,3 +1,3 @@
 # actions
 
-> my personal github-actions toolbox
+> a personalized github-actions toolbox

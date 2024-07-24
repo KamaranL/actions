@@ -3,6 +3,7 @@
 echo ::group::bash "$0"
 
 echo - Amending commit
+git add -A 2>&1
 ! git commit -a --amend --no-edit --date=now 2>&1 && {
     echo ::error::There was a problem with amending the latest changes.
     echo ::endgroup::

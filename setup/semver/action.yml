@@ -1,5 +1,11 @@
+## ci
 name: setup/semver
-description: ''
+description: |
+  Calculate semver.
+
+## requires:
+## <- ${github.workspace}/VERSION.txt
+
 runs:
   using: composite
   steps:
@@ -24,3 +30,13 @@ runs:
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
+
+## results:
+## -> env.CI_NUGET
+## -> env.CI_NUGET_VERSION
+## -> env.CI_VERSION
+## -> env.PRERELEASE
+## -> env.SOURCE_BRANCH
+## -> env.SOURCE_SHA
+## -> env.TARGET_BRANCH
+## -> env.TARGET_SHA

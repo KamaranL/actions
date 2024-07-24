@@ -1,22 +1,41 @@
+## ci/cd
 name: setup
-description: ''
+description: |
+  1. Install bash 5 if running on macOS, if needed.
+  2. Populate GH_TOKEN, if needed.
+  3. Checkout repo, if needed.
+  4. Call sub-jobs as specified.
+
+## requires:
+## <- env.OP_SERVICE_ACCOUNT_TOKEN
+
 inputs:
   checkout:
-    description: ''
+    description: |
+      Multiline string of parameters used by actions/checkout.
   identity:
-    description: ''
+    description: |
+      Whether or not to run identity setup.
+
+      Default: 'false'
     default: 'false'
   release:
-    description: ''
+    description: |
+      Whether or not to run release setup.
+
+      Default: 'false'
     default: 'false'
   semver:
-    description: ''
+    description: |
+      Whether or not to run semver setup.
+
+      Default: 'false'
     default: 'false'
 
 runs:
   using: composite
   steps:
-    - if: ${{ runner.os == 'macOS' }}
+    - if: runner.os == 'macOS'
       run: ((${BASH_VERSION:0:1} < 4)) && brew install bash
       shell: bash
 
@@ -26,21 +45,15 @@ runs:
         INPUTS_CHECKOUT: ${{ inputs.checkout }}
       id: pre
 
-    - if: |
-        fromJson(steps.pre.outputs.timezone) == false &&
-            runner.os == 'Linux'
+    - if: runner.os == 'Linux'
       run: sudo timedatectl set-timezone "America/New_York"
       shell: bash
 
-    - if: |
-        fromJson(steps.pre.outputs.timezone) == false &&
-            runner.os == 'macOS'
+    - if: runner.os == 'macOS'
       run: sudo systemsetup -settimezone "America/New_York"
       shell: bash
 
-    - if: |
-        fromJson(steps.pre.outputs.timezone) == false &&
-            runner.os == 'Windows'
+    - if: runner.os == 'Windows'
       run: tzutil /s "Eastern Standard Time"
       shell: cmd
 
@@ -74,11 +87,14 @@ runs:
         set-safe-directory: ${{ steps.pre.outputs.checkout_set-safe-directory }}
         github-server-url: ${{ steps.pre.outputs.checkout_github-server-url }}
 
-    - if: ${{ fromJson(inputs.identity) }} == true
+    - if: fromJson(inputs.identity) == true
       uses: KamaranL/actions/setup/identity@v2-alpha
 
-    - if: ${{ fromJson(inputs.semver) }} == true
+    - if: fromJson(inputs.semver) == true
       uses: KamaranL/actions/setup/semver@v2-alpha
 
-    - if: ${{ fromJson(inputs.release) }} == true
+    - if: fromJson(inputs.release) == true
       uses: KamaranL/actions/setup/release@v2-alpha
+
+## results:
+## -> env.GH_TOKEN

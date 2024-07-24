@@ -1,5 +1,16 @@
+## ci
 name: commit-merge
-description: ''
+description: |
+  1. Amend commit
+  2. Tag commit
+  3. Push amended commit, as well as new/updated tags, to origin\
+
+## requires:
+## <- env.GH_TOKEN
+## <- env.CI_VERSION
+## <- env.CI_SOURCE_BRANCH
+## <- KamaranL/actions/setup: [checkout, identity, semver]
+
 runs:
   using: composite
   steps:

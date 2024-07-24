@@ -2,6 +2,13 @@
 
 echo ::group::bash "$0"
 
+echo - Checking release existence
+gh release view "$CI_TAG" &>/dev/null && {
+    echo ::error::A release already exists for \""$CI_TAG"\".
+    echo ::endgroup::
+    exit 1
+}
+
 args=(
     release
     create
@@ -17,6 +24,7 @@ args=(
 echo - Creating release
 ! gh "${args[@]}" 2>&1 && {
     echo ::error::There was a problem creating a release for \""$CI_TAG"\".
+    echo ::endgroup::
     exit 1
 }
 

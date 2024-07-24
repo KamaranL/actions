@@ -1,5 +1,7 @@
 name: dump-context
-description: ''
+description: |
+  Prints each available context to the console.
+
 runs:
   using: composite
   steps:

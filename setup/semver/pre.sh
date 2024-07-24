@@ -1,32 +1,35 @@
 #!/usr/bin/env bash
 
+echo ::group::bash "$0"
+
 declare -A out env
 declare -a overrideConfig
-
-echo ::group::bash "$0"
 
 ACTION="${GITHUB_ACTION_PATH##*_actions\/}"
 
 echo - Checking event type
 [ "$GITHUB_EVENT_NAME" != pull_request ] && {
     echo ::error::"$ACTION" can only run on \"pull_request \(open\)\".
+    echo ::endgroup::
     exit 1
 }
 
-echo - Checking for VERSION.txt
+echo - Checking for \"VERSION.txt\"
 [ ! -f VERSION.txt ] && {
     echo ::error::"$ACTION" was unable to find \"VERSION.txt\" in the current \
         workspace.
+    echo ::endgroup::
     exit 1
 }
 
-echo - Checking source/target branches
+echo - Checking source \& target branches
 if [ "$GITHUB_BASE_REF" == main ]; then
     ! [[ "$GITHUB_HEAD_REF" =~ ^dev(elop)?(ment)?$ ]] && {
         echo ::error::Branch \"$GITHUB_HEAD_REF\" is not a development \
             branch, and therefore not allowed to merge into \
             \"$GITHUB_BASE_REF\". Merge \"$GITHUB_HEAD_REF\" into a \
             development branch first.
+        echo ::endgroup::
         exit 1
     }
 else
@@ -64,7 +67,7 @@ IFS=$'\n' read -d '\n' -ra nuget_files <<<"$(find . -type f \( \
 ((${#nuget_files[@]})) &&
     nuget=true
 
-echo - Checking for project files
+echo - Checking for Visual Studio project files
 IFS=$'\n' read -d '\n' -ra project_files <<<"$(find . -type f \( \
     -name '*.csproj' -o \
     -name '*.fsproj' -o \

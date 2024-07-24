@@ -3,6 +3,7 @@
 echo ::group::bash "$0"
 
 mode=sln
+out_dir="$INPUTS_OUT"
 
 [ -z "$INPUTS_SLN" ] && {
     echo - Checking for solution file
@@ -17,6 +18,7 @@ IFS=$'\n' read -d '\n' -ra solutions <<<"${solution_files:-$INPUTS_SLN}" &&
     echo -e ::error::More than one solution found:\\\n"$(printf \
         "  - %s\n" "${solutions[@]}")"\\\n\\\nPlease specify a solution file \
         using available input.
+    echo ::endgroup::
     exit 1
 }
 
@@ -36,8 +38,8 @@ IFS=$'\n' read -d '\n' -ra solutions <<<"${solution_files:-$INPUTS_SLN}" &&
         unset IFS
 }
 
-out_dir="${INPUTS_OUT:-$GITHUB_WORKSPACE/out}"
 [ ! -d "$out_dir" ] && mkdir -p "$out_dir"
+out_dir="$(realpath "$out_dir")"
 
 [ -z "$INPUTS_PARAMS" ] &&
     params=(
@@ -55,6 +57,7 @@ if [ "$mode" == sln ]; then
     ! dotnet publish -c Release "${params[@]}" \
         "$solution" 2>&1 && {
         echo ::error::There was a problem compiling "$solution"
+        echo ::endgroup::
         exit 1
     }
 elif [ "$mode" == proj ]; then
@@ -87,8 +90,10 @@ elif [ "$mode" == proj ]; then
 
             ! dotnet publish -c Release -r "$rid" "${params[@]}" \
                 "$project" 2>&1 && {
-                echo ::notice::There was a problem compiling "$project" for \
+                echo ::error::There was a problem compiling "$project" for \
                     "$rid."
+                echo ::endgroup::
+                exit 1
             }
         done
     done

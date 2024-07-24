@@ -1,27 +1,42 @@
+## cd
 name: dotnet-build
-description: ''
+description: |
+  1. Search for solution/project files if not provided as input.
+  2. Identify whether building a single solution, single project, or multiple projects.
+  2. Compile solution/projects to "out" directory using parameters and/or release identifiers.
+
+## requires:
+## <- KamaranL/actions/setup: [checkout, release]
+
 inputs:
   out:
-    description: ''
+    required: true
+    description: |
+      Directory path where build artifacts will be stored.
   params:
-    description: ''
+    description: |
+      Command-line arguments for `dotnet publish`.
   project:
-    description: ''
+    description: |
+      Multiline list of project file paths to build.
+      This input has **no** effect if "solution" is set.
   release-ids:
-    description: ''
+    description: |
+      Multiline list of release identifiers.
+      This input has **no** effect if "solution" is set.
   solution:
-    description: ''
+    description: |
+      Path of solution file to compile.
 
 outputs:
   out-dir:
-    description: ''
+    description: |
+      Full directory path of where build artifacts are stored.
     value: ${{ steps.main.outputs.out-dir }}
 
 runs:
   using: composite
   steps:
-    - uses: KamaranL/actions/setup/cd@v0
-
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:

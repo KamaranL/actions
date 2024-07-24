@@ -5,21 +5,22 @@ echo ::group::bash "$0"
 echo - Amending commit
 ! git commit -a --amend --no-edit --date=now 2>&1 && {
     echo ::error::There was a problem with amending the latest changes.
+    echo ::endgroup::
     exit 1
-} || {
-    commit="$(git rev-parse HEAD)"
-    git verify-commit "$commit" 2>&1 &&
-        echo - :white_check_mark: "$commit" >>"$GITHUB_STEP_SUMMARY"
 }
 
 commit="$(git rev-parse HEAD)"
-origin="$commit:$CI_SOURCE_BRANCH"
+
+git verify-commit "$commit" 2>&1 &&
+    echo - :white_check_mark: "$commit" >>"$GITHUB_STEP_SUMMARY"
+
 tag="v$CI_VERSION"
 major="v${CI_VERSION:0:1}"
 
 echo - Creating tag: "$tag"
 ! git tag -m "$tag" "$tag" "$commit" 2>&1 && {
     echo ::error::There was a problem with creating tag \""$tag"\".
+    echo ::endgroup::
     exit 1
 } || {
     echo "- :label: **$tag**" >>"$GITHUB_STEP_SUMMARY"
@@ -30,6 +31,7 @@ echo - Creating tag: "$tag"
 echo - Updating major release tag: "$major"
 ! git tag -fm "$major" "$major" "$commit" 2>&1 && {
     echo ::error::There was a problem with updating tag \""$major"\".
+    echo ::endgroup::
     exit 1
 } || {
     git verify-tag "$major" 2>&1 &&
@@ -41,6 +43,7 @@ if [ -f action.yml ] &&
     echo - Updating release tag: latest
     ! git tag -fm latest latest "$commit" 2>&1 && {
         echo ::error::There was a problem with updating tag \"latest\".
+        echo ::endgroup::
         exit 1
     } || {
         git verify-tag latest 2>&1 &&
@@ -48,15 +51,19 @@ if [ -f action.yml ] &&
     }
 fi
 
+origin="$commit:$CI_SOURCE_BRANCH"
+
 echo - Pushing changes to origin: "$origin"
 ! git push origin "$origin" --force-with-lease 2>&1 && {
     echo ::error::There was a problem with pushing changes to origin.
+    echo ::endgroup::
     exit 1
 }
 
 echo - Pushing updated tags
 ! git push origin -f --tags 2>&1 && {
     echo ::error::There was a problem with pushing updated tags to origin.
+    echo ::endgroup::
     exit 1
 }
 
@@ -72,7 +79,7 @@ for ((i = 1; i <= max_attempts; i++)); do
         merged=true
         break
     }
-    sleep 0.5
+    sleep 1
 done
 
 ! $merged &&

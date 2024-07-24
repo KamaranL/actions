@@ -2,9 +2,17 @@
 
 echo ::group::bash "$0"
 
+echo - Checking package
+npm view .@"$CI_VERSION" &>/dev/null && {
+    echo ::error::A package already exists for \""$CI_VERSION"\".
+    echo ::endgroup::
+    exit 1
+}
+
 echo - Publishing package
 ! npm publish 2>&1 && {
     echo ::error::There was a problem publishing package for \""$CI_VERSION"\".
+    echo ::endgroup::
     exit 1
 }
 

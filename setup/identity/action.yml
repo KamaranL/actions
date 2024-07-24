@@ -1,5 +1,11 @@
+## ci
 name: setup/identity
-description: ''
+description: |
+  Install ssh keypair used for commit/tag signing and configure Git identity.
+
+## requires:
+## <- env.OP_SERVICE_ACCOUNT_TOKEN
+
 runs:
   using: composite
   steps:

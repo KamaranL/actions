@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-declare -A env
-
 echo ::group::bash "$0"
+
+declare -A env
 
 env[CI_VERSION]="$GitVersion_MajorMinorPatch"
 

@@ -1,8 +1,19 @@
+## cd
 name: npm-publish
-description: ''
+description: |
+  Publish npm package to npmjs registry.
+
+## requires:
+## <- env.OP_SERVICE_ACCOUNT_TOKEN
+## <- env.CI_VERSION
+## <- KamaranL/actions/setup: [checkout, release]
+
 runs:
   using: composite
   steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+
     - uses: KamaranL/1password-load-secrets-action@v1
       env:
         NODE_AUTH_TOKEN: op://Integrations/npm.kamaranl.CICD/credential
@@ -11,9 +22,6 @@ runs:
       with:
         node-version: latest
         registry-url: https://registry.npmjs.org
-
-    - run: $GITHUB_ACTION_PATH/pre.sh
-      shell: bash
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash

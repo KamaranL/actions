@@ -1,8 +1,16 @@
+## cd
 name: github-release
-description: ''
+description: |
+  Create release for version tagged in pull_request from triggering workflow and attach assets.
 inputs:
   assets:
-    description: ''
+    description: |
+      Directory path containing assets to upload with release
+
+## requires:
+## <- env.GH_TOKEN
+## <- env.CI_TAG
+## <- KamaranL/actions/setup: [checkout, release]
 
 runs:
   using: composite

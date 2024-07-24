@@ -1,0 +1,44 @@
+## cd
+name: compress-assets
+description: |
+  1. Recursively scan "in" directory for build artifacts.
+  2. Copy additional files to artifact directory.
+  3. Compress artifact directory to "out" directory.
+
+## requires:
+## <- env.CI_TAG
+## <- KamaranL/actions/setup: [checkout, release]
+
+inputs:
+  in:
+    required: true
+    description: |
+      Directory path containing build artifacts, or directory path containing subdirectories that each contain build artifacts.
+      Directory name(s) **must** contain platform, architecture, or both.
+  out:
+    required: true
+    description: |
+      Directory path where archives will be stored.
+  additional-files:
+    description: |
+      Multiline list of additional file paths to add to each archive.
+
+outputs:
+  out-dir:
+    description: |
+      Full directory path of where archives are stored.
+    value: ${{ steps.main.outputs.out-dir }}
+
+runs:
+  using: composite
+  steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+      env:
+        INPUTS_ADD_FILES: ${{ inputs.additional-files }}
+        INPUTS_IN: ${{ inputs.in }}
+        INPUTS_OUT: ${{ inputs.out }}
+      id: main

@@ -1,5 +1,11 @@
+## on_fail
 name: create-issue
-description: ''
+description: |
+  1. Run when triggering workflow fail
+  2. Create "ci" label if not present
+  3. Pull logs from triggering workflow
+  4. Upload logs as artifact
+  5. Create issue with details from triggering workflow and attach logs
 runs:
   using: composite
   steps:

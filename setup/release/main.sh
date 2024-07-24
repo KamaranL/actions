@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-declare -A env
-
 echo ::group::bash "$0"
 
-echo - Getting recently pushed tag
+declare -A env
+
+echo - Getting tag from triggering workflow
 pr="$(echo -e "$WFR_REF" | grep -oE '[0-9]{1,}')"
 base_ref="$(gh pr view "$pr" --json baseRefName --jq .baseRefName)"
 env[CI_VERSION]="$(curl -s \
@@ -13,7 +13,7 @@ env[CI_VERSION]="$(curl -s \
 /VERSION.txt")"
 env[CI_TAG]="v${env[CI_VERSION]}"
 
-echo - Switching ref to tags/"${env[CI_TAG]}"
+echo - Checking out tags/"${env[CI_TAG]}"
 git checkout tags/"${env[CI_TAG]}"
 
 for k in "${!env[@]}"; do

@@ -25,8 +25,9 @@
   - [release](/setup/release/action.yml)
 - build
   - [dotnet-build](/dotnet-build/action.yml)
+- code sign
 - [compress-assets](/compress-assets/action.yml)
-- deploy
+- publish
   - [github-release](/github-release/action.yml)
   - [npm-publish](/npm-publish/action.yml)
 

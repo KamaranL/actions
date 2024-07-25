@@ -80,10 +80,9 @@ elif [ "$mode" == proj ]; then
         name="${file%%.*}"
 
         for rid in "${rids[@]}"; do
-            [[ $rid == win-* ]] && {
-                params+=("-p:PublishReadyToRun=true")
-                name="${name^}"
-            } || name="${name,,}"
+            [[ $rid == win-* ]] &&
+                params+=("-p:PublishReadyToRun=true") ||
+                name="${name,,}"
 
             params+=(
                 "-p:PublishDir=$out_dir/$rid"

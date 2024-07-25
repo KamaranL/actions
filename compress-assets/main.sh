@@ -4,13 +4,21 @@ echo ::group::bash "$0"
 
 function get_name
 {
-    name=
-    IFS='-' read -ra parts <<<"${GITHUB_REPOSITORY##*\/}" && unset IFS
-    for part in "${parts[@]}"; do
-        [ "$1" == --win ] &&
-            name+="${part^}" ||
-            name+="$part"
-    done
+
+    is_win="$([ "$1" == --win ] && echo true || echo false)"
+
+    if [ -z "$INPUTS_NAME" ]; then
+        name=
+        IFS='-' read -ra parts <<<"${GITHUB_REPOSITORY##*\/}" && unset IFS
+        for part in "${parts[@]}"; do
+            $is_win &&
+                name+="${part^}" ||
+                name+="$part"
+        done
+    else
+        name="$INPUTS_NAME"
+        ! $is_win && name="${name,,}"
+    fi
 
     echo "$name"
 }

@@ -18,8 +18,8 @@ runs:
       with:
         export-env: false
       env:
-        key: op://Integrations/ssh-keypair.bot_kamaranl.vip/private-key
-        key_pub: op://Integrations/ssh-keypair.bot_kamaranl.vip/public-key
+        key: op://Integrations/bot_at_kamaranl_dot_vip/private-key
+        key_pub: op://Integrations/bot_at_kamaranl_dot_vip/public-key
       id: op-ssh
 
     - if: |

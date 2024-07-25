@@ -83,7 +83,8 @@ elif [ "$mode" == proj ]; then
             [ "$rid" == win-* ] && {
                 params+=("-p:PublishReadyToRun=true")
                 name="${name^}"
-            }
+            } || name="${name,,}"
+
             params+=(
                 "-p:PublishDir=$out_dir/$rid"
                 "-p:AssemblyName=$name"

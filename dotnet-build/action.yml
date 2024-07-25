@@ -3,7 +3,7 @@ name: dotnet-build
 description: |
   1. Search for solution/project files if not provided as input.
   2. Identify whether building a single solution, single project, or multiple projects.
-  2. Compile solution/projects to "out" directory using parameters and/or release identifiers.
+  3. Compile solution/projects to "out" directory using parameters and/or release identifiers.
 
 ## requires:
 ## <- KamaranL/actions/setup: [checkout, release]

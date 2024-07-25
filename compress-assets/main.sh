@@ -53,7 +53,7 @@ for artifact in "${artifacts[@]}"; do
     dir_path="${path%\/*}"
     dir_name="${dir_path##*\/}"
 
-    if [[ "$dir_name" == win-* ]]; then
+    if [[ $dir_name == win-* ]]; then
         out="$out_dir/$(get_name --win)_${CI_TAG}_${dir_name}.zip"
         [ -f "$out" ] && continue
 

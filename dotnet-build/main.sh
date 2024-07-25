@@ -80,7 +80,7 @@ elif [ "$mode" == proj ]; then
         name="${file%%.*}"
 
         for rid in "${rids[@]}"; do
-            [ "$rid" == win-* ] && {
+            [[ $rid == win-* ]] && {
                 params+=("-p:PublishReadyToRun=true")
                 name="${name^}"
             } || name="${name,,}"

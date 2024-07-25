@@ -32,6 +32,12 @@ if [ "$GITHUB_BASE_REF" == main ]; then
         echo ::endgroup::
         exit 1
     }
+
+    echo - Checking for existing tags \& releases
+    if ! git describe --tags --abbrev=0 &>/dev/null &&
+        ! gh release view &>/dev/null; then
+        overrideConfig+=("next-version=1.0.0")
+    fi
 else
     prerelease=true
     overrideConfig+=("continuous-delivery-fallback-tag=alpha")
@@ -50,12 +56,6 @@ out[additionalArguments]="\
 /b \"$GITHUB_HEAD_REF\" \
 /c \"$PR_BASE_SHA\" \
 "
-
-echo - Checking for existing tags \& releases
-if ! git describe --tags --abbrev=0 &>/dev/null &&
-    ! gh release view &>/dev/null; then
-    overrideConfig+=("next-version=1.0.0")
-fi
 
 echo - Checking for common nuget package files
 IFS=$'\n' read -d '\n' -ra nuget_files <<<"$(find . -type f \( \

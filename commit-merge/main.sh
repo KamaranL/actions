@@ -23,21 +23,20 @@ echo - Creating tag: "$tag"
     echo ::error::There was a problem with creating tag \""$tag"\".
     echo ::endgroup::
     exit 1
-} || {
-    echo "- :label: **$tag**" >>"$GITHUB_STEP_SUMMARY"
-    git verify-tag "$tag" 2>&1 &&
-        echo - :white_check_mark: "$tag" >>"$GITHUB_STEP_SUMMARY"
 }
+
+git verify-tag "$tag" 2>&1 &&
+    echo - :white_check_mark: "$tag" >>"$GITHUB_STEP_SUMMARY"
 
 echo - Updating major release tag: "$major"
 ! git tag -fm "$major" "$major" "$commit" 2>&1 && {
     echo ::error::There was a problem with updating tag \""$major"\".
     echo ::endgroup::
     exit 1
-} || {
-    git verify-tag "$major" 2>&1 &&
-        echo - :white_check_mark: "$major" >>"$GITHUB_STEP_SUMMARY"
 }
+
+git verify-tag "$major" 2>&1 &&
+    echo - :white_check_mark: "$major" >>"$GITHUB_STEP_SUMMARY"
 
 if [ -f action.yml ] &&
     [ "$(git tag | sort -r --version-sort | head -1)" == "$tag" ]; then
@@ -46,10 +45,11 @@ if [ -f action.yml ] &&
         echo ::error::There was a problem with updating tag \"latest\".
         echo ::endgroup::
         exit 1
-    } || {
-        git verify-tag latest 2>&1 &&
-            echo - :white_check_mark: latest >>"$GITHUB_STEP_SUMMARY"
     }
+
+    git verify-tag latest 2>&1 &&
+        echo - :white_check_mark: latest >>"$GITHUB_STEP_SUMMARY"
+
 fi
 
 origin="$commit:$CI_SOURCE_BRANCH"
@@ -87,8 +87,8 @@ done
     echo ::error::There was a problem with merging pull request \
         \#"$GITHUB_EVENT_NUMBER". This pull request will need to be merged \
         manually. ||
-    echo "- **$CI_TARGET_BRANCH** :arrow_left: **$CI_SOURCE_BRANCH**" \
-        >>"$GITHUB_STEP_SUMMARY"
+    echo - :white_check_mark: "**$CI_TARGET_BRANCH** <-" \
+        "**$CI_SOURCE_BRANCH**" >>"$GITHUB_STEP_SUMMARY"
 
 echo ::endgroup::
 

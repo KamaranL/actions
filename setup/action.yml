@@ -1,7 +1,7 @@
 ## ci/cd
 name: setup
 description: |
-  1. Install bash 5 if running on macOS, if needed.
+  1. Install bash 5 if running on macOS.
   2. Populate GH_TOKEN, if needed.
   3. Checkout repo, if needed.
   4. Call sub-jobs as specified.

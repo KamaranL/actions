@@ -44,8 +44,9 @@ out_dir="$(realpath "$out_dir")"
 [ -z "$INPUTS_PARAMS" ] &&
     params=(
         --self-contained
-        "-p:DebugType=None"
-        "-p:DebugSymbol=False"
+        "-p:DebugType=none"
+        "-p:DebugSymbol=false"
+        "-p:Optimize=true"
         "-p:PublishSingleFile=true"
         "-p:PublishTrimmed=true"
     ) || IFS=$'\n' read -d '\n' -ra params <<<"$INPUTS_PARAMS" &&

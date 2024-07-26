@@ -2,34 +2,36 @@
 
 echo ::group::bash "$0"
 
-declare -A out env
+declare -A env
 
 echo - Install pfx components
 pfx_dir="$RUNNER_TEMP/.__pfx"
 [ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 
-out[cert]="$pfx_dir/kamaranl@kamaranl.vip.crt"
-out[key]="$pfx_dir/kamaranl@kamaranl.vip_key"
-out[pfx]="$pfx_dir/kamaranl@kamaranl.vip.pfx"
-env[P12_PASS]="$P12_PASS"
+env[PFX_PASS]="$P12_PASS"
+env[PFX_DIR]="$pfx_dir"
+env[PFX_ID]='kamaranl@kamaranl.vip'
+p12_cer="$pfx_dir/${env[PFX_ID]}.crt"
+p12_key="$pfx_dir/${env[PFX_ID]}_key"
+pfx="$pfx_dir/${env[PFX_ID]}.pfx"
 
-echo "$P12_CER" >"${out[cert]}"
-echo "$P12_KEY" >"${out[key]}"
-chmod 0600 "${out[key]}"
+echo "$P12_CER" >"$p12_cer"
+echo "$P12_KEY" >"$p12_key"
+chmod 0600 "$p12_key"
 
 echo - Compiling pfx
 openssl pkcs12 -legacy -export \
-    -in "${out[cert]}" \
-    -inkey "${out[key]}" \
-    -out "${out[pfx]}" \
+    -in "$p12_cer" \
+    -inkey "$p12_key" \
+    -out "$pfx" \
     -passout pass:"$P12_PASS" \
     -name KamaranL
 
 echo - Validating pfx
 ! openssl pkcs12 -legacy -info -nodes \
-    -in "${out[pfx]}" \
+    -in "$pfx" \
     -passin pass:"$P12_PASS" &>/dev/null && {
-    echo -e ::error::\""${out[pfx]}"\" could not be validated. Please check \
+    echo -e ::error::\""$pfx"\" could not be validated. Please check \
         your key/cert and before proceeding.
     echo ::endgroup::
     exit 1
@@ -38,12 +40,6 @@ echo - Validating pfx
 for k in "${!env[@]}"; do
     v="${env[$k]}"
     echo "$k=$v" >>"$GITHUB_ENV"
-done
-unset k v
-
-for k in "${!out[@]}"; do
-    v="${out[$k]}"
-    echo "$k=$v" >>"$GITHUB_OUTPUT"
 done
 
 echo ::endgroup::

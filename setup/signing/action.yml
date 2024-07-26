@@ -1,0 +1,44 @@
+## cd
+name: setup/signing
+description: |
+  Installs pfx components to be converted to pfx and outputs path to compiled pfx file.
+
+## requires:
+## <- env.OP_SERVICE_ACCOUNT_TOKEN
+
+outputs:
+  cert:
+    description: ''
+    value: ${{ steps.main.outputs.cert }}
+  key:
+    description: ''
+    value: ${{ steps.main.outputs.key }}
+  pfx:
+    description: ''
+    value: ${{ steps.main.outputs.pfx }}
+
+runs:
+  using: composite
+  steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+
+    - uses: KamaranL/1password-load-secrets-action@v1
+      with:
+        export-env: false
+      env:
+        key: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/private-key
+        cer: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/public-key
+        pass: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/password
+      id: op-pfx
+
+    - run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+      env:
+        P12_CER: ${{ steps.op-pfx.outputs.cer }}
+        P12_KEY: ${{ steps.op-pfx.outputs.key }}
+        P12_PASS: ${{ steps.op-pfx.outputs.pass }}
+      id: main
+
+## results:
+## -> env.P12_PASS

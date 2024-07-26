@@ -19,8 +19,11 @@ echo "$P12_CER" >"$p12_cer"
 echo "$P12_KEY" >"$p12_key"
 chmod 0600 "$p12_key"
 
+args=(pkcs12)
+[ $RUNNER_OS != macOS ] && args+=(-legacy)
+
 echo - Compiling pfx
-openssl pkcs12 -legacy -export \
+openssl "${args[@]}" -export \
     -in "$p12_cer" \
     -inkey "$p12_key" \
     -out "$pfx" \
@@ -28,7 +31,7 @@ openssl pkcs12 -legacy -export \
     -name KamaranL
 
 echo - Validating pfx
-! openssl pkcs12 -legacy -info -nodes \
+! openssl "${args[@]}" -info -nodes \
     -in "$pfx" \
     -passin pass:"$P12_PASS" &>/dev/null && {
     echo -e ::error::\""$pfx"\" could not be validated. Please check \

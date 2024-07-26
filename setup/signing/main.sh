@@ -4,13 +4,14 @@ echo ::group::bash "$0"
 
 declare -A out env
 
+echo - Install pfx components
 pfx_dir="$RUNNER_TEMP/.__pfx"
 [ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
+
 out[cert]="$pfx_dir/kamaranl@kamaranl.vip.crt"
 out[key]="$pfx_dir/kamaranl@kamaranl.vip_key"
 out[pfx]="$pfx_dir/kamaranl@kamaranl.vip.pfx"
 
-echo - Install pfx components
 echo "$P12_CER" >"${out[cert]}"
 echo "$P12_KEY" >"${out[key]}"
 chmod 0600 "${out[key]}"
@@ -23,12 +24,14 @@ openssl pkcs12 -legacy -export \
     -passout pass:"$P12_PASS" \
     -name KamaranL
 
+ls -lAh "$pfx_dir"
+
 echo - Validating pfx
 ! openssl -legacy -info -nodes \
     -in "${out[pfx]}" \
     -passin pass:"$P12_PASS" &>/dev/null && {
-    echo -e ::error::\""${out[pfx]}"\" could not be validated.\\\n\\\nPlease \
-        check your key/cert and before proceeding.
+    echo -e ::error::\""${out[pfx]}"\" could not be validated. Please check \
+        your key/cert and before proceeding.
     echo ::endgroup::
     exit 1
 }

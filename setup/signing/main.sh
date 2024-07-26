@@ -11,6 +11,7 @@ pfx_dir="$RUNNER_TEMP/.__pfx"
 out[cert]="$pfx_dir/kamaranl@kamaranl.vip.crt"
 out[key]="$pfx_dir/kamaranl@kamaranl.vip_key"
 out[pfx]="$pfx_dir/kamaranl@kamaranl.vip.pfx"
+env[P12_PASS]="$P12_PASS"
 
 echo "$P12_CER" >"${out[cert]}"
 echo "$P12_KEY" >"${out[key]}"
@@ -24,10 +25,8 @@ openssl pkcs12 -legacy -export \
     -passout pass:"$P12_PASS" \
     -name KamaranL
 
-ls -lAh "$pfx_dir"
-
 echo - Validating pfx
-! openssl -legacy -info -nodes \
+! openssl pkcs12 -legacy -info -nodes \
     -in "${out[pfx]}" \
     -passin pass:"$P12_PASS" &>/dev/null && {
     echo -e ::error::\""${out[pfx]}"\" could not be validated. Please check \
@@ -35,6 +34,12 @@ echo - Validating pfx
     echo ::endgroup::
     exit 1
 }
+
+for k in "${!env[@]}"; do
+    v="${env[$k]}"
+    echo "$k=$v" >>"$GITHUB_ENV"
+done
+unset k v
 
 for k in "${!out[@]}"; do
     v="${out[$k]}"

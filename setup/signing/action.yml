@@ -32,15 +32,12 @@ runs:
         pass: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/password
       id: op-pfx
 
-    - uses: KamaranL/1password-load-secrets-action@v1
-      env:
-        P12_PASS: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/password
-
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
         P12_CER: ${{ steps.op-pfx.outputs.cer }}
         P12_KEY: ${{ steps.op-pfx.outputs.key }}
+        P12_PASS: ${{ steps.op-pfx.outputs.pass }}
       id: main
 
 ## results:

@@ -3,7 +3,7 @@
 echo ::group::bash "$0"
 
 echo - Installing ssh keypair
-ssh_dir="$RUNNER_TEMP/.ssh"
+ssh_dir="$RUNNER_TEMP/.__ssh"
 [ ! -d "$ssh_dir" ] && mkdir -p "$ssh_dir"
 echo "$SSH_KEY" >"$ssh_dir/id_ed25519"
 echo "$SSH_KEY_PUB" >"$ssh_dir/id_ed25519.pub"

@@ -31,6 +31,12 @@ inputs:
 
       Default: 'false'
     default: 'false'
+  signing:
+    description: |
+      Whether or not to run signing setup.
+
+      Default: 'false'
+    default: 'false'
 
 runs:
   using: composite
@@ -95,6 +101,9 @@ runs:
 
     - if: fromJson(inputs.release) == true
       uses: KamaranL/actions/setup/release@v2-alpha
+
+    - if: fromJson(inputs.signing) == true
+      uses: KamaranL/actions/setup/signing@v2-alpha
 
 ## results:
 ## -> env.GH_TOKEN

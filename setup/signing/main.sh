@@ -4,14 +4,14 @@ echo ::group::bash "$0"
 
 declare -A out env
 
+pfx_dir="$RUNNER_TEMP/.__pfx"
+[ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 out[cert]="$pfx_dir/kamaranl@kamaranl.vip.crt"
 out[key]="$pfx_dir/kamaranl@kamaranl.vip_key"
 out[pfx]="$pfx_dir/kamaranl@kamaranl.vip.pfx"
 env[P12_PASS]="$P12_PASS"
 
 echo - Install pfx components
-pfx_dir="$RUNNER_TEMP/.__pfx"
-[ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 echo "$P12_CER" >"${out[cert]}"
 echo "$P12_KEY" >"${out[key]}"
 chmod 0600 "${out[key]}"

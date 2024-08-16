@@ -1,21 +1,10 @@
 ## cd
 name: setup/signing
 description: |
-  Installs pfx components to be converted to pfx and outputs path to compiled pfx file.
+  Installs pfx components to be compiled.
 
 ## requires:
 ## <- env.OP_SERVICE_ACCOUNT_TOKEN
-
-outputs:
-  cert:
-    description: ''
-    value: ${{ steps.main.outputs.cert }}
-  key:
-    description: ''
-    value: ${{ steps.main.outputs.key }}
-  pfx:
-    description: ''
-    value: ${{ steps.main.outputs.pfx }}
 
 runs:
   using: composite
@@ -38,7 +27,8 @@ runs:
         P12_CER: ${{ steps.op-pfx.outputs.cer }}
         P12_KEY: ${{ steps.op-pfx.outputs.key }}
         P12_PASS: ${{ steps.op-pfx.outputs.pass }}
-      id: main
 
 ## results:
-## -> env.P12_PASS
+## -> env.PFX_DIR
+## -> env.PFX_ID
+## -> env.PFX_PASS

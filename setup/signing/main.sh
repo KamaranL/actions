@@ -4,7 +4,7 @@ echo ::group::bash "$0"
 
 declare -A env
 
-echo - Install pfx components
+echo - Installing pfx components
 pfx_dir="$RUNNER_TEMP/.__pfx"
 [ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 

@@ -40,6 +40,12 @@ echo - Validating pfx
     exit 1
 } || echo Valid.
 
+case $RUNNER_OS in
+Linux) env[RID]=linux ;;
+macOS) env[RID]=osx ;;
+Windows) env[RID]=win ;;
+esac
+
 for k in "${!env[@]}"; do
     v="${env[$k]}"
     echo "$k=$v" >>"$GITHUB_ENV"

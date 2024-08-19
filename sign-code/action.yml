@@ -1,0 +1,29 @@
+## cd
+name: sign-code
+description: |
+
+## requires:
+## <- env.PFX_DIR
+## <- env.PFX_ID
+## <- env.PFX_PASS
+
+inputs:
+  in:
+    required: true
+    description: |
+      Directory path containing build artifacts, or directory path containing subdirectories that each contain build artifacts.
+      Directory name(s) **must** contain platform, architecture, or both.
+
+runs:
+  using: composite
+  steps:
+    - run: $GITHUB_ACTION_PATH/pre.sh
+      shell: bash
+
+    - if: runner.os != 'Windows'
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
+
+    - if: runner.os == 'Windows'
+      run: '& $env:GITHUB_ACTION_PATH/Main.ps1'
+      shell: pwsh

@@ -12,9 +12,6 @@ try {
 
     foreach ($Artifact in $Artifacts) {
         "- Signing `"$Artifact`""
-        # signtool.exe sign /f "$env:PFX_DIR/$env:PFX_ID.pfx" /p $env:PFX_PASS /t 'http://timestamp.digicert.com' `
-        # /fd SHA256 $Artifact | Out-Host
-
         signtool.exe sign /n $env:PFX_ID /t http://timestamp.digicert.com /fd SHA256 $Artifact | Out-Host
 
         signtool.exe verify /pa $Artifact | Out-Host

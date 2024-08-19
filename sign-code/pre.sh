@@ -5,7 +5,6 @@ echo ::group::bash "$0"
 required_vars=(
     PFX_DIR
     PFX_ID
-    PFX_PASS
 )
 
 echo - Checking required variables

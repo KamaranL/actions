@@ -12,6 +12,10 @@ foreach ($Certificate in $Certificates) {
     Import-Certificate $Certificate -CertStoreLocation Cert:\LocalMachine\Root
 }
 
+'- Adding identity to CurrentUser'
+Import-PfxCertificate "$env:PFX_DIR/$env:PFX_ID.pfx" -Password (
+    ConvertTo-SecureString $env:PFX_PASS -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+
 Write-Output '::endgroup::'
 
 exit 0

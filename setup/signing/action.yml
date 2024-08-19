@@ -40,6 +40,9 @@ runs:
       run: '& $env:GITHUB_ACTION_PATH/Post.ps1'
       shell: pwsh
 
+    - if: runner.os == 'Windows'
+      uses: KamaranL/add-signtool-action@v1
+
 ## results:
 ## -> env.PFX_DIR
 ## -> env.PFX_ID

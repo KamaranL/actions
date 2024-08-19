@@ -33,12 +33,12 @@ openssl "${args[@]}" -export \
 echo - Validating pfx
 ! openssl "${args[@]}" -info -nodes \
     -in "$pfx".pfx \
-    -passin pass:"$PASS" && {
+    -passin pass:"$PASS" &>/dev/null && {
     echo ::error::\""$pfx".pfx\" could not be validated. Please check \
         your key/cert and before proceeding.
     echo ::endgroup::
     exit 1
-}
+} || echo Valid.
 
 for k in "${!env[@]}"; do
     v="${env[$k]}"

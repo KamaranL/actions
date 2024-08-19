@@ -11,7 +11,7 @@ pfx="$PFX_DIR/$PFX_ID"
 
 case $RUNNER_OS in
 macOS)
-    security unlock-keychain ~/Library/Keychains/login.keychain -p ""
+    security unlock-keychain -p "" ~/Library/Keychains/login.keychain
 
     echo - Adding Certificate Authorities to keychain
     for cert in "${certs[@]}"; do
@@ -22,7 +22,7 @@ macOS)
         }
     done
 
-    echo - Adding code signing cert to keychain
+    echo - Adding identity to keychain
     ! security import "$pfx.pfx" \
         -k ~/Library/Keychains/login.keychain \
         -P "$PFX_PASS" \

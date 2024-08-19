@@ -34,12 +34,13 @@ for artifact in "${artifacts[@]}"; do
     else
         (
             cd "$dir_path"
-            ssh-keygen -Y sign -f "$pfx"_key -n file "$path"
+            ssh-keygen -Y sign -f "$PFX_DIR/$PFX_ID"_key -n file "$path"
         )
 
         echo - Verifying "\"$path\""
-        ssh-keygen -Y verify -f <(echo "$PFX_ID $(cat "$pfx".pub)") -n file \
-            -s "$path".sig -I "$PFX_ID" <"$path"
+        ssh-keygen -Y verify -f <(
+            echo "$PFX_ID $(cat "$PFX_DIR/$PFX_ID".pub)"
+        ) -n file -s "$path".sig -I "$PFX_ID" <"$path"
     fi
 
     (($?)) && {

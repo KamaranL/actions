@@ -23,7 +23,11 @@ runs:
     - if: runner.os != 'Windows'
       run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
+      env:
+        INPUTS_IN: ${{ inputs.in }}
 
     - if: runner.os == 'Windows'
       run: '& $env:GITHUB_ACTION_PATH/Main.ps1'
       shell: pwsh
+      env:
+        INPUTS_IN: ${{ inputs.in }}

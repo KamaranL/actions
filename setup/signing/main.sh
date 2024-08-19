@@ -8,7 +8,6 @@ echo - Installing pfx components
 pfx_dir="$RUNNER_TEMP/.__pfx"
 [ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 
-env[PFX_PASS]="$PASS"
 env[PFX_DIR]="$pfx_dir"
 env[PFX_ID]='kamaranl@kamaranl.vip'
 pfx="$pfx_dir/${env[PFX_ID]}"

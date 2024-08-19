@@ -35,10 +35,14 @@ runs:
     - if: runner.os != 'Windows'
       run: $GITHUB_ACTION_PATH/post.sh
       shell: bash
+      env:
+        PFX_PASS: ${{ steps.op-pfx.outputs.pass }}
 
     - if: runner.os == 'Windows'
       run: '& $env:GITHUB_ACTION_PATH/Post.ps1'
       shell: pwsh
+      env:
+        PFX_PASS: ${{ steps.op-pfx.outputs.pass }}
 
     - if: runner.os == 'Windows'
       uses: KamaranL/add-signtool-action@v1
@@ -46,4 +50,3 @@ runs:
 ## results:
 ## -> env.PFX_DIR
 ## -> env.PFX_ID
-## -> env.PFX_PASS

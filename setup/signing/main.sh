@@ -15,26 +15,26 @@ pfx="$pfx_dir/${env[PFX_ID]}"
 
 echo "$ROOT_CA" >"$pfx_dir/ca.crt"
 echo "$INT_CA" >"$pfx_dir/int-ca.crt"
-echo "$CER" >"$pfx.crt"
-echo "$KEY" >"$pfx.key"
-chmod 0600 "$pfx.key"
+echo "$CER" >"$pfx".crt
+echo "$KEY" >"$pfx"_key
+chmod 0600 "$pfx"_key
 
 args=(pkcs12)
 [ $RUNNER_OS != macOS ] && args+=(-legacy)
 
 echo - Compiling pfx
 openssl "${args[@]}" -export \
-    -in "$pfx.crt" \
-    -inkey "$pfx.key" \
-    -out "$pfx.pfx" \
+    -in "$pfx".crt \
+    -inkey "$pfx"_key \
+    -out "$pfx".pfx \
     -passout pass:"$PASS" \
     -name KamaranL
 
 echo - Validating pfx
 ! openssl "${args[@]}" -info -nodes \
-    -in "$pfx.pfx" \
-    -passin pass:"$PASS" &>/dev/null && {
-    echo ::error::"\"$pfx.pfx\"" could not be validated. Please check \
+    -in "$pfx".pfx \
+    -passin pass:"$PASS" && {
+    echo ::error::\""$pfx".pfx\" could not be validated. Please check \
         your key/cert and before proceeding.
     echo ::endgroup::
     exit 1

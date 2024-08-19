@@ -16,7 +16,7 @@ macOS)
     echo - Adding Certificate Authorities to keychain
     for cert in "${certs[@]}"; do
         ! security import "$cert" -k ~/Library/Keychains/login.keychain -A && {
-            echo ::error::Failed to import "\"$cert\"" into login keychain.
+            echo ::error::Failed to import \""$cert"\" into login keychain.
             echo ::endgroup::
             exit 1
         }
@@ -27,7 +27,7 @@ macOS)
         -k ~/Library/Keychains/login.keychain \
         -P "$PFX_PASS" \
         -T /usr/bin/codesign && {
-        echo ::error::Failed to import "\"$pfx.pfx\"" into login keychain.
+        echo ::error::Failed to import \""$pfx".pfx\" into login keychain.
         echo ::endgroup::
         exit 1
     }

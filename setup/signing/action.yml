@@ -16,17 +16,29 @@ runs:
       with:
         export-env: false
       env:
-        key: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/private-key
         cer: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/public-key
+        key: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/private-key
         pass: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/password
+        int_ca: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/intermediate-ca
+        root_ca: op://Integrations/kamaranl_at_kamaranl_dot_vip.p12/root-ca
       id: op-pfx
 
     - run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
       env:
-        P12_CER: ${{ steps.op-pfx.outputs.cer }}
-        P12_KEY: ${{ steps.op-pfx.outputs.key }}
-        P12_PASS: ${{ steps.op-pfx.outputs.pass }}
+        CER: ${{ steps.op-pfx.outputs.cer }}
+        KEY: ${{ steps.op-pfx.outputs.key }}
+        PASS: ${{ steps.op-pfx.outputs.pass }}
+        INT_CA: ${{ steps.op-pfx.outputs.int_ca }}
+        ROOT_CA: ${{ steps.op-pfx.outputs.root_ca }}
+
+    - if: runner.os != 'Windows'
+      run: $GITHUB_ACTION_PATH/post.sh
+      shell: bash
+
+    - if: runner.os == 'Windows'
+      run: '& $env:GITHUB_ACTION_PATH/Post.ps1'
+      shell: pwsh
 
 ## results:
 ## -> env.PFX_DIR

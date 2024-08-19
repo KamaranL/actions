@@ -8,33 +8,33 @@ echo - Installing pfx components
 pfx_dir="$RUNNER_TEMP/.__pfx"
 [ ! -d "$pfx_dir" ] && mkdir -p "$pfx_dir"
 
-env[PFX_PASS]="$P12_PASS"
+env[PFX_PASS]="$PASS"
 env[PFX_DIR]="$pfx_dir"
 env[PFX_ID]='kamaranl@kamaranl.vip'
-p12_cer="$pfx_dir/${env[PFX_ID]}.crt"
-p12_key="$pfx_dir/${env[PFX_ID]}_key"
-pfx="$pfx_dir/${env[PFX_ID]}.pfx"
+pfx="$pfx_dir/${env[PFX_ID]}"
 
-echo "$P12_CER" >"$p12_cer"
-echo "$P12_KEY" >"$p12_key"
-chmod 0600 "$p12_key"
+echo "$ROOT_CA" >"$pfx_dir/ca.crt"
+echo "$INT_CA" >"$pfx_dir/int-ca.crt"
+echo "$CER" >"$pfx.crt"
+echo "$KEY" >"$pfx.key"
+chmod 0600 "$pfx.key"
 
 args=(pkcs12)
 [ $RUNNER_OS != macOS ] && args+=(-legacy)
 
 echo - Compiling pfx
 openssl "${args[@]}" -export \
-    -in "$p12_cer" \
-    -inkey "$p12_key" \
-    -out "$pfx" \
-    -passout pass:"$P12_PASS" \
+    -in "$pfx.crt" \
+    -inkey "$pfx.key" \
+    -out "$pfx.pfx" \
+    -passout pass:"$PASS" \
     -name KamaranL
 
 echo - Validating pfx
 ! openssl "${args[@]}" -info -nodes \
-    -in "$pfx" \
-    -passin pass:"$P12_PASS" &>/dev/null && {
-    echo -e ::error::\""$pfx"\" could not be validated. Please check \
+    -in "$pfx.pfx" \
+    -passin pass:"$PASS" &>/dev/null && {
+    echo ::error::"\"$pfx.pfx\"" could not be validated. Please check \
         your key/cert and before proceeding.
     echo ::endgroup::
     exit 1
